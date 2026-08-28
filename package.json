@@ -1,6 +1,6 @@
 {
   "name": "what-should-i-do",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Daily ESO activity recommendations, tailored to your characters",
   "main": "./out/main/index.js",
   "author": "Illyriat <contact@illyriat.com>",
