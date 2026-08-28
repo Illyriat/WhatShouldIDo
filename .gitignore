@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output (electron-vite build + electron-builder packaging)
+out/
+dist/
+
+# Build / test artifacts
+*.tsbuildinfo
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env files - never commit secrets/tokens (e.g. GH_TOKEN)
+.env
+.env.local
+.env.*.local
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/

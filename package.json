@@ -1,0 +1,41 @@
+{
+  "name": "what-should-i-do",
+  "version": "0.1.0",
+  "description": "Daily ESO activity recommendations, tailored to your characters",
+  "main": "./out/main/index.js",
+  "author": "j4m3s",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux",
+    "publish": "npm run build && electron-builder --publish always"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "electron-updater": "^6.8.9",
+    "luaparse": "^0.3.1"
+  },
+  "devDependencies": {
+    "@types/luaparse": "^0.2.12",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^2.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  }
+}

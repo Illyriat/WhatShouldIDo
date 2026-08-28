@@ -1,0 +1,38 @@
+appId: com.illyriat.whatshouldido
+productName: What Should I Do
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - out/**/*
+  - package.json
+extraResources:
+  - resources/**
+win:
+  target: nsis
+  icon: resources/icon.png
+nsis:
+  artifactName: ${productName}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+mac:
+  # dmg is what users install; zip is what electron-updater's MacUpdater actually
+  # downloads and applies for in-app auto-update - both are needed.
+  target:
+    - dmg
+    - zip
+  icon: resources/icon.png
+  category: public.app-category.utilities
+linux:
+  # AppImage is what electron-updater's AppImageUpdater supports for in-app
+  # auto-update; deb is a convenience download but won't self-update in-app.
+  target:
+    - AppImage
+    - deb
+  icon: resources/icon.png
+  category: Utility
+publish:
+  provider: github
+  owner: Illyriat
+  repo: WhatShouldIDo
