@@ -12,16 +12,22 @@ win:
   target: nsis
   icon: resources/icon.png
 nsis:
-  artifactName: ${productName}-${version}-setup.${ext}
+  # No ${version} in the name - same reasoning as mac/linux's artifactName below:
+  # GitHub's releases/latest/download/<name> permalink needs a fixed filename that
+  # doesn't change release to release. See the README's Download buttons.
+  artifactName: ${productName}-Setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
   # dmg is what users install; zip is what electron-updater's MacUpdater actually
-  # downloads and applies for in-app auto-update - both are needed.
+  # downloads and applies for in-app auto-update - both are needed. GitHub's macOS
+  # runners are Apple Silicon, so this only produces an arm64 build - there's no
+  # Intel Mac download until x64 is added to `arch` here (and CI runs on/targets it).
   target:
     - dmg
     - zip
+  artifactName: ${productName}-${arch}.${ext}
   icon: resources/icon.png
   category: public.app-category.utilities
 linux:
@@ -30,6 +36,7 @@ linux:
   target:
     - AppImage
     - deb
+  artifactName: ${productName}.${ext}
   icon: resources/icon.png
   category: Utility
 publish:

@@ -1,8 +1,15 @@
 # What Should I Do
 
-![Version](https://img.shields.io/badge/version-v0.1.0-blue)  ![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)
+![Version](https://img.shields.io/badge/version-v0.1.0-blue)  [![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)](./LICENSE)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)  [![Downloads](https://img.shields.io/github/downloads/Illyriat/WhatShouldIDo/total)](https://github.com/Illyriat/WhatShouldIDo/releases/latest)
 
 ### A desktop companion that tells you what to do today across every character on every account, for every server.
+
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do-Setup.exe)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do-arm64.dmg)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux%20(AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do.AppImage)
+
+These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
+
     * For this app to work you first need the required addons installed in ESO (see below).
         ** Log into each character at least once with them active so they have data to read.
         ** ESO only writes SavedVariables to disk on logout or /reloadui - do one of those before checking the app for the latest state.
@@ -77,6 +84,10 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 To build+publish from your own machine instead (only reaches whichever platform you're running on), set a `GH_TOKEN` environment variable to a GitHub personal access token with `repo` access and run `npm run publish`.
 
 **Note:** none of these builds are code-signed. Windows installers will show a SmartScreen "unrecognized app" warning, and unsigned macOS builds are blocked by Gatekeeper (right-click -> Open works around it) until this is set up with an Apple Developer account (for notarization) and a Windows code-signing certificate.
+
+## License
+
+All rights reserved - see [LICENSE](./LICENSE) for the full terms. Redistribution, reuploading, or rehosting this software anywhere other than the official [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) is not permitted.
 
 #
 > This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
