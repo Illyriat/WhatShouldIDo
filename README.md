@@ -4,9 +4,9 @@
 
 ### A desktop companion that tells you what to do today across every character on every account, for every server.
 
-[![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do-Setup.exe)
-[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do-arm64.dmg)
-[![Download for Linux](https://img.shields.io/badge/Download-Linux%20(AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/What%20Should%20I%20Do.AppImage)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo-Setup.exe)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo-arm64.dmg)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux%20(AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo.AppImage)
 
 These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
 

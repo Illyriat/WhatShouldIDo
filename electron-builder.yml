@@ -12,10 +12,12 @@ win:
   target: nsis
   icon: resources/icon.png
 nsis:
-  # No ${version} in the name - same reasoning as mac/linux's artifactName below:
-  # GitHub's releases/latest/download/<name> permalink needs a fixed filename that
-  # doesn't change release to release. See the README's Download buttons.
-  artifactName: ${productName}-Setup.${ext}
+  # A fixed, space-free name (not ${productName}, which has spaces) - GitHub's
+  # releases/latest/download/<name> permalink needs a filename that (a) doesn't
+  # change release to release and (b) GitHub won't silently mangle: it doesn't
+  # preserve spaces in uploaded asset names, and does so *inconsistently* (some
+  # became hyphens, one became dots) - see the README's Download buttons.
+  artifactName: WhatShouldIDo-Setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -27,7 +29,7 @@ mac:
   target:
     - dmg
     - zip
-  artifactName: ${productName}-${arch}.${ext}
+  artifactName: WhatShouldIDo-${arch}.${ext}
   icon: resources/icon.png
   category: public.app-category.utilities
 linux:
@@ -36,7 +38,7 @@ linux:
   target:
     - AppImage
     - deb
-  artifactName: ${productName}.${ext}
+  artifactName: WhatShouldIDo.${ext}
   icon: resources/icon.png
   category: Utility
 publish:
