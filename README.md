@@ -1,6 +1,6 @@
 # What Should I Do
 
-![Version](https://img.shields.io/badge/version-v0.1.1-blue)  [![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)](./LICENSE)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)  [![Downloads](https://img.shields.io/github/downloads/Illyriat/WhatShouldIDo/total)](https://github.com/Illyriat/WhatShouldIDo/releases/latest)
+![Version](https://img.shields.io/badge/version-v0.1.2-blue)  [![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)](./LICENSE)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)  [![Downloads](https://img.shields.io/github/downloads/Illyriat/WhatShouldIDo/total)](https://github.com/Illyriat/WhatShouldIDo/releases/latest)
 
 ### A desktop companion that tells you what to do today across every character on every account, for every server.
 
@@ -71,17 +71,44 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 
 ### Shipping a release (all three platforms)
 
-`.github/workflows/release.yml` builds Windows, macOS and Linux in parallel and publishes all of them to the same [GitHub Release](https://github.com/Illyriat/WhatShouldIDo/releases), so everyone already running the app gets offered the update automatically (the app checks silently on launch, and there's a "Check for Updates" button in Settings too):
+`.github/workflows/release.yml` builds Windows, macOS and Linux in parallel and publishes all of them to the same [GitHub Release](https://github.com/Illyriat/WhatShouldIDo/releases), so everyone already running the app gets offered the update automatically (the app checks silently on launch, and there's a "Check for Updates" button in Settings too).
 
-1. Bump `version` in `package.json`.
-2. Commit, then tag and push:
-   ```
-   git tag v0.1.0
-   git push origin v0.1.0
-   ```
-3. The workflow picks up the tag push and does the rest. Progress: the repo's Actions tab.
+> **The release version comes from `package.json`, not from the git tag.** electron-builder reads `version` in `package.json` and publishes to a release named `v<that version>`. The tag name is only what triggers the workflow. If the tagged commit still has the old `version`, CI happily rebuilds the *old* version and re-uploads its assets over the existing release - the workflow goes green, but no new release appears and nobody gets an update. So the version bump **must be committed on the commit you tag.**
 
-To build+publish from your own machine instead (only reaches whichever platform you're running on), set a `GH_TOKEN` environment variable to a GitHub personal access token with `repo` access and run `npm run publish`.
+1. Bump `version` in `package.json` (e.g. `0.1.1` -> `0.1.2`), and bump the `version-v0.1.1-blue` badge at the top of this README to match.
+2. Commit that change and push it to `main`:
+   ```
+   git add package.json README.md
+   git commit -m "Bump version to 0.1.2"
+   git push
+   ```
+3. Tag that same commit and push the tag:
+   ```
+   git tag v0.1.2
+   git push origin v0.1.2
+   ```
+4. The workflow picks up the tag push and does the rest (test job, then the 3-OS build matrix - roughly 4 minutes). Watch it in the repo's **Actions** tab.
+5. Confirm afterwards: a `v0.1.2` entry on the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) marked **Latest**, carrying the installers plus `latest.yml` / `latest-mac.yml` / `latest-linux.yml` (those `.yml` files are what auto-update reads). If instead the assets landed back on the previous release, step 1 wasn't committed on the tagged commit - see "Fixing a botched tag" below.
+
+**How soon users get it:** once the release is live, the app only checks for updates *at startup* (`src/main/index.ts` calls `checkForUpdates()` once on launch - there's no periodic poll). So a running user gets the update the next time they open the app: it downloads in the background (`autoDownload` is on) and they're prompted to restart. The "Check for Updates" button in Settings forces the check immediately.
+
+#### Fixing a botched tag
+
+If you pushed a tag whose commit still had the old `version` (CI went green but no new release):
+
+```
+git add package.json && git commit -m "Bump version to 0.1.2" && git push
+git tag -d v0.1.2                    # delete the local tag
+git push origin :refs/tags/v0.1.2   # delete the remote tag
+git tag v0.1.2                       # re-tag the new commit
+git push origin v0.1.2               # re-trigger the workflow
+```
+
+Then, on the previous release, delete any `latest*.yml` / `.blockmap` assets that got re-uploaded with newer timestamps so it stays consistent (the fresh run overwrites its own copies anyway).
+
+#### Publishing from your own machine
+
+To build+publish locally instead (only reaches whichever platform you're running on), set a `GH_TOKEN` environment variable to a GitHub personal access token with `repo` access and run `npm run publish`. The same `package.json` version rule applies.
 
 **Note:** none of these builds are code-signed. Windows installers will show a SmartScreen "unrecognized app" warning, and unsigned macOS builds are blocked by Gatekeeper (right-click -> Open works around it) until this is set up with an Apple Developer account (for notarization) and a Windows code-signing certificate.
 
