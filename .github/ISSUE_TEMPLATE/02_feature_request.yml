@@ -1,0 +1,73 @@
+name: Feature request
+description: Suggest a new daily activity, page, or improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! This app is about answering "what should I do today?" across every
+        character on every account. Requests that fit that goal — and that can be sourced from a
+        SavedVariables addon or a public data source — are the easiest to act on.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or gap, not the solution yet. What do you currently do by hand, or forget to do?
+      placeholder: |
+        I never remember which characters still have crafting writs to hand in, so I log into all of them to check.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like the app to do?
+      description: Describe the feature. Where would it live (Home board, new sidebar page, existing page)?
+      placeholder: |
+        A "Crafting Writs" board on the Home page showing which characters have an unclaimed writ per craft.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of request is this?
+      options:
+        - New daily activity / recommendation
+        - New standalone page (like Potion Crafting / Enchanting)
+        - Improvement to an existing page
+        - Data accuracy / more data
+        - Quality of life (themes, layout, shortcuts)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: data-source
+    attributes:
+      label: Where would the data come from?
+      description: >
+        If you know it — which ESO addon writes the relevant SavedVariables (e.g. a `.lua` file name),
+        or a public site like eso-hub / UESP. It's fine to say "not sure".
+      placeholder: |
+        Dolgubon's Lazy Writ Crafter, or the WritWorthy addon, both track writ status.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or workarounds
+      description: How do you handle this today? Any addons or tools that already do part of it?
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Mockups, screenshots, links, examples from other tools.
+    validations:
+      required: false

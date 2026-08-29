@@ -1,0 +1,122 @@
+name: Bug report
+description: Something in the app is broken, wrong, or not showing what you expect.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug.
+
+        Before you start, a couple of quick checks that resolve most reports:
+        - Make sure the **required addons** (Skill Lines, Urich's Skill Point Finder) are installed and enabled in ESO.
+        - Log into each affected character once, then **log out or `/reloadui`** — ESO only writes SavedVariables to disk at those points.
+        - Confirm you're on the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest).
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect to see instead?
+      placeholder: |
+        On the Home page, the Riding Training board shows 0 characters, but 4 of mine can train today.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What did you click / do, in order?
+      placeholder: |
+        1. Open the app
+        2. Select account @MyAccount
+        3. Switch server to EU
+        4. Look at the Riding Training board
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app?
+      options:
+        - Home - Today's Pledges
+        - Home - Riding Training
+        - Dungeon Check List
+        - Potion Crafting
+        - Enchanting
+        - Account / Server switcher
+        - Settings (data folder, addons, theme)
+        - Updates / installer
+        - Something else / not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS (Apple Silicon)
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: Shown in Settings → About (Version and Build).
+      placeholder: "v0.1.1 (build 123)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: addons
+    attributes:
+      label: Required addons installed and enabled?
+      options:
+        - "Yes - Skill Lines and USPF both installed and enabled"
+        - "Partially - one of them"
+        - "No"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: setup
+    attributes:
+      label: Account setup
+      description: Roughly how many ESO accounts / characters, and on which servers (NA, EU, both)? Is your Documents folder redirected by OneDrive?
+      placeholder: |
+        1 account, ~20 characters, mostly EU with 3 on NA. Documents is redirected to OneDrive.
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images in here. A shot of the broken screen helps a lot.
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Other context, things you've already tried, error messages, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Before submitting
+      options:
+        - label: I've removed anything private I don't want public (real names, email, full file paths).
+          required: true
+        - label: I'm on the latest release and the issue still happens.
+          required: true

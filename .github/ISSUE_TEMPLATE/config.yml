@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Download the latest version
+    url: https://github.com/Illyriat/WhatShouldIDo/releases/latest
+    about: Not a bug - you just need the newest build. Direct download links are in the README.
+  - name: Setup help (addons, "no accounts found")
+    url: https://github.com/Illyriat/WhatShouldIDo#readme
+    about: The README covers the required addons and pointing the app at a redirected Documents folder.

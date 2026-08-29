@@ -29,6 +29,35 @@ function updateStatusLabel(status: UpdateStatus): string | null {
   }
 }
 
+const ADDONS: {
+  name: string
+  url: string
+  required: boolean
+  description: string
+}[] = [
+  {
+    name: 'Skill Lines',
+    url: 'https://www.esoui.com/downloads/info4041-SkillLines.html',
+    required: true,
+    description:
+      'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.'
+  },
+  {
+    name: "Urich's Skill Point Finder (USPF)",
+    url: 'https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html',
+    required: true,
+    description:
+      'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. THis is the core feature of WhatShouldIDo.'
+  },
+  {
+    name: 'Daily Craft Status',
+    url: 'https://www.esoui.com/downloads/info2510-DailyCraftStatus.html',
+    required: false,
+    description:
+      'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.'
+  }
+]
+
 const THEME_OPTIONS: { value: ThemePreference; label: string; description: string; swatch: [string, string] }[] = [
   { value: 'system', label: 'System', description: 'Follows your OS light/dark setting', swatch: ['#16181d', '#f5f6f8'] },
   { value: 'dark', label: 'Dark', description: 'The default - orange & teal', swatch: ['#16181d', '#1e2129'] },
@@ -105,6 +134,37 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
         </div>
 
         {foundStatus && <p className="muted settings-found-status">{foundStatus}</p>}
+      </section>
+
+      <section className="board-section">
+        <div className="pledges-panel__title-row">
+          <h3 className="settings-section-title">Addons</h3>
+        </div>
+
+        <p className="muted">
+          This app reads data that ESO addons write to disk. Install them from{' '}
+          <a href="https://www.esoui.com/" target="_blank" rel="noreferrer">
+            ESOUI
+          </a>{' '}
+          (or Minion), enable them in-game, then log into each character once with them active so they have data to
+          write.
+        </p>
+
+        <ul className="addon-list">
+          {ADDONS.map((addon) => (
+            <li key={addon.url} className="addon-row">
+              <div className="addon-row__head">
+                <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
+                  {addon.name}
+                </a>
+                <span className={`addon-badge ${addon.required ? 'addon-badge--required' : 'addon-badge--optional'}`}>
+                  {addon.required ? 'Required' : 'Optional'}
+                </span>
+              </div>
+              <p className="addon-row__desc">{addon.description}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="board-section">
