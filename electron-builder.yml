@@ -43,7 +43,8 @@ publish:
   provider: github
   owner: Illyriat
   repo: WhatShouldIDo
-  # electron-builder defaults to draft releases (so you can review before it goes
-  # live) - draft releases are invisible to users and to electron-updater's
-  # auto-update check, so publish immediately instead.
-  draft: false
+  # electron-builder defaults to "draft" (releaseType, not the old "draft: true/false"
+  # boolean some docs/issues still reference - that key was removed and rejected by
+  # this version's config schema) - draft releases are invisible to users and to
+  # electron-updater's auto-update check, so publish immediately as a real release.
+  releaseType: release
