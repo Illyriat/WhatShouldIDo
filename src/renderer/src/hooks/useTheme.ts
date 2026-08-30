@@ -23,11 +23,8 @@ export interface ThemeControl {
   setPreference: (preference: ThemePreference) => void
 }
 
-/**
- * Applies the chosen theme as a `data-theme` attribute on <html>, which the CSS in
- * styles.css keys off of. "system" tracks the OS light/dark preference live (via a
- * matchMedia listener) rather than being fixed at whatever it resolved to on load.
- */
+// Applies the theme as a `data-theme` attribute on <html> for styles.css to key off.
+// "system" tracks the OS light/dark preference live via a matchMedia listener.
 export function useTheme(): ThemeControl {
   const [preference, setPreferenceState] = useState<ThemePreference>(readStoredPreference)
 

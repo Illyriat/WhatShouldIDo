@@ -17,15 +17,9 @@ function extractCompletedKeys(gd: unknown): string[] {
     .map(([key]) => key)
 }
 
-/**
- * Realm buckets (data scoped to one megaserver/profile) have `charInfo` +
- * `ptsData` directly on them. USPF nests them oddly: "$AccountWide" is always
- * the primary bucket directly under the account, but any *other* realm (e.g.
- * "EU Megaserver") is nested one level deeper, as a sibling key *inside*
- * "$AccountWide" rather than alongside it. Detecting buckets structurally (has
- * both charInfo and ptsData) rather than by hardcoded realm name/depth handles
- * that nesting without guessing at naming.
- */
+// A realm bucket carries `charInfo` and `ptsData`. USPF puts the primary bucket at
+// "$AccountWide", but nests any other realm ("EU Megaserver" etc.) one level deeper
+// inside it. Match on the shape rather than realm names/depth to cope with that.
 function findRealmBuckets(container: PlainObject, depth = 0): PlainObject[] {
   const buckets: PlainObject[] = []
   if (depth > 2) return buckets
@@ -44,13 +38,8 @@ function findRealmBuckets(container: PlainObject, depth = 0): PlainObject[] {
 export interface RawCharacter {
   charId: string
   charName: string
-  /**
-   * GD (Group Dungeon quest) keys this character has completed, straight from
-   * USPF's cache. Unlike the PD/achievement data this app used to read, quest
-   * completion (GetCompletedQuestInfo) is genuinely per-character in ESO - no
-   * account-wide unioning needed, this is just directly correct once USPF has
-   * had a chance to recalculate it for that character.
-   */
+  // GD (Group Dungeon quest) keys this character has completed. Quest completion is
+  // per-character in ESO, so no account-wide unioning is needed here.
   completedDungeonKeys: string[]
 }
 
@@ -59,10 +48,8 @@ export interface RawAccount {
   characters: RawCharacter[]
 }
 
-/**
- * Reads USPF.lua and returns one RawAccount per @AccountName found, with
- * characters merged (deduped by charId) across every realm bucket that account has.
- */
+// Reads USPF.lua into one RawAccount per @AccountName, merging characters (deduped by
+// charId) across all of that account's realm buckets.
 export async function extractAccountsFromUspf(filePath: string): Promise<RawAccount[]> {
   const parsed = await parseSavedVariables(filePath, 'USPF_Settings')
   const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])

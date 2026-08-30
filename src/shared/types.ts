@@ -1,24 +1,24 @@
 export type PledgeTier = 'base' | 'dlc'
 
 export interface PledgeDungeon {
-  /** USPF's short key from its GD table, e.g. "BC1", "TC" */
+  // USPF's short key from its GD table, e.g. "BC1", "TC".
   key: string
   dungeonName: string
   tier: PledgeTier
-  /** quest id USPF checks (via GetCompletedQuestInfo) to mark this dungeon's quest as done */
+  // Quest id USPF checks to mark this dungeon's quest as done.
   questId: number
 }
 
 export interface Character {
   charId: string
   charName: string
-  /** e.g. "NA Megaserver", "EU Megaserver" - "Unknown" if SkillLines has no record of this character */
+  // e.g. "NA Megaserver"; "Unknown Server" when SkillLines has no record of this character.
   server: string
-  /** GD keys (dungeon quests) this character has personally completed - quest completion is per-character in ESO, not account-wide */
+  // GD keys this character has completed. Per-character, not account-wide.
   completedDungeonKeys: string[]
-  /** true = all 3 riding stats (Capacity/Stamina/Speed) already at cap - nothing left to ever train */
+  // All 3 riding stats (Capacity/Stamina/Speed) already at cap.
   ridingMaxed: boolean
-  /** true = not maxed, and today's training cooldown has elapsed - recommend training */
+  // Not maxed and today's training cooldown has elapsed.
   readyToTrainRiding: boolean
 }
 
@@ -32,17 +32,17 @@ export interface PledgeMaster {
   tier: PledgeTier
 }
 
-/** One of today's three pledge dungeons, resolved against PledgeDungeon data */
+// One of today's three pledge dungeons, resolved against PledgeDungeon data.
 export interface TodaysPledge {
   master: PledgeMaster
   dungeon: PledgeDungeon | null
-  /** raw scraped name, kept even if we couldn't resolve it to a known dungeon */
+  // Raw scraped name, kept even when it doesn't resolve to a known dungeon.
   scrapedName: string
 }
 
 export interface TodaysPledges {
   pledges: TodaysPledge[]
-  /** true if this came from cache because a fresh fetch failed */
+  // Served from cache because the fresh fetch failed.
   stale: boolean
   fetchedAt: string
 }
@@ -52,7 +52,7 @@ export interface CharacterRecommendation {
   charName: string
   accountName: string
   server: string
-  /** true = character has NOT completed this dungeon's quest yet -> recommended */
+  // Character hasn't completed this dungeon's quest yet.
   recommended: boolean
 }
 
@@ -69,7 +69,7 @@ export interface RecommendationsResult {
   fetchedAt: string
 }
 
-/** Pushed from main to renderer as the auto-updater's state changes - see src/main/updater.ts */
+// Pushed from main to renderer as the auto-updater's state changes (src/main/updater.ts).
 export type UpdateStatus =
   | { state: 'idle' }
   | { state: 'checking' }
@@ -79,12 +79,14 @@ export type UpdateStatus =
   | { state: 'downloaded'; version: string }
   | { state: 'error'; message: string }
 
+// Which addon SavedVariables files were found on disk, keyed by file name
+// (e.g. "USPF.lua"). true = the addon has written data at least once.
+export type AddonStatus = Record<string, boolean>
+
 export interface AppSettings {
-  /** User-chosen override for the "Documents" folder ESO's SavedVariables live under
-   *  (<Documents>/Elder Scrolls Online/<profile>/SavedVariables/...). Undefined = use
-   *  the OS default (e.g. when Documents has been redirected by OneDrive). */
+  // Override for the Documents folder holding ESO's SavedVariables. Undefined = OS
+  // default (needed when OneDrive has redirected Documents).
   documentsPathOverride?: string
-  /** The OS default Documents path, shown in Settings so the user has a point of
-   *  reference even when an override is set. */
+  // The OS default Documents path, shown in Settings for reference.
   defaultDocumentsPath: string
 }

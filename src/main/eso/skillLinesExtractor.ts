@@ -13,12 +13,9 @@ function asPlainObject(value: unknown): PlainObject | null {
 const NON_REALM_KEYS = new Set(['settings', 'windowSize', 'windowPosition', 'version'])
 
 /**
- * SkillLines.lua explicitly labels which megaserver each character is on - unlike
- * USPF, which only distinguishes an implicit default bucket from separately-named
- * ones. Structure (confirmed against the live file):
- *   ["Default"]["@AccountName"]["$AccountWide"]["NA Megaserver"]["@AccountName"][charName] = {...}
- *   ["Default"]["@AccountName"]["$AccountWide"]["EU Megaserver"]["@AccountName"][charName] = {...}
- * (the inner "@AccountName" repeats the outer one). Returns accountName -> charName -> server label.
+ * SkillLines.lua names the megaserver for each character (USPF doesn't). Layout:
+ *   ["Default"][@Account]["$AccountWide"]["NA Megaserver"][@Account][charName] = {...}
+ * The inner @Account key repeats the outer one. Returns account -> char -> server.
  */
 export async function extractCharacterServers(filePath: string): Promise<Map<string, Map<string, string>>> {
   const result = new Map<string, Map<string, string>>()

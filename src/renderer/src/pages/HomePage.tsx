@@ -45,8 +45,7 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
     return () => {
       cancelled = true
     }
-    // refreshToken (from the shared accountSelection hook) is the trigger for re-fetching
-    // here too, so one Refresh click updates accounts and pledges together.
+    // Depend on refreshToken so one Refresh click reloads pledges alongside accounts.
   }, [refreshToken])
 
   const filteredRecommendations = useMemo(() => {

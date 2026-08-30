@@ -1,22 +1,16 @@
 import type { PledgeDungeon } from './types'
 
 /**
- * Static lookup of USPF's `GD` (Group Dungeon) table: one entry per specific dungeon,
- * each tracked via its own one-time intro quest (USPF checks completion with the real
- * ESO API `GetCompletedQuestInfo(questId)` - genuinely per-character, no account-wide
- * caveat unlike achievements). Completing this quest is what grants the skill point AND
- * is the "have they done the quest for this dungeon" signal the app recommends around.
+ * USPF's `GD` (Group Dungeon) table, one entry per dungeon. Each dungeon has a one-time
+ * intro quest; USPF marks it done via GetCompletedQuestInfo(questId), which is
+ * per-character. Completing that quest grants the skill point and is the signal this app
+ * recommends around.
  *
- * Resolved by cross-referencing USPF's own `id` field (each dungeon's real ESO zone
- * index) against LibZone's zoneIndex->name table (the addon's own comprehensive,
- * community-maintained zone database) - verified against real player data and eso-hub's
- * "It can be found in <Zone>, part of the <Pack> DLC pack" per-dungeon descriptions for
- * a subset (e.g. Black Drake Villa + The Cauldron / Flames of Ambition) as a sanity check.
- * Quest IDs cross-checked against UESP quest pages (e.g. quest 4107 = "Banishing the
- * Banished", the intro quest for The Banished Cells I) confirm these are real, correct IDs.
+ * Dungeon names come from matching USPF's zone-index `id` against LibZone's
+ * zoneIndex->name table. Quest ids were checked against UESP quest pages.
  */
 export const PLEDGE_DUNGEONS: PledgeDungeon[] = [
-  // --- Base game ---
+  // Base game
   { key: 'BC1', dungeonName: 'Banished Cells I', tier: 'base', questId: 4107 },
   { key: 'BC2', dungeonName: 'Banished Cells II', tier: 'base', questId: 4597 },
   { key: 'EH1', dungeonName: 'Elden Hollow I', tier: 'base', questId: 4336 },
@@ -42,7 +36,7 @@ export const PLEDGE_DUNGEONS: PledgeDungeon[] = [
   { key: 'BC', dungeonName: 'Blessed Crucible', tier: 'base', questId: 4469 },
   { key: 'VM', dungeonName: 'Vaults of Madness', tier: 'base', questId: 4822 },
 
-  // --- DLC (includes Imperial City, which the daily rotation does draw from) ---
+  // DLC (Imperial City included - the daily rotation draws from it)
   { key: 'ICP', dungeonName: 'Imperial City Prison', tier: 'dlc', questId: 5136 },
   { key: 'WGT', dungeonName: 'White-Gold Tower', tier: 'dlc', questId: 5342 },
   { key: 'RM', dungeonName: 'Ruins of Mazzatun', tier: 'dlc', questId: 5403 },
@@ -79,12 +73,9 @@ export const PLEDGE_DUNGEONS: PledgeDungeon[] = [
   { key: 'BGF', dungeonName: 'Black Gem Foundry', tier: 'dlc', questId: 7323 }
 ]
 
-/**
- * eso-hub is inconsistent about prefixing dungeon names with "The" (e.g. it scrapes
- * as "The Banished Cells II" even though this file's dungeonName is just "Banished
- * Cells II", while "The Dread Cellar" is prefixed on both sides) - stripping a
- * leading "The " from both sides before comparing makes matching robust to that.
- */
+// eso-hub isn't consistent about a leading "The" on dungeon names (it scrapes "The
+// Banished Cells II" but "The Dread Cellar" matches on both sides). Strip it before
+// comparing.
 function normalizeDungeonName(name: string): string {
   return name.trim().replace(/^the\s+/i, '').toLowerCase()
 }

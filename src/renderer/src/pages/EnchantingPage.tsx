@@ -55,7 +55,7 @@ function EnchantingPage(): React.JSX.Element {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch {
-      /* storage disabled - selection just won't persist */
+      /* storage disabled - selection won't persist */
     }
   }, [state])
 

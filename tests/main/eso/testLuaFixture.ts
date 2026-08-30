@@ -2,13 +2,8 @@ import { mkdtemp, writeFile, rm } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
 
-/**
- * Test-only helper (not matched by vitest.config.ts's `*.test.ts` include, so it
- * never runs as a suite itself): writes a minified Lua SavedVariables-style fixture
- * to a real temp file, since the parser reads from disk rather than accepting a
- * string directly. Call `cleanup()` (e.g. from `afterEach`) to remove every temp dir
- * this writer created.
- */
+// Writes Lua SavedVariables fixtures to real temp files, since the parser reads from
+// disk. Call cleanup() from afterEach to delete the temp dirs.
 export function createLuaFixtureWriter(): {
   write: (fileName: string, content: string) => Promise<string>
   cleanup: () => Promise<void>

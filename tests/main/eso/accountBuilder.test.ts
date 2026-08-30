@@ -9,21 +9,17 @@ afterEach(async () => {
   await Promise.all(tmpDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })))
 })
 
-/**
- * Builds a fake `<Documents>/Elder Scrolls Online/live/SavedVariables/` folder with
- * the three addons' files, matching the real on-disk layout `findSavedVariablesFiles`
- * scans - this is what makes it an integration test of the whole main/eso pipeline
- * (locator + parser + all three extractors + the merge in buildAccounts) rather than
- * a unit test of any one piece.
- */
+// Writes a fake Documents/Elder Scrolls Online/live/SavedVariables/ folder with all
+// three addon files in the real on-disk layout, so this exercises the whole pipeline
+// end to end: locator, parser, every extractor, and the merge in buildAccounts.
 async function writeFixtureDocuments(): Promise<string> {
   const documentsDir = await mkdtemp(join(tmpdir(), 'wsid-docs-'))
   tmpDirs.push(documentsDir)
   const savedVarsDir = join(documentsDir, 'Elder Scrolls Online', 'live', 'SavedVariables')
   await mkdir(savedVarsDir, { recursive: true })
 
-  // Alice (NA) and Bob live in the default bucket; Carol is under a nested EU bucket -
-  // see uspfExtractor's doc comment for why that nesting is structured this way.
+  // Alice (NA) and Bob are in the default bucket; Carol is in a nested EU bucket.
+  // See findRealmBuckets in uspfExtractor for why the nesting looks like this.
   await writeFile(
     join(savedVarsDir, 'USPF.lua'),
     `USPF_Settings={["Default"]={["@TestAccount"]={` +
@@ -46,7 +42,7 @@ async function writeFixtureDocuments(): Promise<string> {
     'utf-8'
   )
 
-  // Only Alice (maxed) has riding data - Bob and Carol must fall back to "no data yet".
+  // Only Alice has riding data (maxed); Bob and Carol fall back to "no data yet".
   await writeFile(
     join(savedVarsDir, 'DailyCraftStatus.lua'),
     `DailyCraftStatusVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
