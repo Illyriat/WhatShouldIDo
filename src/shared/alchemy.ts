@@ -1,37 +1,34 @@
 /**
- * Static ESO Alchemy data + the trait-matching rule, kept in `shared` so the
- * calculation is a pure function the renderer imports directly (no IPC needed -
- * there's no character-specific state here, just game data).
+ * ESO Alchemy game data plus the trait-matching rule, in `shared` so the renderer can
+ * compute results without a round trip through the main process.
  *
- * Reagent trait lists and the solvent tables are transcribed from eso-hub's
- * Alchemy overview (https://eso-hub.com/en/alchemy-reagents-and-solvents) and
- * cross-checked against UESP's Online:Alchemy_Effects reagent-pair tables.
- * Current as of the 2025 reagent set (34 reagents, 32 effects).
+ * Reagent and solvent tables come from eso-hub's Alchemy overview
+ * (https://eso-hub.com/en/alchemy-reagents-and-solvents), checked against UESP's
+ * Online:Alchemy_Effects. Current for the 2025 set: 34 reagents, 32 effects.
  *
- * The core mechanic: you mix one solvent with 2-3 reagents. Any trait that is
- * shared by AT LEAST TWO of your reagents becomes an active effect on the result.
- * A water solvent makes a potion (effects apply to you); an oil solvent makes a
- * poison (effects apply to the enemy you hit). The solvent only sets the level
- * requirement and scales potency - it never changes which effects appear.
+ * Rule: mix a solvent with 2-3 reagents. Any trait shared by two or more reagents
+ * becomes an effect on the result. Water solvents make potions (effects hit you),
+ * oils make poisons (effects hit your target). The solvent only sets level and
+ * potency, never which effects appear.
  */
 
 export type AlchemyMode = 'potion' | 'poison'
 
-/** 'positive' effects help whoever they land on; 'negative' effects harm them. */
+// 'positive' effects help whoever they land on, 'negative' effects harm them.
 export type EffectKind = 'positive' | 'negative'
 
 export interface AlchemyEffect {
   id: string
   name: string
   kind: EffectKind
-  /** What it does when it lands (phrased neutrally - it lands on you in a potion, on your target in a poison). */
+  // Phrased neutrally: it lands on you in a potion, on your target in a poison.
   description: string
 }
 
 export interface Reagent {
   id: string
   name: string
-  /** Exactly four trait effect ids, in eso-hub's listed order. */
+  // Four trait effect ids, in eso-hub's listed order.
   traits: [string, string, string, string]
 }
 
@@ -39,9 +36,9 @@ export interface Solvent {
   id: string
   name: string
   mode: AlchemyMode
-  /** Alchemy level or Champion Point requirement to use it. */
+  // Alchemy level or Champion Point requirement to use it.
   requirement: string
-  /** 1 (lowest) .. 9 (Lorkhan's Tears / Alkahest). Higher = stronger result. */
+  // 1..9, higher is a stronger result (9 = Lorkhan's Tears / Alkahest).
   tier: number
 }
 
@@ -310,8 +307,8 @@ export function getSolvent(id: string): Solvent | undefined {
   return SOLVENTS_BY_ID.get(id)
 }
 
-// Relative, not root-absolute - the packaged app loads index.html via file://, where
-// a leading '/' resolves to the filesystem root rather than the app's own directory.
+// Keep these relative: the packaged app loads index.html over file://, where a
+// leading '/' points at the filesystem root, not the app directory.
 export function reagentIconUrl(id: string): string {
   return `./alchemy/reagents/${id}.png`
 }
@@ -322,31 +319,25 @@ export function solventIconUrl(id: string): string {
   return `./alchemy/solvents/${id}.png`
 }
 
-/** One effect that will appear on the crafted item, and which chosen reagents produced it. */
+// One effect on the crafted item and the reagents that produced it.
 export interface ResolvedEffect {
   effect: AlchemyEffect
-  /** ids of the selected reagents that share this trait (always 2+). */
+  // Selected reagents sharing this trait (always 2+).
   sourceReagentIds: string[]
 }
 
 export interface AlchemyResult {
   mode: AlchemyMode
-  /** Active effects, positive first then negative, each in the reagents' listed order. */
+  // Active effects, positive first then negative, each in the reagents' listed order.
   effects: ResolvedEffect[]
-  /** Selected reagents that share no trait with any other selected reagent - they contribute nothing. */
+  // Selected reagents that share no trait with any other pick, so contribute nothing.
   wastedReagentIds: string[]
-  /**
-   * Effects that landed on the wrong side: negative effects in a potion (they hurt you),
-   * positive effects in a poison (they help your target). Subset of `effects` by id.
-   */
+  // Effects on the wrong side: negatives in a potion, positives in a poison. Subset of `effects` by id.
   counterproductiveEffectIds: string[]
 }
 
-/**
- * Apply the trait-matching rule to a set of chosen reagent ids.
- * Order of `reagentIds` is preserved for "which reagent" display; duplicates and
- * unknown ids are ignored. Works with 0-3 reagents (0-1 simply yields no effects).
- */
+// Applies the trait-matching rule. Preserves `reagentIds` order for display; ignores
+// duplicates and unknown ids. 0-1 reagents just yields no effects.
 export function computeAlchemyResult(reagentIds: string[], mode: AlchemyMode): AlchemyResult {
   const chosen = reagentIds
     .filter((id, i) => reagentIds.indexOf(id) === i)
@@ -386,11 +377,11 @@ export function computeAlchemyResult(reagentIds: string[], mode: AlchemyMode): A
   return { mode, effects, wastedReagentIds, counterproductiveEffectIds }
 }
 
-/** A concrete reagent combination that produces a set of wanted effects. */
+// A reagent combination that produces a wanted set of effects.
 export interface RecipeMatch {
   reagentIds: string[]
   result: AlchemyResult
-  /** true if every produced effect is on the right side (no counterproductive ones). */
+  // true if no effect landed on the wrong side.
   clean: boolean
 }
 
@@ -411,11 +402,8 @@ function combinations<T>(items: T[], size: number): T[][] {
   return out
 }
 
-/**
- * Reverse lookup: every 2- and 3-reagent combination whose produced effects include
- * ALL of `targetEffectIds`. Sorted best-first - clean recipes before dirty ones, then
- * fewer total effects, then 2 reagents before 3. Capped at `limit`.
- */
+// Every 2- and 3-reagent combination producing all of `targetEffectIds`. Sorted
+// clean-first, then fewest total effects, then 2 reagents before 3. Capped at `limit`.
 export function findRecipesForEffects(
   targetEffectIds: string[],
   mode: AlchemyMode,
@@ -424,7 +412,7 @@ export function findRecipesForEffects(
   const targets = targetEffectIds.filter((id) => EFFECTS_BY_ID.has(id))
   if (targets.length === 0) return []
 
-  // Only reagents that carry at least one target trait can help.
+  // A reagent with none of the target traits can't help.
   const candidates = REAGENTS.filter((r) => r.traits.some((t) => targets.includes(t)))
 
   const matches: RecipeMatch[] = []

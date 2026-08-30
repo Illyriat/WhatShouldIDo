@@ -14,21 +14,20 @@ export interface AccountSelection {
   setSelectedServer: (server: string) => void
   availableServers: string[]
   selectedCharacters: Account['characters']
-  /** re-reads SavedVariables from disk - ESO only writes them on logout/reload UI, so
-   *  this app never auto-detects in-game changes; call this after doing so in-game. */
+  // Re-reads SavedVariables from disk. ESO only writes them on logout / /reloadui,
+  // so there's no live detection; call this after doing either in-game.
   refresh: () => void
-  /** bumped by refresh() - pages with their own separate data fetches (e.g. HomePage's
-   *  recommendations) should include this in their own effect's dependency array so a
-   *  single refresh() call re-fetches everything together. */
+  // Bumped by refresh(). Pages that fetch their own data should depend on this so
+  // one refresh() re-fetches everything.
   refreshToken: number
 }
 
 /**
- * Shared account/server loading + selection logic (no "All Accounts"/"All Servers"
- * option - always resolves to a specific, valid account+server once accounts.length > 0).
- * Call this ONCE in App.tsx and pass the result down to pages as a prop - calling it
- * per-page would give each page its own independent selection state, which resets
- * back to the default account/server every time the user switches pages.
+ * Shared account/server loading and selection. Always resolves to a specific account
+ * and server once any accounts exist (there's no "All" option).
+ *
+ * Call once in App.tsx and pass the result down as a prop. Per-page instances would
+ * each hold their own selection and reset on every navigation.
  */
 export function useAccountSelection(): AccountSelection {
   const [state, setState] = useState<AccountsState>({ status: 'loading' })
@@ -51,9 +50,8 @@ export function useAccountSelection(): AccountSelection {
     return () => {
       cancelled = true
     }
-    // refreshToken is intentionally the only reason this re-runs after mount - bumping
-    // it re-fetches without resetting `state` back to 'loading' first, so the page
-    // keeps showing the previous data (no flash) until the fresh read resolves.
+    // Only refreshToken re-runs this after mount. It doesn't reset `state` to
+    // 'loading', so the previous data stays on screen until the new read resolves.
   }, [refreshToken])
 
   const refresh = useCallback(() => setRefreshToken((t) => t + 1), [])

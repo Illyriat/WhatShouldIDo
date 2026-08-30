@@ -1,9 +1,5 @@
-/**
- * Single source of truth for IPC channel names, shared by main (registers handlers)
- * and preload (invokes them) so the two sides can never drift out of sync on a typo'd
- * string - see src/main/ipc/*.ts for the `register*IpcHandlers` functions that consume
- * these, and src/preload/index.ts for the renderer-facing `window.api` that invokes them.
- */
+// IPC channel names, shared by the main handlers (src/main/ipc/*.ts) and the preload
+// bridge (src/preload/index.ts) so the two sides can't drift.
 export const IPC_CHANNELS = {
   getAccounts: 'get-accounts',
   getRecommendations: 'get-recommendations',
@@ -12,6 +8,6 @@ export const IPC_CHANNELS = {
   pickDocumentsFolder: 'pick-documents-folder',
   checkForUpdates: 'check-for-updates',
   quitAndInstallUpdate: 'quit-and-install-update',
-  /** main -> renderer push, not invoke/handle - see registerUpdateIpcHandlers */
+  // main -> renderer push, not invoke/handle
   updateStatus: 'update-status'
 } as const

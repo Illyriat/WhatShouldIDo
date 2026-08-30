@@ -5,7 +5,7 @@ interface Props {
   updater: AppUpdater
 }
 
-/** Only ever shows once an update has finished downloading - checking/downloading are silent. */
+// Shows only once an update has finished downloading; earlier states are silent.
 function UpdateBanner({ updater }: Props): React.JSX.Element | null {
   const [dismissed, setDismissed] = useState(false)
 

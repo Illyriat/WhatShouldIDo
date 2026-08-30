@@ -3,11 +3,9 @@ import { join } from 'path'
 import { readdir, access } from 'fs/promises'
 import { constants } from 'fs'
 
-/**
- * Finds `<fileName>` under Documents/Elder Scrolls Online/<profile>/SavedVariables/.
- * <profile> is normally "live", but scanning for it keeps this working for other
- * profiles (e.g. "liveeu", "pts") without hardcoding.
- */
+// Finds `<fileName>` in every Documents/Elder Scrolls Online/<profile>/SavedVariables/
+// folder. <profile> is usually "live" but can be "liveeu", "pts", etc., so scan rather
+// than hardcode.
 export async function findSavedVariablesFiles(fileName: string, documentsOverride?: string): Promise<string[]> {
   const documentsDir = documentsOverride ?? join(homedir(), 'Documents')
   const esoDir = join(documentsDir, 'Elder Scrolls Online')
@@ -28,7 +26,7 @@ export async function findSavedVariablesFiles(fileName: string, documentsOverrid
       await access(candidate, constants.R_OK)
       found.push(candidate)
     } catch {
-      // not present under this profile, skip
+      // not in this profile
     }
   }
 

@@ -12,7 +12,7 @@ const api = {
   pickDocumentsFolder: (): Promise<string | null> => ipcRenderer.invoke(IPC_CHANNELS.pickDocumentsFolder),
   checkForUpdates: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.checkForUpdates),
   quitAndInstallUpdate: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.quitAndInstallUpdate),
-  /** Subscribes to update-status pushes from main; call the returned function to unsubscribe. */
+  // Subscribes to update-status pushes from main; call the returned fn to unsubscribe.
   onUpdateStatus: (callback: (status: UpdateStatus) => void): (() => void) => {
     const listener = (_event: IpcRendererEvent, status: UpdateStatus): void => callback(status)
     ipcRenderer.on(IPC_CHANNELS.updateStatus, listener)

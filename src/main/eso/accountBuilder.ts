@@ -26,14 +26,12 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
 }
 
 /**
- * Builds the final Account[] the app uses: reads USPF (per-character dungeon-quest
- * completion, possibly multiple profiles e.g. "live"/"pts"), SkillLines (server
- * labels), and DailyCraftStatus (riding-training status), and attaches each to the
- * matching character. No cross-character unioning for dungeon quests - GD quest
- * completion (GetCompletedQuestInfo) is genuinely per-character in ESO, unlike
- * achievements, so each character's own cached flags are already correct once USPF
- * has had a chance to recalculate them (i.e. that character has logged in at least
- * once with the addon active). Same reasoning applies to riding stats.
+ * Builds the Account[] the app renders. Reads USPF (per-character dungeon-quest
+ * completion, one file per profile), SkillLines (server labels) and DailyCraftStatus
+ * (riding-training status) and joins them onto each character.
+ *
+ * Dungeon-quest and riding data are per-character in ESO, so there's no cross-character
+ * unioning - a character's own flags are correct once it has logged in with the addon.
  */
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
   const [uspfFiles, skillLinesFiles, ridingFiles] = await Promise.all([

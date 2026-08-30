@@ -3,9 +3,8 @@ import electronUpdater from 'electron-updater'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 import type { UpdateStatus } from '@shared/types'
 
-// electron-updater is CommonJS; its named exports aren't statically analyzable by
-// Node's ESM interop once bundled, so this app's ESM main process (package.json has
-// "type": "module") must go through the default export instead - see
+// electron-updater is CommonJS; the ESM main process can't destructure its named
+// exports after bundling, so pull autoUpdater off the default export.
 // https://github.com/electron-userland/electron-builder/issues/7976
 const { autoUpdater } = electronUpdater
 
@@ -27,13 +26,9 @@ autoUpdater.on('download-progress', (progress) =>
 autoUpdater.on('update-downloaded', (info) => sendStatus({ state: 'downloaded', version: info.version }))
 autoUpdater.on('error', (err) => sendStatus({ state: 'error', message: err.message }))
 
-/**
- * Checks GitHub Releases (see electron-builder.yml's `publish` block) for a newer
- * version, downloading it automatically in the background if found - the renderer
- * finds out via `update-status` events and prompts the user to restart once
- * `update-downloaded` fires. No-ops with a friendly status outside a packaged build,
- * since electron-updater has nothing to check against in dev (no app-update.yml).
- */
+// Checks GitHub Releases (electron-builder.yml `publish` block) and auto-downloads a
+// newer version in the background; the renderer reacts to the update-status events.
+// Dev builds have no app-update.yml to check against, so bail out early.
 export async function checkForUpdates(): Promise<void> {
   if (!app.isPackaged) {
     sendStatus({ state: 'error', message: "Updates aren't available in a dev build." })
@@ -46,7 +41,7 @@ export async function checkForUpdates(): Promise<void> {
   }
 }
 
-/** Call once, after the main window is created, so update-status events have somewhere to go. */
+// Call once the main window exists, before checkForUpdates runs.
 export function setUpdateTargetWindow(window: BrowserWindow): void {
   targetWindow = window
 }

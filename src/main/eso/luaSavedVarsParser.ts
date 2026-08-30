@@ -1,12 +1,8 @@
 import { readFile } from 'fs/promises'
 import luaparse from 'luaparse'
 
-/**
- * ESO SavedVariables files are minified single-line Lua chunks of the form
- * `VarName={...}`. This parses just the table literal into a plain JS value,
- * using luaparse's AST rather than eval (these files aren't attacker-controlled,
- * but there's no reason to execute arbitrary Lua either).
- */
+// ESO SavedVariables files are minified single-line Lua of the form `VarName={...}`.
+// Parse the table literal into a plain JS value via luaparse's AST, not eval.
 
 type LuaTable = Record<string, unknown> | unknown[]
 
@@ -40,7 +36,7 @@ function tableConstructorToJs(node: luaparse.TableConstructorExpression): LuaTab
     return arrayValues
   }
 
-  // Mixed array+keyed table: fold array part in with 1-based numeric string keys
+  // Mixed table: fold the array part in under 1-based string keys.
   arrayValues.forEach((v, i) => {
     objectEntries[String(i + 1)] = v
   })
@@ -52,9 +48,8 @@ function luaExpressionToJs(node: luaparse.Expression): unknown {
     case 'TableConstructorExpression':
       return tableConstructorToJs(node)
     case 'StringLiteral':
-      // Source was read as latin1 + parsed with encodingMode 'pseudo-latin1' (see
-      // parseSavedVariables) so multi-byte UTF-8 sequences in character names etc.
-      // survive intact as raw bytes here - decode them back to real text.
+      // The source was read as latin1 (see parseSavedVariables), so UTF-8 byte
+      // sequences arrive here raw. Decode them back to text.
       return node.value === null ? null : Buffer.from(node.value, 'latin1').toString('utf-8')
     case 'NumericLiteral':
       return node.value
@@ -73,16 +68,12 @@ function luaExpressionToJs(node: luaparse.Expression): unknown {
   }
 }
 
-/**
- * Parses a SavedVariables .lua file and returns the value assigned to `globalName`
- * (e.g. "USPF_Settings"), or null if that global isn't assigned in the file.
- */
+// Returns the value assigned to `globalName` (e.g. "USPF_Settings") in a
+// SavedVariables file, or null if it isn't assigned there.
 export async function parseSavedVariables(filePath: string, globalName: string): Promise<LuaTable | null> {
-  // Read as latin1 (byte-for-byte, no UTF-8 decoding) so luaparse's
-  // 'pseudo-latin1' encoding mode can hand back string literal bytes losslessly -
-  // needed both to populate StringLiteral.value at all (luaparse leaves it null
-  // under the default 'none' mode) and to correctly round-trip non-ASCII
-  // characters in e.g. character names.
+  // Read latin1 so luaparse's 'pseudo-latin1' mode hands back string bytes intact.
+  // Under the default mode StringLiteral.value is null; this also round-trips
+  // non-ASCII character names.
   const source = await readFile(filePath, 'latin1')
   const ast = luaparse.parse(source, { comments: false, scope: false, encodingMode: 'pseudo-latin1' })
 

@@ -34,15 +34,13 @@ function computeStatus(ridingStats: PlainObject, nowSeconds: number): RidingStat
 }
 
 /**
- * Reads DailyCraftStatus.lua (an already-installed addon, unrelated to USPF) for each
- * character's riding-training status. `$AccountWide` holds realm buckets (e.g.
- * "NA Megaserver"/"EU Megaserver") each keyed by charId directly - mirrors USPF's/
- * SkillLines' nesting pattern but without a charInfo list, so this is joined onto
- * existing characters by charId elsewhere rather than used as a name source.
- * Training itself has one shared daily cooldown per character (not per stat) - see
- * DailyCraftStatus's own AltsModule.lua `DCS_canTrainAltRiding` for the source logic
- * this mirrors: maxed on all 3 stats -> nothing to do ever; otherwise compare
- * `timeToTrain` (unix seconds) against now.
+ * Reads each character's riding-training status from DailyCraftStatus.lua (a separate
+ * addon). `$AccountWide` holds realm buckets keyed straight by charId, with no charInfo
+ * list, so callers join this onto known characters by charId.
+ *
+ * Training has one daily cooldown per character, not per stat. Mirrors
+ * DailyCraftStatus's own DCS_canTrainAltRiding: maxed on all 3 stats means nothing to
+ * do; otherwise compare `timeToTrain` (unix seconds) against now.
  */
 export async function extractRidingStatus(
   filePath: string,

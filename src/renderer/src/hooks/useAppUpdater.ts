@@ -7,11 +7,8 @@ export interface AppUpdater {
   quitAndInstallUpdate: () => void
 }
 
-/**
- * Mirrors the main process's auto-updater state (see src/main/updater.ts) - main checks
- * once automatically on launch, and this also exposes a manual trigger for Settings'
- * "Check for Updates" button.
- */
+// Mirrors the main process's auto-updater state (src/main/updater.ts) and exposes the
+// manual trigger behind Settings' "Check for Updates" button.
 export function useAppUpdater(): AppUpdater {
   const [status, setStatus] = useState<UpdateStatus>({ state: 'idle' })
 

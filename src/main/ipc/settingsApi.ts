@@ -22,7 +22,7 @@ export async function setDocumentsPathOverride(path: string | null): Promise<App
   return getAppSettings()
 }
 
-/** Opens a native folder picker. Returns null if the user cancelled. */
+// Opens a native folder picker. Null if the user cancelled.
 export async function pickDocumentsFolder(): Promise<string | null> {
   const result = await dialog.showOpenDialog({
     title: 'Select your Documents folder (containing "Elder Scrolls Online")',

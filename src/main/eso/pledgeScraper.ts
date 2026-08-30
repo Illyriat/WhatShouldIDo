@@ -21,11 +21,8 @@ interface CacheFile {
   scrapedNames: string[]
 }
 
-/**
- * ESO's daily reset varies by megaserver (NA ~10:00 UTC, EU ~03:00 UTC). Since this
- * app doesn't track server per character in v1, NA's reset is used as the single
- * cutoff for "which ESO day is it" - a documented simplification.
- */
+// Daily reset differs by megaserver (NA ~10:00 UTC, EU ~03:00 UTC). We don't track
+// server here, so NA's reset is the single cutoff for "which ESO day is it".
 export function currentEsoDay(now: Date): string {
   const resetHourUtc = 10
   const cutoff = new Date(now)
@@ -52,10 +49,8 @@ async function writeCache(cachePath: string, cache: CacheFile): Promise<void> {
 export function parseScrapedNames(html: string): string[] {
   const $ = cheerio.load(html)
 
-  // The "Todays Pledges" section is the only place these dungeon header images
-  // appear on the page (confirmed against the live page - "Upcoming Pledges" is
-  // rendered client-side and has none), so a page-wide selector is both simpler
-  // and more robust than walking siblings out of the heading's nested wrapper.
+  // These header images only appear in the "Todays Pledges" section ("Upcoming
+  // Pledges" is rendered client-side), so a page-wide selector is safe here.
   const names: string[] = []
   $('img[alt$=" header"]').each((_, img) => {
     const alt = $(img).attr('alt') ?? ''

@@ -1,18 +1,17 @@
 /**
- * Static ESO Enchanting data + the glyph-resolution rule, kept in `shared` so the
- * renderer can compute a result with no IPC (it's pure game data, no per-character state).
+ * ESO Enchanting game data plus the glyph-resolution rule, in `shared` so the renderer
+ * can compute results locally.
  *
- * A glyph is made from three runes:
- *   - Potency rune  -> whether the glyph is ADDITIVE or SUBTRACTIVE, and its level.
- *   - Essence rune  -> which effect the glyph has (and which item type it goes on).
- *   - Aspect rune   -> the glyph's quality (white .. gold).
- * The result is a straight lookup: (essence, additive|subtractive) picks exactly one
- * glyph; potency sets the level; aspect sets the quality. Nothing is probabilistic.
+ * A glyph is three runes:
+ *   Potency  -> additive or subtractive, and the level.
+ *   Essence  -> the effect (and which item type it goes on).
+ *   Aspect   -> the quality (white..gold).
+ * Resolution is a plain lookup: (essence, potency type) picks one glyph, potency sets
+ * the level, aspect sets the quality.
  *
- * Rune translations and the essence -> glyph matrix are transcribed from UESP's
- * Online:Runestones page and cross-checked against eso-hub's Enchanting glyph list.
- * Current as of the 2025 rune set (16 additive + 16 subtractive potency, 19 essence,
- * 5 aspect; 38 glyphs). Hakeijo (Tel Var) and Indeko (Antiquities) are included.
+ * Rune translations and the essence->glyph matrix come from UESP's Online:Runestones,
+ * checked against eso-hub. Current for the 2025 set (32 potency, 19 essence, 5 aspect,
+ * 38 glyphs), Hakeijo and Indeko included.
  */
 
 export type PotencyType = 'additive' | 'subtractive'
@@ -22,14 +21,14 @@ export interface PotencyRune {
   id: string
   name: string
   type: PotencyType
-  /** Gear level range the rune crafts for, e.g. "1–10", "CP 160". */
+  // Gear level range the rune crafts for, e.g. "1–10", "CP 160".
   levelLabel: string
 }
 
 export interface EssenceRune {
   id: string
   name: string
-  /** The rune's in-lore translation, as ESO shows once decoded. */
+  // The rune's in-lore translation, as ESO shows it once decoded.
   translation: string
 }
 
@@ -37,7 +36,7 @@ export interface AspectRune {
   id: string
   name: string
   quality: string
-  /** Swatch colour for the quality. */
+  // Swatch colour for the quality.
   color: string
 }
 
@@ -119,7 +118,7 @@ export const ESSENCE_RUNES: EssenceRune[] = [
 ]
 
 export const GLYPHS: Glyph[] = [
-  // --- Weapon ---
+  // Weapon
   { id: 'flame', name: 'Glyph of Flame', itemType: 'weapon', effect: 'Deals Fire Damage on hit.' },
   { id: 'frost', name: 'Glyph of Frost', itemType: 'weapon', effect: 'Deals Frost Damage on hit.' },
   { id: 'shock', name: 'Glyph of Shock', itemType: 'weapon', effect: 'Deals Shock Damage on hit.' },
@@ -179,7 +178,7 @@ export const GLYPHS: Glyph[] = [
     itemType: 'weapon',
     effect: 'Deals extra Magic Damage to undead and Daedra, and restores Health, Magicka, and Stamina.'
   },
-  // --- Armor ---
+  // Armor
   { id: 'health', name: 'Glyph of Health', itemType: 'armor', effect: 'Adds Max Health.' },
   { id: 'magicka', name: 'Glyph of Magicka', itemType: 'armor', effect: 'Adds Max Magicka.' },
   { id: 'stamina', name: 'Glyph of Stamina', itemType: 'armor', effect: 'Adds Max Stamina.' },
@@ -189,7 +188,7 @@ export const GLYPHS: Glyph[] = [
     itemType: 'armor',
     effect: 'Adds Max Health, Magicka, and Stamina.'
   },
-  // --- Jewelry ---
+  // Jewelry
   { id: 'increase-physical-harm', name: 'Glyph of Increase Physical Harm', itemType: 'jewelry', effect: 'Adds Weapon Damage.' },
   { id: 'increase-magical-harm', name: 'Glyph of Increase Magical Harm', itemType: 'jewelry', effect: 'Adds Spell Damage.' },
   { id: 'decrease-physical-harm', name: 'Glyph of Decrease Physical Harm', itemType: 'jewelry', effect: 'Adds Physical Resistance (Armor).' },
@@ -212,7 +211,7 @@ export const GLYPHS: Glyph[] = [
   { id: 'potion-speed', name: 'Glyph of Potion Speed', itemType: 'jewelry', effect: "Reduces the cooldown of potions below this item's level." }
 ]
 
-/** essence rune id -> the glyph it makes with an additive vs a subtractive potency rune. */
+// essence rune id -> the glyph it makes with an additive vs a subtractive potency rune.
 const ESSENCE_TO_GLYPH: Record<string, { additive: string; subtractive: string }> = {
   dekeipa: { additive: 'frost', subtractive: 'frost-resist' },
   deni: { additive: 'stamina', subtractive: 'absorb-stamina' },
@@ -253,8 +252,8 @@ export function getGlyph(id: string): Glyph | undefined {
   return GLYPH_BY_ID.get(id)
 }
 
-// Relative, not root-absolute - the packaged app loads index.html via file://, where
-// a leading '/' resolves to the filesystem root rather than the app's own directory.
+// Keep these relative: the packaged app loads index.html over file://, where a
+// leading '/' points at the filesystem root, not the app directory.
 export function runeIconUrl(id: string): string {
   return `./enchanting/runes/${id}.png`
 }
@@ -262,13 +261,13 @@ export function glyphIconUrl(id: string): string {
   return `./enchanting/glyphs/${id}.png`
 }
 
-/** Which glyph an essence rune produces for a given potency type. */
+// Which glyph an essence rune produces for a given potency type.
 export function glyphForEssence(essenceId: string, potencyType: PotencyType): Glyph | undefined {
   const pair = ESSENCE_TO_GLYPH[essenceId]
   return pair ? GLYPH_BY_ID.get(pair[potencyType]) : undefined
 }
 
-/** Reverse lookup: the essence rune and potency type that produce a given glyph. */
+// The essence rune and potency type that produce a given glyph.
 export function runesForGlyph(glyphId: string): { essence: EssenceRune; potencyType: PotencyType } | null {
   for (const [essenceId, pair] of Object.entries(ESSENCE_TO_GLYPH)) {
     const type = (['additive', 'subtractive'] as const).find((t) => pair[t] === glyphId)
@@ -285,15 +284,13 @@ export interface EnchantResult {
   potency: PotencyRune
   essence: EssenceRune
   aspect?: AspectRune
-  /** Restated for display: the crafted glyph's level and quality. */
+  // The crafted glyph's level and quality, ready to display.
   levelLabel: string
   qualityLabel: string
 }
 
-/**
- * Resolve the three chosen runes into a finished glyph. Returns null until both a
- * potency and an essence rune are chosen (aspect is optional - it only sets quality).
- */
+// Resolves the chosen runes into a glyph. Null until both a potency and an essence
+// rune are picked; aspect is optional and only sets quality.
 export function computeGlyph(
   potencyId: string | null,
   essenceId: string | null,
