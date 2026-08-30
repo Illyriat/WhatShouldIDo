@@ -4,6 +4,7 @@ export const IPC_CHANNELS = {
   getAccounts: 'get-accounts',
   getRecommendations: 'get-recommendations',
   getAppSettings: 'get-app-settings',
+  getAddonStatus: 'get-addon-status',
   setDocumentsPathOverride: 'set-documents-path-override',
   pickDocumentsFolder: 'pick-documents-folder',
   checkForUpdates: 'check-for-updates',

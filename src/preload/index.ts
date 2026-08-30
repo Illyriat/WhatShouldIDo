@@ -1,12 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { IpcRendererEvent } from 'electron'
-import type { Account, AppSettings, RecommendationsResult, UpdateStatus } from '@shared/types'
+import type { Account, AddonStatus, AppSettings, RecommendationsResult, UpdateStatus } from '@shared/types'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 
 const api = {
   getAccounts: (): Promise<Account[]> => ipcRenderer.invoke(IPC_CHANNELS.getAccounts),
   getRecommendations: (): Promise<RecommendationsResult> => ipcRenderer.invoke(IPC_CHANNELS.getRecommendations),
   getAppSettings: (): Promise<AppSettings> => ipcRenderer.invoke(IPC_CHANNELS.getAppSettings),
+  getAddonStatus: (): Promise<AddonStatus> => ipcRenderer.invoke(IPC_CHANNELS.getAddonStatus),
   setDocumentsPathOverride: (path: string | null): Promise<AppSettings> =>
     ipcRenderer.invoke(IPC_CHANNELS.setDocumentsPathOverride, path),
   pickDocumentsFolder: (): Promise<string | null> => ipcRenderer.invoke(IPC_CHANNELS.pickDocumentsFolder),

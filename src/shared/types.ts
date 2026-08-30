@@ -79,6 +79,10 @@ export type UpdateStatus =
   | { state: 'downloaded'; version: string }
   | { state: 'error'; message: string }
 
+// Which addon SavedVariables files were found on disk, keyed by file name
+// (e.g. "USPF.lua"). true = the addon has written data at least once.
+export type AddonStatus = Record<string, boolean>
+
 export interface AppSettings {
   // Override for the Documents folder holding ESO's SavedVariables. Undefined = OS
   // default (needed when OneDrive has redirected Documents).

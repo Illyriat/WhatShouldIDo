@@ -1,9 +1,10 @@
 import { dialog, ipcMain } from 'electron'
 import { homedir } from 'os'
 import { join } from 'path'
-import type { AppSettings } from '@shared/types'
+import type { AddonStatus, AppSettings } from '@shared/types'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 import { readPersistedSettings, writePersistedSettings } from '../settingsStore'
+import { detectAddons } from '../eso/addonDetector'
 
 function defaultDocumentsPath(): string {
   return join(homedir(), 'Documents')
@@ -15,6 +16,11 @@ export async function getAppSettings(): Promise<AppSettings> {
     documentsPathOverride: stored.documentsPathOverride,
     defaultDocumentsPath: defaultDocumentsPath()
   }
+}
+
+export async function getAddonStatus(): Promise<AddonStatus> {
+  const stored = await readPersistedSettings()
+  return detectAddons(stored.documentsPathOverride)
 }
 
 export async function setDocumentsPathOverride(path: string | null): Promise<AppSettings> {
@@ -34,6 +40,7 @@ export async function pickDocumentsFolder(): Promise<string | null> {
 
 export function registerSettingsIpcHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.getAppSettings, () => getAppSettings())
+  ipcMain.handle(IPC_CHANNELS.getAddonStatus, () => getAddonStatus())
   ipcMain.handle(IPC_CHANNELS.setDocumentsPathOverride, (_event, path: string | null) =>
     setDocumentsPathOverride(path)
   )

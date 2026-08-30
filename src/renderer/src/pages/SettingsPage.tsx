@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { AppSettings, UpdateStatus } from '@shared/types'
+import type { AddonStatus, AppSettings, UpdateStatus } from '@shared/types'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { AppUpdater } from '../hooks/useAppUpdater'
@@ -32,12 +32,15 @@ function updateStatusLabel(status: UpdateStatus): string | null {
 const ADDONS: {
   name: string
   url: string
+  // SavedVariables file this addon writes. Used to detect whether it's installed.
+  file: string
   required: boolean
   description: string
 }[] = [
   {
     name: 'Skill Lines',
     url: 'https://www.esoui.com/downloads/info4041-SkillLines.html',
+    file: 'SkillLines.lua',
     required: true,
     description:
       'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.'
@@ -45,6 +48,7 @@ const ADDONS: {
   {
     name: "Urich's Skill Point Finder (USPF)",
     url: 'https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html',
+    file: 'USPF.lua',
     required: true,
     description:
       'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. THis is the core feature of WhatShouldIDo.'
@@ -52,6 +56,7 @@ const ADDONS: {
   {
     name: 'Daily Craft Status',
     url: 'https://www.esoui.com/downloads/info2510-DailyCraftStatus.html',
+    file: 'DailyCraftStatus.lua',
     required: false,
     description:
       'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.'
@@ -68,6 +73,7 @@ const THEME_OPTIONS: { value: ThemePreference; label: string; description: strin
 
 function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.Element {
   const [settings, setSettings] = useState<AppSettings | null>(null)
+  const [addonStatus, setAddonStatus] = useState<AddonStatus | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -78,6 +84,17 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
       cancelled = true
     }
   }, [])
+
+  // Re-check whenever the data folder changes.
+  useEffect(() => {
+    let cancelled = false
+    window.api.getAddonStatus().then((s) => {
+      if (!cancelled) setAddonStatus(s)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [accountSelection.refreshToken])
 
   async function handleBrowse(): Promise<void> {
     const picked = await window.api.pickDocumentsFolder()
@@ -151,19 +168,43 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
         </p>
 
         <ul className="addon-list">
-          {ADDONS.map((addon) => (
-            <li key={addon.url} className="addon-row">
-              <div className="addon-row__head">
-                <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
-                  {addon.name}
-                </a>
-                <span className={`addon-badge ${addon.required ? 'addon-badge--required' : 'addon-badge--optional'}`}>
-                  {addon.required ? 'Required' : 'Optional'}
-                </span>
-              </div>
-              <p className="addon-row__desc">{addon.description}</p>
-            </li>
-          ))}
+          {ADDONS.map((addon) => {
+            const detected = addonStatus?.[addon.file] ?? false
+            const badgeState = addonStatus == null
+              ? 'addon-badge--pending'
+              : detected
+                ? 'addon-badge--detected'
+                : addon.required
+                  ? 'addon-badge--missing'
+                  : 'addon-badge--optional'
+            return (
+              <li key={addon.url} className="addon-row">
+                <div className="addon-row__head">
+                  <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
+                    {addon.name}
+                  </a>
+                  <span
+                    className={`addon-badge ${badgeState}`}
+                    title={
+                      addonStatus == null
+                        ? 'Checking…'
+                        : detected
+                          ? `Detected (${addon.file} found)`
+                          : `Not detected (no ${addon.file} on disk)`
+                    }
+                  >
+                    {addon.required ? 'Required' : 'Optional'}
+                  </span>
+                  {addonStatus != null && (
+                    <span className="addon-row__detect muted">
+                      {detected ? '✓ detected' : 'not detected'}
+                    </span>
+                  )}
+                </div>
+                <p className="addon-row__desc">{addon.description}</p>
+              </li>
+            )
+          })}
         </ul>
       </section>
 

@@ -684,14 +684,35 @@ h1 {
   border: 1px solid transparent;
 }
 
-.addon-badge--required {
+/* Detected on disk, the addon has written its SavedVariables at least once. */
+.addon-badge--detected {
+  color: var(--good);
+  border-color: var(--good);
+}
+
+/* Required but missing. */
+.addon-badge--missing {
   color: var(--bad);
   border-color: var(--bad);
 }
 
+/* Optional and not installed, not a problem, so stay neutral. */
 .addon-badge--optional {
   color: var(--muted);
   border-color: var(--border);
+}
+
+/* Before the first detection result comes back. */
+.addon-badge--pending {
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.addon-row__detect {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .addon-row__desc {
