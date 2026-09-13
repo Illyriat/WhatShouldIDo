@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export type Page = 'home' | 'dungeons' | 'alchemy' | 'enchanting' | 'settings'
+export type Page = 'home' | 'dungeons' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
 
 interface Props {
   collapsed: boolean
@@ -23,17 +23,33 @@ const NAV_ITEMS: NavItem[] = [
       { page: 'alchemy', label: 'Alchemy' },
       { page: 'enchanting', label: 'Enchanting' }
     ]
+  },
+  {
+    group: 'collections',
+    label: 'Collections',
+    children: [{ page: 'musicboxes', label: 'Music Boxes' }]
   }
 ]
 
-function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props): React.JSX.Element {
-  const isCraftingPage = activePage === 'alchemy' || activePage === 'enchanting'
-  const [craftingOpen, setCraftingOpen] = useState(isCraftingPage)
+const GROUPS = NAV_ITEMS.filter((item): item is Extract<NavItem, { group: string }> => 'children' in item)
 
-  // Reveal the group when navigation lands on one of its pages from elsewhere
+function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props): React.JSX.Element {
+  const activeGroup = GROUPS.find((g) => g.children.some((c) => c.page === activePage))?.group ?? null
+  const [openGroups, setOpenGroups] = useState<Set<string>>(() => (activeGroup ? new Set([activeGroup]) : new Set()))
+
+  // Reveal a group when navigation lands on one of its pages from elsewhere.
   useEffect(() => {
-    if (isCraftingPage) setCraftingOpen(true)
-  }, [isCraftingPage])
+    if (activeGroup) setOpenGroups((prev) => (prev.has(activeGroup) ? prev : new Set(prev).add(activeGroup)))
+  }, [activeGroup])
+
+  function toggleGroup(group: string): void {
+    setOpenGroups((prev) => {
+      const next = new Set(prev)
+      if (next.has(group)) next.delete(group)
+      else next.add(group)
+      return next
+    })
+  }
 
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
@@ -55,11 +71,11 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props
             <div key={item.group} className="sidebar__group">
               <button
                 className={`sidebar__nav-item sidebar__group-toggle ${
-                  isCraftingPage && !craftingOpen ? 'sidebar__nav-item--active' : ''
+                  activeGroup === item.group && !openGroups.has(item.group) ? 'sidebar__nav-item--active' : ''
                 }`}
                 title={item.label}
-                aria-expanded={craftingOpen}
-                onClick={() => setCraftingOpen((open) => !open)}
+                aria-expanded={openGroups.has(item.group)}
+                onClick={() => toggleGroup(item.group)}
               >
                 {collapsed ? (
                   item.label.slice(0, 1)
@@ -67,13 +83,13 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props
                   <>
                     <span>{item.label}</span>
                     <span className="sidebar__group-caret" aria-hidden="true">
-                      {craftingOpen ? '▾' : '▸'}
+                      {openGroups.has(item.group) ? '▾' : '▸'}
                     </span>
                   </>
                 )}
               </button>
 
-              {craftingOpen && (
+              {openGroups.has(item.group) && (
                 <div className="sidebar__subnav">
                   {item.children.map((child) => (
                     <button

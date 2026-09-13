@@ -1532,3 +1532,106 @@ h1 {
   height: 20px;
   flex-shrink: 0;
 }
+
+/* --- Music Boxes (Collections) --- */
+.musicbox-head {
+  flex-wrap: wrap;
+}
+
+.musicbox-progress {
+  flex: 1;
+  min-width: 120px;
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.musicbox-progress__fill {
+  height: 100%;
+  background: var(--good);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.musicbox-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.musicbox-search {
+  flex: 1;
+  min-width: 220px;
+}
+
+.musicbox-table {
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.musicbox-table th,
+.musicbox-table td {
+  text-align: left;
+  padding: 8px 12px;
+  vertical-align: middle;
+  width: auto;
+  min-width: 0;
+  height: auto;
+}
+
+.musicbox-table thead th {
+  height: auto;
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.musicbox-table__check-col,
+.musicbox-table__icon-col {
+  width: 1%;
+  text-align: center;
+}
+
+.musicbox-table__check-col input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.musicbox-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+
+.musicbox-table__name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.musicbox-table__name label {
+  cursor: pointer;
+}
+
+.musicbox-table__desc {
+  font-size: 0.78rem;
+}
+
+.musicbox-table__cost {
+  white-space: nowrap;
+}
+
+.musicbox-row--collected .musicbox-table__name label {
+  color: var(--good);
+}
+
+.musicbox-table__empty {
+  text-align: center;
+  padding: 20px;
+}
