@@ -24,6 +24,7 @@ As a whole this will track:
 - An Account and Server switcher, so multi-account and NA/EU players see only the characters relevant to what they've selected
 - An Alchemy page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
 - An Enchanting page: pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons
+- A Music Boxes collection checklist (under Collections): every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app
 
 The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) has two things: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
