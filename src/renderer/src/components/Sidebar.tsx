@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 export type Page = 'home' | 'dungeons' | 'alchemy' | 'enchanting' | 'settings'
 
 interface Props {
@@ -7,14 +9,32 @@ interface Props {
   onNavigate: (page: Page) => void
 }
 
-const NAV_ITEMS: { page: Page; label: string }[] = [
+type NavItem =
+  | { page: Page; label: string }
+  | { group: string; label: string; children: { page: Page; label: string }[] }
+
+const NAV_ITEMS: NavItem[] = [
   { page: 'home', label: 'Home' },
   { page: 'dungeons', label: 'Dungeon Check List' },
-  { page: 'alchemy', label: 'Potion Crafting' },
-  { page: 'enchanting', label: 'Enchanting' }
+  {
+    group: 'crafting',
+    label: 'Crafting',
+    children: [
+      { page: 'alchemy', label: 'Alchemy' },
+      { page: 'enchanting', label: 'Enchanting' }
+    ]
+  }
 ]
 
 function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props): React.JSX.Element {
+  const isCraftingPage = activePage === 'alchemy' || activePage === 'enchanting'
+  const [craftingOpen, setCraftingOpen] = useState(isCraftingPage)
+
+  // Reveal the group when navigation lands on one of its pages from elsewhere
+  useEffect(() => {
+    if (isCraftingPage) setCraftingOpen(true)
+  }, [isCraftingPage])
+
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
       <div className="sidebar__brand">
@@ -30,16 +50,57 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props
       </div>
 
       <nav className="sidebar__nav">
-        {NAV_ITEMS.map((item) => (
-          <button
-            key={item.page}
-            className={`sidebar__nav-item ${activePage === item.page ? 'sidebar__nav-item--active' : ''}`}
-            title={item.label}
-            onClick={() => onNavigate(item.page)}
-          >
-            {collapsed ? item.label.slice(0, 1) : item.label}
-          </button>
-        ))}
+        {NAV_ITEMS.map((item) =>
+          'children' in item ? (
+            <div key={item.group} className="sidebar__group">
+              <button
+                className={`sidebar__nav-item sidebar__group-toggle ${
+                  isCraftingPage && !craftingOpen ? 'sidebar__nav-item--active' : ''
+                }`}
+                title={item.label}
+                aria-expanded={craftingOpen}
+                onClick={() => setCraftingOpen((open) => !open)}
+              >
+                {collapsed ? (
+                  item.label.slice(0, 1)
+                ) : (
+                  <>
+                    <span>{item.label}</span>
+                    <span className="sidebar__group-caret" aria-hidden="true">
+                      {craftingOpen ? '▾' : '▸'}
+                    </span>
+                  </>
+                )}
+              </button>
+
+              {craftingOpen && (
+                <div className="sidebar__subnav">
+                  {item.children.map((child) => (
+                    <button
+                      key={child.page}
+                      className={`sidebar__nav-item sidebar__nav-item--child ${
+                        activePage === child.page ? 'sidebar__nav-item--active' : ''
+                      }`}
+                      title={child.label}
+                      onClick={() => onNavigate(child.page)}
+                    >
+                      {collapsed ? child.label.slice(0, 1) : child.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              key={item.page}
+              className={`sidebar__nav-item ${activePage === item.page ? 'sidebar__nav-item--active' : ''}`}
+              title={item.label}
+              onClick={() => onNavigate(item.page)}
+            >
+              {collapsed ? item.label.slice(0, 1) : item.label}
+            </button>
+          )
+        )}
       </nav>
 
       <div className="sidebar__footer">

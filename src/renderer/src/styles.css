@@ -175,6 +175,39 @@ body {
   border-color: var(--border);
 }
 
+.sidebar__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sidebar__group-caret {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.sidebar__subnav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__nav-item--child {
+  padding-left: 22px;
+  font-size: 0.85rem;
+}
+
+.sidebar--collapsed .sidebar__nav-item--child {
+  padding-left: 10px;
+}
+
 .sidebar__footer {
   margin-top: auto;
 }
@@ -722,7 +755,7 @@ h1 {
   color: var(--muted);
 }
 
-/* --- Potion Crafting (Alchemy) --- */
+/* --- Alchemy --- */
 .alchemy-intro {
   max-width: 760px;
   margin-bottom: 18px;
