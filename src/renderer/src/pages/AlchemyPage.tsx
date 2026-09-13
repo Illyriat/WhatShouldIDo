@@ -129,7 +129,7 @@ function AlchemyPage(): React.JSX.Element {
 
   return (
     <div className="page page--wide">
-      <h2 className="settings-title">Potion Crafting</h2>
+      <h2 className="settings-title">Alchemy</h2>
 
       <p className="muted alchemy-intro">
         Pick a solvent and 2–3 reagents. Any trait shared by <strong>two or more</strong> of your reagents becomes an

@@ -1,6 +1,6 @@
 # What Should I Do
 
-![Version](https://img.shields.io/badge/version-v0.1.2-blue)  [![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)](./LICENSE)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)  [![Downloads](https://img.shields.io/github/downloads/Illyriat/WhatShouldIDo/total)](https://github.com/Illyriat/WhatShouldIDo/releases/latest)
+![Version](https://img.shields.io/badge/version-v0.2.0-blue)  [![License: All Rights Reserved](https://img.shields.io/badge/license-All--Rights--Reserved-red)](./LICENSE)  ![Usage: No Redistribution](https://img.shields.io/badge/Usage-No%20Redistribution-red)  ![Built with Electron](https://img.shields.io/badge/Built%20with-Electron-9feaf9)  [![Downloads](https://img.shields.io/github/downloads/Illyriat/WhatShouldIDo/total)](https://github.com/Illyriat/WhatShouldIDo/releases/latest)
 
 ### A desktop companion that tells you what to do today across every character on every account, for every server.
 
@@ -22,14 +22,15 @@ As a whole this will track:
 - Which characters are ready for their daily riding (Capacity/Stamina/Speed) training, and which have already maxed out
 - A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable
 - An Account and Server switcher, so multi-account and NA/EU players see only the characters relevant to what they've selected
-- A Potion Crafting page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
+- An Alchemy page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
 - An Enchanting page: pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons
+- A Music Boxes collection checklist (under Collections): every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app
 
 The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) has two things: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
 ![Home Page](./img/home.png)
 ![Dungeon Check List](./img/dungeon-checklist.png)
-![Potion Crafting](./img/alchemy.png)
+![Alchemy](./img/alchemy.png)
 ![Enchanting](./img/enchanting.png)
 
 ## Required Addons

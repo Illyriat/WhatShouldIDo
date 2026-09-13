@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import DungeonsPage from './pages/DungeonsPage'
 import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
+import MusicBoxesPage from './pages/MusicBoxesPage'
 import SettingsPage from './pages/SettingsPage'
 import { useAccountSelection } from './hooks/useAccountSelection'
 import { useTheme } from './hooks/useTheme'
@@ -31,6 +32,7 @@ function App(): React.JSX.Element {
         {activePage === 'dungeons' && <DungeonsPage accountSelection={accountSelection} />}
         {activePage === 'alchemy' && <AlchemyPage />}
         {activePage === 'enchanting' && <EnchantingPage />}
+        {activePage === 'musicboxes' && <MusicBoxesPage accountSelection={accountSelection} />}
         {activePage === 'settings' && (
           <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} />
         )}
