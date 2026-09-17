@@ -27,7 +27,8 @@ describe('detectAddons', () => {
     expect(await detectAddons(documentsDir)).toEqual({
       'USPF.lua': true,
       'SkillLines.lua': true,
-      'DailyCraftStatus.lua': false
+      'DailyCraftStatus.lua': false,
+      'WhatShouldIDoDataCollector.lua': false
     })
   })
 
@@ -38,7 +39,8 @@ describe('detectAddons', () => {
     expect(await detectAddons(documentsDir)).toEqual({
       'USPF.lua': false,
       'SkillLines.lua': false,
-      'DailyCraftStatus.lua': false
+      'DailyCraftStatus.lua': false,
+      'WhatShouldIDoDataCollector.lua': false
     })
   })
 

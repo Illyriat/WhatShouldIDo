@@ -1,8 +1,9 @@
-import type { Account } from '@shared/types'
+import type { Account, AllianceRankStatus } from '@shared/types'
 import { findSavedVariablesFiles } from './savedVarsLocator'
 import { extractAccountsFromUspf, type RawAccount } from './uspfExtractor'
 import { extractCharacterServers } from './skillLinesExtractor'
 import { extractRidingStatus, type RidingStatus } from './ridingExtractor'
+import { extractAllianceRankStatus } from './allianceRankExtractor'
 
 const UNKNOWN_SERVER = 'Unknown Server'
 const NO_RIDING_DATA: RidingStatus = { ridingMaxed: false, readyToTrainRiding: false }
@@ -34,10 +35,11 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
  * unioning - a character's own flags are correct once it has logged in with the addon.
  */
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
-  const [uspfFiles, skillLinesFiles, ridingFiles] = await Promise.all([
+  const [uspfFiles, skillLinesFiles, ridingFiles, allianceRankFiles] = await Promise.all([
     findSavedVariablesFiles('USPF.lua', documentsOverride),
     findSavedVariablesFiles('SkillLines.lua', documentsOverride),
-    findSavedVariablesFiles('DailyCraftStatus.lua', documentsOverride)
+    findSavedVariablesFiles('DailyCraftStatus.lua', documentsOverride),
+    findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride)
   ])
 
   const rawAccountLists = await Promise.all(uspfFiles.map((file) => extractAccountsFromUspf(file)))
@@ -62,6 +64,12 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
     for (const [charId, status] of ridingMap) ridingByCharId.set(charId, status)
   }
 
+  const allianceRankMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractAllianceRankStatus(file)))
+  const allianceRankByCharId = new Map<string, AllianceRankStatus>()
+  for (const allianceRankMap of allianceRankMapsByFile) {
+    for (const [charId, status] of allianceRankMap) allianceRankByCharId.set(charId, status)
+  }
+
   const accounts: Account[] = []
 
   for (const rawAccount of rawAccounts.values()) {
@@ -75,7 +83,8 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
         server: charNameToServer.get(character.charName) ?? UNKNOWN_SERVER,
         completedDungeonKeys: character.completedDungeonKeys,
         ridingMaxed: riding.ridingMaxed,
-        readyToTrainRiding: riding.readyToTrainRiding
+        readyToTrainRiding: riding.readyToTrainRiding,
+        allianceRank: allianceRankByCharId.get(character.charId) ?? null
       }
     })
 
