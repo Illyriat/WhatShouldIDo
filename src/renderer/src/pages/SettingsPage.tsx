@@ -60,6 +60,14 @@ const ADDONS: {
     required: false,
     description:
       'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.'
+  },
+  {
+    name: 'What Should I Do - Data Collector',
+    url: 'https://github.com/Illyriat/WhatShouldIDoDataCollector',
+    file: 'WhatShouldIDoDataCollector.lua',
+    required: false,
+    description:
+      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress. Powers the Alliance Rank page.'
   }
 ]
 
