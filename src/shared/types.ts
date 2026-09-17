@@ -9,6 +9,22 @@ export interface PledgeDungeon {
   questId: number
 }
 
+export interface AllianceRankStatus {
+  // 0-50. 0 = Citizen (no AP earned yet).
+  rank: number
+  // 1 or 2 - each of the 25 named ranks has two numbered sub-grades.
+  subRank: number
+  // Lifetime AP earned toward rank (GetUnitAvARankPoints) - distinct from spendable AP currency.
+  currentAP: number
+  // AP required for rank 50, read live from the game (GetNumPointsNeededForAvARank(50))
+  // rather than hardcoded, so it stays correct across any future rebalance.
+  apForMaxRank: number
+  // AP window for the character's current rank step, from the game's own
+  // GetAvARankProgress(currentAP) - bounds of the inner "progress within this rank" ring.
+  currentRankStartAP: number
+  currentRankEndAP: number
+}
+
 export interface Character {
   charId: string
   charName: string
@@ -20,6 +36,8 @@ export interface Character {
   ridingMaxed: boolean
   // Not maxed and today's training cooldown has elapsed.
   readyToTrainRiding: boolean
+  // null when the AllianceRankTracker addon has no data yet for this character.
+  allianceRank: AllianceRankStatus | null
 }
 
 export interface Account {

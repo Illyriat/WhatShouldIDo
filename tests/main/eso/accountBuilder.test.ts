@@ -51,6 +51,16 @@ async function writeFixtureDocuments(): Promise<string> {
     'utf-8'
   )
 
+  // Only Alice has alliance rank data; Bob and Carol fall back to null.
+  await writeFile(
+    join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
+    `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
+      `["1001"]={["allianceRank"]={["rank"]=23,["subRank"]=1,["currentAP"]=6200000,["apForMaxRank"]=64680000,` +
+      `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400}}` +
+      `}}}}}`,
+    'utf-8'
+  )
+
   return documentsDir
 }
 
@@ -69,7 +79,15 @@ describe('buildAccounts', () => {
         server: 'NA Megaserver',
         completedDungeonKeys: ['BC1'],
         ridingMaxed: true,
-        readyToTrainRiding: false
+        readyToTrainRiding: false,
+        allianceRank: {
+          rank: 23,
+          subRank: 1,
+          currentAP: 6200000,
+          apForMaxRank: 64680000,
+          currentRankStartAP: 6072000,
+          currentRankEndAP: 6918400
+        }
       },
       {
         charId: '1002',
@@ -77,7 +95,8 @@ describe('buildAccounts', () => {
         server: 'Unknown Server', // not present in the SkillLines fixture
         completedDungeonKeys: [],
         ridingMaxed: false,
-        readyToTrainRiding: false // not present in the DailyCraftStatus fixture
+        readyToTrainRiding: false, // not present in the DailyCraftStatus fixture
+        allianceRank: null
       },
       {
         charId: '2001',
@@ -85,7 +104,8 @@ describe('buildAccounts', () => {
         server: 'EU Megaserver',
         completedDungeonKeys: ['BC1', 'EH1'],
         ridingMaxed: false,
-        readyToTrainRiding: false
+        readyToTrainRiding: false,
+        allianceRank: null
       }
     ])
   })

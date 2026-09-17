@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export type Page = 'home' | 'dungeons' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
+export type Page = 'home' | 'dungeons' | 'alliancerank' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
 
 interface Props {
   collapsed: boolean
@@ -16,6 +16,7 @@ type NavItem =
 const NAV_ITEMS: NavItem[] = [
   { page: 'home', label: 'Home' },
   { page: 'dungeons', label: 'Dungeon Check List' },
+  { page: 'alliancerank', label: 'Alliance Rank' },
   {
     group: 'crafting',
     label: 'Crafting',

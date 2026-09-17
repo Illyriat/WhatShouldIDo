@@ -3,6 +3,7 @@ import Sidebar, { type Page } from './components/Sidebar'
 import UpdateBanner from './components/UpdateBanner'
 import HomePage from './pages/HomePage'
 import DungeonsPage from './pages/DungeonsPage'
+import AllianceRankPage from './pages/AllianceRankPage'
 import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
 import MusicBoxesPage from './pages/MusicBoxesPage'
@@ -30,6 +31,7 @@ function App(): React.JSX.Element {
         <UpdateBanner updater={updater} />
         {activePage === 'home' && <HomePage accountSelection={accountSelection} />}
         {activePage === 'dungeons' && <DungeonsPage accountSelection={accountSelection} />}
+        {activePage === 'alliancerank' && <AllianceRankPage accountSelection={accountSelection} />}
         {activePage === 'alchemy' && <AlchemyPage />}
         {activePage === 'enchanting' && <EnchantingPage />}
         {activePage === 'musicboxes' && <MusicBoxesPage accountSelection={accountSelection} />}
