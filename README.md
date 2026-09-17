@@ -20,6 +20,7 @@ As a whole this will track:
 - Today's three Undaunted Pledges, resolved against real dungeon names, with a note if a dungeon can't yet be mapped
 - Which of your characters still need to run each of today's pledge dungeons (per-character quest completion, not achievement-based, so it's accurate per character rather than per account)
 - Which characters are ready for their daily riding (Capacity/Stamina/Speed) training, and which have already maxed out
+- An Alliance Rank page: each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining
 - A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable
 - An Account and Server switcher, so multi-account and NA/EU players see only the characters relevant to what they've selected
 - An Alchemy page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
@@ -30,8 +31,10 @@ The sidebar can be collapsed down to icons when you don't need it. Settings (bot
 
 ![Home Page](./img/home.png)
 ![Dungeon Check List](./img/dungeon-checklist.png)
+![Alliance Rank](./img/alliance-rank.png)
 ![Alchemy](./img/alchemy.png)
 ![Enchanting](./img/enchanting.png)
+![Music Boxes](./img/music-boxes.png)
 
 ## Required Addons
 
@@ -42,6 +45,7 @@ Install and enable all three, then log into each character once with them active
 | [Urich's Skill Point Finder (USPF)](https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html) | Per-character dungeon quest completion (Pledges + Dungeon Check List) |
 | [Skill Lines](https://www.esoui.com/downloads/info4041-SkillLines.html) | Knowing which server (NA/EU) each character is on |
 | [Daily Craft Status](https://esoui.com/downloads/info2510-DailyCraftStatus.html) | Riding training status |
+| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress |
 
 ## Running it
 
