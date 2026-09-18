@@ -16,25 +16,70 @@ These always grab the newest release directly - no need to dig through the [Rele
 
 This app reads directly from your local ESO SavedVariables files - no manual entry, no separate account linking. It finds every account and character on your PC automatically from the standard `Documents\Elder Scrolls Online` location - and if Windows/OneDrive has redirected your Documents folder elsewhere, Settings lets you point it at the right one.
 
-As a whole this will track:
-- Today's three Undaunted Pledges, resolved against real dungeon names, with a note if a dungeon can't yet be mapped
-- Which of your characters still need to run each of today's pledge dungeons (per-character quest completion, not achievement-based, so it's accurate per character rather than per account)
-- Which characters are ready for their daily riding (Capacity/Stamina/Speed) training, and which have already maxed out
-- An Alliance Rank page: each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining
-- A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable
-- An Account and Server switcher, so multi-account and NA/EU players see only the characters relevant to what they've selected
-- An Alchemy page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
-- An Enchanting page: pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons
-- A Music Boxes collection checklist (under Collections): every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app
+## Features
 
-The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) has two things: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
+### Home
+Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole).
+
+<details>
+<summary>Screenshot</summary>
 
 ![Home Page](./img/home.png)
+
+</details>
+
+### Dungeon Check List
+A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Dungeon Check List](./img/dungeon-checklist.png)
+
+</details>
+
+### Alliance Rank
+Each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Alliance Rank](./img/alliance-rank.png)
+
+</details>
+
+### Alchemy
+Pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Alchemy](./img/alchemy.png)
+
+</details>
+
+### Enchanting
+Pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Enchanting](./img/enchanting.png)
+
+</details>
+
+### Music Boxes
+Under Collections: every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Music Boxes](./img/music-boxes.png)
+
+</details>
+
+### Everywhere else
+Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
 ## Required Addons
 
