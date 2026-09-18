@@ -646,6 +646,81 @@ h1 {
   font-size: 1.1rem;
 }
 
+.settings-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.settings-toc {
+  position: sticky;
+  top: 24px;
+  flex: 0 0 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-toc__item {
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.settings-toc__item:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.settings-sections {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-section-caret {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+
+.settings-section-caret.is-open {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 720px) {
+  .settings-layout {
+    flex-direction: column;
+  }
+
+  .settings-toc {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: initial;
+  }
+}
+
 .theme-options {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -805,6 +880,45 @@ h1 {
 
 .addon-row__desc {
   margin: 8px 0 0;
+  font-size: 0.83rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.feature-toggle-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feature-toggle-row {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.feature-toggle-row__label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.feature-toggle-row__label input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.feature-toggle-row__desc {
+  margin: 6px 0 0 26px;
   font-size: 0.83rem;
   line-height: 1.45;
   color: var(--muted);
