@@ -76,7 +76,7 @@ const ADDONS: {
     file: 'WhatShouldIDoDataCollector.lua',
     required: false,
     description:
-      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress. Powers the Alliance Rank page.',
+      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress (powers the Alliance Rank page), and each account’s Champion Points per realm (shown on the Home page banner).',
     relevantFlags: ['allianceRank', 'welcomeBanner']
   }
 ]
