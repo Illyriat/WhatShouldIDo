@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for taking the time to file a bug.
 
-        Before you start, a couple of quick checks that resolve most reports:
+        Before you start, check the **[Troubleshooting wiki page](https://github.com/Illyriat/WhatShouldIDo/wiki/Troubleshooting)** - it covers most reports we get. A few of the same quick checks:
         - Make sure the **required addons** (Skill Lines, Urich's Skill Point Finder) are installed and enabled in ESO.
         - Log into each affected character once, then **log out or `/reloadui`** — ESO only writes SavedVariables to disk at those points.
         - Confirm you're on the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest).

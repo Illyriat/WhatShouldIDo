@@ -14,6 +14,8 @@ These always grab the newest release directly - no need to dig through the [Rele
         ** Log into each character at least once with them active so they have data to read.
         ** ESO only writes SavedVariables to disk on logout or /reloadui - do one of those before checking the app for the latest state.
 
+Something not showing up, or not sure why? Check the **[Troubleshooting wiki page](https://github.com/Illyriat/WhatShouldIDo/wiki/Troubleshooting)** before opening an issue - it covers the common causes (missing data, addon setup, OneDrive-redirected Documents, update checks, etc.).
+
 This app reads directly from your local ESO SavedVariables files - no manual entry, no separate account linking. It finds every account and character on your PC automatically from the standard `Documents\Elder Scrolls Online` location - and if Windows/OneDrive has redirected your Documents folder elsewhere, Settings lets you point it at the right one.
 
 ## Features
