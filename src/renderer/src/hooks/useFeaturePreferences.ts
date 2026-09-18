@@ -13,6 +13,11 @@ export const USER_TOGGLEABLE_FEATURES: {
   // upcoming-pledges preview) once its parent feature is turned off, since it'd do nothing.
   dependsOn?: FeatureFlag
 }[] = [
+  {
+    flag: 'welcomeBanner',
+    label: 'Welcome banner',
+    description: 'The "Welcome, <account>!" banner (and Champion Points) at the top of the Home page.'
+  },
   { flag: 'pledges', label: "Today's Pledges", description: "Today's Undaunted Pledge dungeons and recommendations on the Home page." },
   {
     flag: 'upcomingPledges',

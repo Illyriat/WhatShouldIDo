@@ -118,7 +118,7 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
 
   return (
     <div className="page">
-      {selectedAccount && (
+      {features.isEnabled('welcomeBanner') && selectedAccount && (
         <div className="home-welcome-banner">
           <span className="home-welcome-banner__greeting">Welcome,</span>
           <div className="home-welcome-banner__identity">

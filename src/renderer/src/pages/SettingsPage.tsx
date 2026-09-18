@@ -77,7 +77,7 @@ const ADDONS: {
     required: false,
     description:
       'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress. Powers the Alliance Rank page.',
-    relevantFlags: ['allianceRank']
+    relevantFlags: ['allianceRank', 'welcomeBanner']
   }
 ]
 
