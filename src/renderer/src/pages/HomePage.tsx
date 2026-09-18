@@ -110,8 +110,26 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     )
   }
 
+  // Champion Points are account+realm scoped (see accountBuilder.ts), so this reads the
+  // total for whichever server is currently selected, not the account as a whole.
+  const championPoints = selectedServer
+    ? state.accounts.find((a) => a.accountName === selectedAccount)?.championPoints[selectedServer]
+    : undefined
+
   return (
     <div className="page">
+      {selectedAccount && (
+        <div className="home-welcome-banner">
+          <span className="home-welcome-banner__greeting">Welcome,</span>
+          <div className="home-welcome-banner__identity">
+            <h1>{selectedAccount}!</h1>
+            {championPoints !== undefined && (
+              <span className="home-welcome-banner__cp-badge">{championPoints.toLocaleString()} CP</span>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="page__header">
         <button
           className="refresh-button"
