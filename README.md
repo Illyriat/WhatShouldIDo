@@ -65,7 +65,9 @@ Unit/integration tests cover the app's actual data logic - pledge name matching,
 
 ## Feature flags
 
-`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, and any associated background fetch all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+
+Separately, users can turn off any feature the developer *did* ship, from Settings -> Features - a "declutter" checklist for hiding pages they don't personally use (e.g. no interest in Alliance Rank). This is per-user and persisted to `settings.json` (not `FEATURE_FLAGS`, and not `localStorage` - Electron's `file://`-loaded renderer doesn't reliably persist `localStorage` across app restarts, so this and `documentsPathOverride` both go through the main-process settings store instead). A feature the developer disabled never appears in this list at all; the user toggle can only narrow what's already shipped, never widen it.
 
 ## Building for a release
 

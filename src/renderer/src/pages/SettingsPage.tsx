@@ -4,11 +4,13 @@ import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { AppUpdater } from '../hooks/useAppUpdater'
+import { USER_TOGGLEABLE_FEATURES, type FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 interface Props {
   theme: ThemeControl
   accountSelection: AccountSelection
   updater: AppUpdater
+  features: FeaturePreferences
 }
 
 function updateStatusLabel(status: UpdateStatus): string | null {
@@ -79,8 +81,6 @@ const ADDONS: {
   }
 ]
 
-const VISIBLE_ADDONS = ADDONS.filter((addon) => addon.relevantFlags.some((flag) => FEATURE_FLAGS[flag]))
-
 const THEME_OPTIONS: { value: ThemePreference; label: string; description: string; swatch: [string, string] }[] = [
   { value: 'system', label: 'System', description: 'Follows your OS light/dark setting', swatch: ['#16181d', '#f5f6f8'] },
   { value: 'dark', label: 'Dark', description: 'The default - orange & teal', swatch: ['#16181d', '#1e2129'] },
@@ -89,9 +89,19 @@ const THEME_OPTIONS: { value: ThemePreference; label: string; description: strin
   { value: 'frost', label: 'Frost', description: 'Cool blue dark theme', swatch: ['#0f1620', '#16202c'] }
 ]
 
-function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.Element {
+function SettingsPage({ theme, accountSelection, updater, features }: Props): React.JSX.Element {
   const [settings, setSettings] = useState<AppSettings | null>(null)
   const [addonStatus, setAddonStatus] = useState<AddonStatus | null>(null)
+
+  // Addons whose data nothing currently visible uses (developer flag off, or the user
+  // declutter-toggled every consuming feature off) don't need a row here either.
+  const visibleAddons = ADDONS.filter((addon) => addon.relevantFlags.some((flag) => features.isEnabled(flag)))
+
+  // Only offer a toggle for features the developer actually shipped (FEATURE_FLAGS
+  // true), and only show a sub-toggle (like upcomingPledges) while its parent is on.
+  const visibleToggleableFeatures = USER_TOGGLEABLE_FEATURES.filter(
+    (item) => FEATURE_FLAGS[item.flag] && (!item.dependsOn || features.isEnabled(item.dependsOn))
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -171,7 +181,36 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
         {foundStatus && <p className="muted settings-found-status">{foundStatus}</p>}
       </section>
 
-      {VISIBLE_ADDONS.length > 0 && (
+      {visibleToggleableFeatures.length > 0 && (
+        <section className="board-section">
+          <div className="pledges-panel__title-row">
+            <h3 className="settings-section-title">Features</h3>
+          </div>
+
+          <p className="muted">
+            Turn off anything you don't use to declutter the sidebar. This only hides the page - your data isn't
+            touched, and you can turn it back on anytime.
+          </p>
+
+          <ul className="feature-toggle-list">
+            {visibleToggleableFeatures.map((item) => (
+              <li key={item.flag} className="feature-toggle-row">
+                <label className="feature-toggle-row__label">
+                  <input
+                    type="checkbox"
+                    checked={features.isEnabled(item.flag)}
+                    onChange={(e) => features.setUserEnabled(item.flag, e.target.checked)}
+                  />
+                  <span className="feature-toggle-row__name">{item.label}</span>
+                </label>
+                <p className="feature-toggle-row__desc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {visibleAddons.length > 0 && (
         <section className="board-section">
           <div className="pledges-panel__title-row">
             <h3 className="settings-section-title">Addons</h3>
@@ -187,7 +226,7 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
           </p>
 
           <ul className="addon-list">
-            {VISIBLE_ADDONS.map((addon) => {
+            {visibleAddons.map((addon) => {
               const detected = addonStatus?.[addon.file] ?? false
               const badgeState = addonStatus == null
                 ? 'addon-badge--pending'

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { RecommendationsResult } from '@shared/types'
-import { FEATURE_FLAGS } from '@shared/featureFlags'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import PledgesBoard from '../components/PledgesBoard'
 import RidingBoard from '../components/RidingBoard'
 import type { AccountSelection } from '../hooks/useAccountSelection'
+import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 type RecommendationsState =
   | { status: 'loading' }
@@ -16,9 +16,10 @@ const EMPTY_RECOMMENDATIONS: RecommendationsResult = { pledges: [], upcoming: []
 
 interface Props {
   accountSelection: AccountSelection
+  features: FeaturePreferences
 }
 
-function HomePage({ accountSelection }: Props): React.JSX.Element {
+function HomePage({ accountSelection, features }: Props): React.JSX.Element {
   const {
     state,
     selectedAccount,
@@ -31,12 +32,12 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
     refreshToken
   } = accountSelection
 
-  const [recState, setRecState] = useState<RecommendationsState>(
-    FEATURE_FLAGS.pledges ? { status: 'loading' } : { status: 'ready', recommendations: EMPTY_RECOMMENDATIONS }
+  const [recState, setRecState] = useState<RecommendationsState>(() =>
+    features.isEnabled('pledges') ? { status: 'loading' } : { status: 'ready', recommendations: EMPTY_RECOMMENDATIONS }
   )
 
   useEffect(() => {
-    if (!FEATURE_FLAGS.pledges) return
+    if (!features.isEnabled('pledges')) return
 
     let cancelled = false
 
@@ -125,8 +126,10 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
         </div>
       </div>
 
-      {FEATURE_FLAGS.pledges && filteredRecommendations && <PledgesBoard result={filteredRecommendations} />}
-      {FEATURE_FLAGS.ridingTraining && <RidingBoard characters={selectedCharacters} />}
+      {features.isEnabled('pledges') && filteredRecommendations && (
+        <PledgesBoard result={filteredRecommendations} upcomingPledgesEnabled={features.isEnabled('upcomingPledges')} />
+      )}
+      {features.isEnabled('ridingTraining') && <RidingBoard characters={selectedCharacters} />}
     </div>
   )
 }

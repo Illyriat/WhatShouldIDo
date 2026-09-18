@@ -14,7 +14,8 @@ export async function getAppSettings(): Promise<AppSettings> {
   const stored = await readPersistedSettings()
   return {
     documentsPathOverride: stored.documentsPathOverride,
-    defaultDocumentsPath: defaultDocumentsPath()
+    defaultDocumentsPath: defaultDocumentsPath(),
+    disabledFeatures: stored.disabledFeatures ?? []
   }
 }
 
@@ -24,7 +25,14 @@ export async function getAddonStatus(): Promise<AddonStatus> {
 }
 
 export async function setDocumentsPathOverride(path: string | null): Promise<AppSettings> {
-  await writePersistedSettings({ documentsPathOverride: path ?? undefined })
+  const stored = await readPersistedSettings()
+  await writePersistedSettings({ ...stored, documentsPathOverride: path ?? undefined })
+  return getAppSettings()
+}
+
+export async function setDisabledFeatures(flags: string[]): Promise<AppSettings> {
+  const stored = await readPersistedSettings()
+  await writePersistedSettings({ ...stored, disabledFeatures: flags })
   return getAppSettings()
 }
 
@@ -44,5 +52,6 @@ export function registerSettingsIpcHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.setDocumentsPathOverride, (_event, path: string | null) =>
     setDocumentsPathOverride(path)
   )
+  ipcMain.handle(IPC_CHANNELS.setDisabledFeatures, (_event, flags: string[]) => setDisabledFeatures(flags))
   ipcMain.handle(IPC_CHANNELS.pickDocumentsFolder, () => pickDocumentsFolder())
 }

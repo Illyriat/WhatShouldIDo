@@ -116,4 +116,8 @@ export interface AppSettings {
   documentsPathOverride?: string
   // The OS default Documents path, shown in Settings for reference.
   defaultDocumentsPath: string
+  // User "declutter" toggles - feature flags (src/shared/featureFlags.ts) the user has
+  // turned off in Settings. Stored as plain strings (not FeatureFlag) since a value
+  // saved under an older build can name a flag that no longer exists.
+  disabledFeatures: string[]
 }

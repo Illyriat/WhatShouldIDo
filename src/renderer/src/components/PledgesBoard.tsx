@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import type { RecommendationsResult } from '@shared/types'
-import { FEATURE_FLAGS } from '@shared/featureFlags'
 
 interface Props {
   result: RecommendationsResult
+  upcomingPledgesEnabled: boolean
 }
 
 function formatUpcomingLabel(esoDay: string, index: number): string {
@@ -11,7 +11,7 @@ function formatUpcomingLabel(esoDay: string, index: number): string {
   return new Date(`${esoDay}T00:00:00Z`).toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })
 }
 
-function PledgesBoard({ result }: Props): React.JSX.Element {
+function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Element {
   const [showUpcoming, setShowUpcoming] = useState(false)
 
   return (
@@ -42,7 +42,7 @@ function PledgesBoard({ result }: Props): React.JSX.Element {
         ))}
       </div>
 
-      {FEATURE_FLAGS.upcomingPledges && result.upcoming.length > 0 && (
+      {upcomingPledgesEnabled && result.upcoming.length > 0 && (
         <div className="upcoming-pledges">
           <button
             type="button"

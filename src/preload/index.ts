@@ -10,6 +10,8 @@ const api = {
   getAddonStatus: (): Promise<AddonStatus> => ipcRenderer.invoke(IPC_CHANNELS.getAddonStatus),
   setDocumentsPathOverride: (path: string | null): Promise<AppSettings> =>
     ipcRenderer.invoke(IPC_CHANNELS.setDocumentsPathOverride, path),
+  setDisabledFeatures: (flags: string[]): Promise<AppSettings> =>
+    ipcRenderer.invoke(IPC_CHANNELS.setDisabledFeatures, flags),
   pickDocumentsFolder: (): Promise<string | null> => ipcRenderer.invoke(IPC_CHANNELS.pickDocumentsFolder),
   checkForUpdates: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.checkForUpdates),
   quitAndInstallUpdate: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.quitAndInstallUpdate),

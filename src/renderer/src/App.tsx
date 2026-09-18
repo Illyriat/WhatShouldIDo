@@ -8,10 +8,10 @@ import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
 import MusicBoxesPage from './pages/MusicBoxesPage'
 import SettingsPage from './pages/SettingsPage'
-import { FEATURE_FLAGS } from '@shared/featureFlags'
 import { useAccountSelection } from './hooks/useAccountSelection'
 import { useTheme } from './hooks/useTheme'
 import { useAppUpdater } from './hooks/useAppUpdater'
+import { useFeaturePreferences } from './hooks/useFeaturePreferences'
 
 function App(): React.JSX.Element {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -19,6 +19,7 @@ function App(): React.JSX.Element {
   const accountSelection = useAccountSelection()
   const theme = useTheme()
   const updater = useAppUpdater()
+  const features = useFeaturePreferences()
 
   return (
     <div className="layout">
@@ -27,23 +28,24 @@ function App(): React.JSX.Element {
         onToggleCollapsed={() => setSidebarCollapsed((c) => !c)}
         activePage={activePage}
         onNavigate={setActivePage}
+        features={features}
       />
       <div className="layout__content">
         <UpdateBanner updater={updater} />
-        {activePage === 'home' && <HomePage accountSelection={accountSelection} />}
-        {activePage === 'dungeons' && FEATURE_FLAGS.dungeonChecklist && (
+        {activePage === 'home' && <HomePage accountSelection={accountSelection} features={features} />}
+        {activePage === 'dungeons' && features.isEnabled('dungeonChecklist') && (
           <DungeonsPage accountSelection={accountSelection} />
         )}
-        {activePage === 'alliancerank' && FEATURE_FLAGS.allianceRank && (
+        {activePage === 'alliancerank' && features.isEnabled('allianceRank') && (
           <AllianceRankPage accountSelection={accountSelection} />
         )}
-        {activePage === 'alchemy' && FEATURE_FLAGS.alchemy && <AlchemyPage />}
-        {activePage === 'enchanting' && FEATURE_FLAGS.enchanting && <EnchantingPage />}
-        {activePage === 'musicboxes' && FEATURE_FLAGS.musicBoxes && (
+        {activePage === 'alchemy' && features.isEnabled('alchemy') && <AlchemyPage />}
+        {activePage === 'enchanting' && features.isEnabled('enchanting') && <EnchantingPage />}
+        {activePage === 'musicboxes' && features.isEnabled('musicBoxes') && (
           <MusicBoxesPage accountSelection={accountSelection} />
         )}
         {activePage === 'settings' && (
-          <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} />
+          <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} features={features} />
         )}
       </div>
     </div>
