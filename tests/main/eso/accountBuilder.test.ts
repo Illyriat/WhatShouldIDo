@@ -51,10 +51,12 @@ async function writeFixtureDocuments(): Promise<string> {
     'utf-8'
   )
 
-  // Only Alice has alliance rank data; Bob and Carol fall back to null.
+  // Only Alice has alliance rank data; Bob and Carol fall back to null. Champion Points
+  // are account+realm scoped (not per-character), and EU has none yet - only NA does.
   await writeFile(
     join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
     `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
+      `["championPoints"]=810,` +
       `["1001"]={["allianceRank"]={["rank"]=23,["subRank"]=1,["currentAP"]=6200000,["apForMaxRank"]=64680000,` +
       `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400}}` +
       `}}}}}`,
@@ -72,6 +74,8 @@ describe('buildAccounts', () => {
 
     expect(accounts).toHaveLength(1)
     expect(accounts[0].accountName).toBe('@TestAccount')
+    // Account-wide per realm - NA has data, EU (Carol's realm) doesn't yet.
+    expect(accounts[0].championPoints).toEqual({ 'NA Megaserver': 810 })
     expect(accounts[0].characters).toEqual([
       {
         charId: '1001',
