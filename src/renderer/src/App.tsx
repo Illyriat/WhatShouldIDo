@@ -8,6 +8,7 @@ import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
 import MusicBoxesPage from './pages/MusicBoxesPage'
 import SettingsPage from './pages/SettingsPage'
+import { FEATURE_FLAGS } from '@shared/featureFlags'
 import { useAccountSelection } from './hooks/useAccountSelection'
 import { useTheme } from './hooks/useTheme'
 import { useAppUpdater } from './hooks/useAppUpdater'
@@ -30,11 +31,17 @@ function App(): React.JSX.Element {
       <div className="layout__content">
         <UpdateBanner updater={updater} />
         {activePage === 'home' && <HomePage accountSelection={accountSelection} />}
-        {activePage === 'dungeons' && <DungeonsPage accountSelection={accountSelection} />}
-        {activePage === 'alliancerank' && <AllianceRankPage accountSelection={accountSelection} />}
-        {activePage === 'alchemy' && <AlchemyPage />}
-        {activePage === 'enchanting' && <EnchantingPage />}
-        {activePage === 'musicboxes' && <MusicBoxesPage accountSelection={accountSelection} />}
+        {activePage === 'dungeons' && FEATURE_FLAGS.dungeonChecklist && (
+          <DungeonsPage accountSelection={accountSelection} />
+        )}
+        {activePage === 'alliancerank' && FEATURE_FLAGS.allianceRank && (
+          <AllianceRankPage accountSelection={accountSelection} />
+        )}
+        {activePage === 'alchemy' && FEATURE_FLAGS.alchemy && <AlchemyPage />}
+        {activePage === 'enchanting' && FEATURE_FLAGS.enchanting && <EnchantingPage />}
+        {activePage === 'musicboxes' && FEATURE_FLAGS.musicBoxes && (
+          <MusicBoxesPage accountSelection={accountSelection} />
+        )}
         {activePage === 'settings' && (
           <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} />
         )}

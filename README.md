@@ -63,6 +63,10 @@ npm test
 
 Unit/integration tests cover the app's actual data logic - pledge name matching, the Lua SavedVariables parser (including its Unicode round-trip), and the USPF/SkillLines/DailyCraftStatus extractors and their multi-realm-bucket merging (the trickiest, least-obvious part of this app, per `accountBuilder.test.ts`'s fixture-based end-to-end case) - plus the Alchemy/Enchanting calculators. No UI/renderer tests yet. CI (`.github/workflows/ci.yml`) runs both on every push and PR.
 
+## Feature flags
+
+`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, and any associated background fetch all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+
 ## Building for a release
 
 Installers are built for Windows (NSIS), macOS (dmg + zip) and Linux (AppImage + deb) from `electron-builder.yml`. Building an installer for a given OS has to actually run on that OS (a macOS `.dmg` needs `hdiutil`, a `.deb` needs `dpkg`/`fakeroot` - neither exists on Windows), so cross-platform releases go through CI rather than one machine building all three:

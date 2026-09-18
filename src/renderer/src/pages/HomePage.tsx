@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { RecommendationsResult } from '@shared/types'
+import { FEATURE_FLAGS } from '@shared/featureFlags'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import PledgesBoard from '../components/PledgesBoard'
@@ -10,6 +11,8 @@ type RecommendationsState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'ready'; recommendations: RecommendationsResult }
+
+const EMPTY_RECOMMENDATIONS: RecommendationsResult = { pledges: [], upcoming: [], stale: false, fetchedAt: '' }
 
 interface Props {
   accountSelection: AccountSelection
@@ -28,9 +31,13 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
     refreshToken
   } = accountSelection
 
-  const [recState, setRecState] = useState<RecommendationsState>({ status: 'loading' })
+  const [recState, setRecState] = useState<RecommendationsState>(
+    FEATURE_FLAGS.pledges ? { status: 'loading' } : { status: 'ready', recommendations: EMPTY_RECOMMENDATIONS }
+  )
 
   useEffect(() => {
+    if (!FEATURE_FLAGS.pledges) return
+
     let cancelled = false
 
     window.api
@@ -118,8 +125,8 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
         </div>
       </div>
 
-      {filteredRecommendations && <PledgesBoard result={filteredRecommendations} />}
-      <RidingBoard characters={selectedCharacters} />
+      {FEATURE_FLAGS.pledges && filteredRecommendations && <PledgesBoard result={filteredRecommendations} />}
+      {FEATURE_FLAGS.ridingTraining && <RidingBoard characters={selectedCharacters} />}
     </div>
   )
 }

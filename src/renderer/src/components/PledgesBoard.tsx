@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { RecommendationsResult } from '@shared/types'
+import { FEATURE_FLAGS } from '@shared/featureFlags'
 
 interface Props {
   result: RecommendationsResult
@@ -41,7 +42,7 @@ function PledgesBoard({ result }: Props): React.JSX.Element {
         ))}
       </div>
 
-      {result.upcoming.length > 0 && (
+      {FEATURE_FLAGS.upcomingPledges && result.upcoming.length > 0 && (
         <div className="upcoming-pledges">
           <button
             type="button"

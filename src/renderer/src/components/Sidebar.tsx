@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
 
 export type Page = 'home' | 'dungeons' | 'alliancerank' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
 
@@ -10,27 +11,32 @@ interface Props {
 }
 
 type NavItem =
-  | { page: Page; label: string }
-  | { group: string; label: string; children: { page: Page; label: string }[] }
+  | { page: Page; label: string; flag?: FeatureFlag }
+  | { group: string; label: string; children: { page: Page; label: string; flag?: FeatureFlag }[] }
 
-const NAV_ITEMS: NavItem[] = [
+const ALL_NAV_ITEMS: NavItem[] = [
   { page: 'home', label: 'Home' },
-  { page: 'dungeons', label: 'Dungeon Check List' },
-  { page: 'alliancerank', label: 'Alliance Rank' },
+  { page: 'dungeons', label: 'Dungeon Check List', flag: 'dungeonChecklist' },
+  { page: 'alliancerank', label: 'Alliance Rank', flag: 'allianceRank' },
   {
     group: 'crafting',
     label: 'Crafting',
     children: [
-      { page: 'alchemy', label: 'Alchemy' },
-      { page: 'enchanting', label: 'Enchanting' }
+      { page: 'alchemy', label: 'Alchemy', flag: 'alchemy' },
+      { page: 'enchanting', label: 'Enchanting', flag: 'enchanting' }
     ]
   },
   {
     group: 'collections',
     label: 'Collections',
-    children: [{ page: 'musicboxes', label: 'Music Boxes' }]
+    children: [{ page: 'musicboxes', label: 'Music Boxes', flag: 'musicBoxes' }]
   }
 ]
+
+// Drop flagged-off items, then drop any group left with no children.
+const NAV_ITEMS: NavItem[] = ALL_NAV_ITEMS.map((item) =>
+  'children' in item ? { ...item, children: item.children.filter((c) => !c.flag || FEATURE_FLAGS[c.flag]) } : item
+).filter((item) => ('children' in item ? item.children.length > 0 : !item.flag || FEATURE_FLAGS[item.flag]))
 
 const GROUPS = NAV_ITEMS.filter((item): item is Extract<NavItem, { group: string }> => 'children' in item)
 
