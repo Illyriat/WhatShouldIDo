@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { AddonStatus, AppSettings, UpdateStatus } from '@shared/types'
+import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { AppUpdater } from '../hooks/useAppUpdater'
@@ -36,6 +37,9 @@ const ADDONS: {
   file: string
   required: boolean
   description: string
+  // Feature flags that consume this addon's data. When every one of these is toggled
+  // off (see src/shared/featureFlags.ts), the addon is pointless and its row is hidden.
+  relevantFlags: FeatureFlag[]
 }[] = [
   {
     name: 'Skill Lines',
@@ -43,7 +47,8 @@ const ADDONS: {
     file: 'SkillLines.lua',
     required: true,
     description:
-      'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.'
+      'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.',
+    relevantFlags: ['pledges', 'ridingTraining', 'dungeonChecklist', 'allianceRank', 'musicBoxes']
   },
   {
     name: "Urich's Skill Point Finder (USPF)",
@@ -51,7 +56,8 @@ const ADDONS: {
     file: 'USPF.lua',
     required: true,
     description:
-      'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. THis is the core feature of WhatShouldIDo.'
+      'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. THis is the core feature of WhatShouldIDo.',
+    relevantFlags: ['pledges', 'dungeonChecklist']
   },
   {
     name: 'Daily Craft Status',
@@ -59,7 +65,8 @@ const ADDONS: {
     file: 'DailyCraftStatus.lua',
     required: false,
     description:
-      'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.'
+      'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.',
+    relevantFlags: ['ridingTraining']
   },
   {
     name: 'What Should I Do - Data Collector',
@@ -67,9 +74,12 @@ const ADDONS: {
     file: 'WhatShouldIDoDataCollector.lua',
     required: false,
     description:
-      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress. Powers the Alliance Rank page.'
+      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress. Powers the Alliance Rank page.',
+    relevantFlags: ['allianceRank']
   }
 ]
+
+const VISIBLE_ADDONS = ADDONS.filter((addon) => addon.relevantFlags.some((flag) => FEATURE_FLAGS[flag]))
 
 const THEME_OPTIONS: { value: ThemePreference; label: string; description: string; swatch: [string, string] }[] = [
   { value: 'system', label: 'System', description: 'Follows your OS light/dark setting', swatch: ['#16181d', '#f5f6f8'] },
@@ -161,60 +171,60 @@ function SettingsPage({ theme, accountSelection, updater }: Props): React.JSX.El
         {foundStatus && <p className="muted settings-found-status">{foundStatus}</p>}
       </section>
 
-      <section className="board-section">
-        <div className="pledges-panel__title-row">
-          <h3 className="settings-section-title">Addons</h3>
-        </div>
+      {VISIBLE_ADDONS.length > 0 && (
+        <section className="board-section">
+          <div className="pledges-panel__title-row">
+            <h3 className="settings-section-title">Addons</h3>
+          </div>
 
-        <p className="muted">
-          This app reads data that ESO addons write to disk. Install them from{' '}
-          <a href="https://www.esoui.com/" target="_blank" rel="noreferrer">
-            ESOUI
-          </a>{' '}
-          (or Minion), enable them in-game, then log into each character once with them active so they have data to
-          write.
-        </p>
+          <p className="muted">
+            This app reads data that ESO addons write to disk. Install them from{' '}
+            <a href="https://www.esoui.com/" target="_blank" rel="noreferrer">
+              ESOUI
+            </a>{' '}
+            (or Minion), enable them in-game, then log into each character once with them active so they have data
+            to write.
+          </p>
 
-        <ul className="addon-list">
-          {ADDONS.map((addon) => {
-            const detected = addonStatus?.[addon.file] ?? false
-            const badgeState = addonStatus == null
-              ? 'addon-badge--pending'
-              : detected
-                ? 'addon-badge--detected'
-                : addon.required
-                  ? 'addon-badge--missing'
-                  : 'addon-badge--optional'
-            return (
-              <li key={addon.url} className="addon-row">
-                <div className="addon-row__head">
-                  <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
-                    {addon.name}
-                  </a>
-                  <span
-                    className={`addon-badge ${badgeState}`}
-                    title={
-                      addonStatus == null
-                        ? 'Checking…'
-                        : detected
-                          ? `Detected (${addon.file} found)`
-                          : `Not detected (no ${addon.file} on disk)`
-                    }
-                  >
-                    {addon.required ? 'Required' : 'Optional'}
-                  </span>
-                  {addonStatus != null && (
-                    <span className="addon-row__detect muted">
-                      {detected ? '✓ detected' : 'not detected'}
+          <ul className="addon-list">
+            {VISIBLE_ADDONS.map((addon) => {
+              const detected = addonStatus?.[addon.file] ?? false
+              const badgeState = addonStatus == null
+                ? 'addon-badge--pending'
+                : detected
+                  ? 'addon-badge--detected'
+                  : addon.required
+                    ? 'addon-badge--missing'
+                    : 'addon-badge--optional'
+              return (
+                <li key={addon.url} className="addon-row">
+                  <div className="addon-row__head">
+                    <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
+                      {addon.name}
+                    </a>
+                    <span
+                      className={`addon-badge ${badgeState}`}
+                      title={
+                        addonStatus == null
+                          ? 'Checking…'
+                          : detected
+                            ? `Detected (${addon.file} found)`
+                            : `Not detected (no ${addon.file} on disk)`
+                      }
+                    >
+                      {addon.required ? 'Required' : 'Optional'}
                     </span>
-                  )}
-                </div>
-                <p className="addon-row__desc">{addon.description}</p>
-              </li>
-            )
-          })}
-        </ul>
-      </section>
+                    {addonStatus != null && (
+                      <span className="addon-row__detect muted">{detected ? '✓ detected' : 'not detected'}</span>
+                    )}
+                  </div>
+                  <p className="addon-row__desc">{addon.description}</p>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )}
 
       <section className="board-section">
         <div className="pledges-panel__title-row">
