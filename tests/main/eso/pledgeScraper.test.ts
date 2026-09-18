@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { currentEsoDay, parseScrapedNames, resolvePledges } from '../../../src/main/eso/pledgeScraper'
+import {
+  currentEsoDay,
+  parseScrapedNames,
+  parseUpcomingScrapedNames,
+  resolvePledges
+} from '../../../src/main/eso/pledgeScraper'
 
 describe('parseScrapedNames', () => {
   it('extracts dungeon names from header <img alt> tags, in document order', () => {
@@ -35,6 +40,68 @@ describe('parseScrapedNames', () => {
   it('ignores images whose alt does not end in " header"', () => {
     const html = `<img alt="Some other icon" /><img alt="Real Dungeon header" />`
     expect(parseScrapedNames(html)).toEqual(['Real Dungeon'])
+  })
+})
+
+function upcomingRow(dayLabel: string, names: string[]): string {
+  const cells = names
+    .map(
+      (name) => `
+        <td class="px-2 py-1"><a href="#">${name}</a></td>`
+    )
+    .join('')
+  return `
+    <tr>
+      <td class="px-2 py-1">${dayLabel}</td>${cells}
+    </tr>`
+}
+
+describe('parseUpcomingScrapedNames', () => {
+  it('extracts each row of the upcoming table, nearest day first', () => {
+    const html = `
+      <section id="upcoming">
+        <table><tbody>
+          ${upcomingRow('In 1 day', ['Wayrest Sewers II', 'Arx Corinium', 'March of Sacrifices'])}
+          ${upcomingRow('In 2 days', ['Fungal Grotto I', "Selene's Web", 'Depths of Malatar'])}
+        </tbody></table>
+      </section>
+    `
+    expect(parseUpcomingScrapedNames(html, 5)).toEqual([
+      ['Wayrest Sewers II', 'Arx Corinium', 'March of Sacrifices'],
+      ['Fungal Grotto I', "Selene's Web", 'Depths of Malatar']
+    ])
+  })
+
+  it('caps at the requested limit even if more rows are present', () => {
+    const html = `
+      <section id="upcoming">
+        <table><tbody>
+          ${upcomingRow('In 1 day', ['A', 'B', 'C'])}
+          ${upcomingRow('In 2 days', ['D', 'E', 'F'])}
+          ${upcomingRow('In 3 days', ['G', 'H', 'I'])}
+        </tbody></table>
+      </section>
+    `
+    expect(parseUpcomingScrapedNames(html, 2)).toEqual([
+      ['A', 'B', 'C'],
+      ['D', 'E', 'F']
+    ])
+  })
+
+  it('skips a row that does not have exactly 3 dungeon cells', () => {
+    const html = `
+      <section id="upcoming">
+        <table><tbody>
+          ${upcomingRow('In 1 day', ['A', 'B'])}
+          ${upcomingRow('In 2 days', ['D', 'E', 'F'])}
+        </tbody></table>
+      </section>
+    `
+    expect(parseUpcomingScrapedNames(html, 5)).toEqual([['D', 'E', 'F']])
+  })
+
+  it('returns an empty array when the upcoming section is missing', () => {
+    expect(parseUpcomingScrapedNames('<div>no upcoming section here</div>', 5)).toEqual([])
   })
 })
 
