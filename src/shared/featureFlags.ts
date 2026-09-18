@@ -4,6 +4,7 @@
 // `define`/dead-code-elimination mechanism), so disabled code still ships in the
 // bundle, it just never renders or runs.
 export const FEATURE_FLAGS = {
+  welcomeBanner: false,
   pledges: true,
   upcomingPledges: true,
   ridingTraining: true,

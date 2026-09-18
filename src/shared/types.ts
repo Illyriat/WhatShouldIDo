@@ -43,6 +43,10 @@ export interface Character {
 export interface Account {
   accountName: string
   characters: Character[]
+  // Champion Points earned, keyed by server (e.g. "EU Megaserver") - account-wide per
+  // realm, not per-character, so it lives here rather than on Character. Empty when the
+  // WhatShouldIDoDataCollector addon has no data yet for that realm.
+  championPoints: Record<string, number>
 }
 
 export interface PledgeMaster {

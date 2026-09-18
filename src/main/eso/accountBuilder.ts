@@ -4,6 +4,7 @@ import { extractAccountsFromUspf, type RawAccount } from './uspfExtractor'
 import { extractCharacterServers } from './skillLinesExtractor'
 import { extractRidingStatus, type RidingStatus } from './ridingExtractor'
 import { extractAllianceRankStatus } from './allianceRankExtractor'
+import { extractChampionPoints } from './championPointsExtractor'
 
 const UNKNOWN_SERVER = 'Unknown Server'
 const NO_RIDING_DATA: RidingStatus = { ridingMaxed: false, readyToTrainRiding: false }
@@ -28,11 +29,15 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
 
 /**
  * Builds the Account[] the app renders. Reads USPF (per-character dungeon-quest
- * completion, one file per profile), SkillLines (server labels) and DailyCraftStatus
- * (riding-training status) and joins them onto each character.
+ * completion, one file per profile), SkillLines (server labels), DailyCraftStatus
+ * (riding-training status) and WhatShouldIDoDataCollector (Alliance Rank, Champion
+ * Points) and joins them onto each character or account.
  *
  * Dungeon-quest and riding data are per-character in ESO, so there's no cross-character
  * unioning - a character's own flags are correct once it has logged in with the addon.
+ * Champion Points are account+realm scoped instead (every character on the same account
+ * and megaserver shares one CP total), so they live on Account.championPoints rather
+ * than on each character.
  */
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
   const [uspfFiles, skillLinesFiles, ridingFiles, allianceRankFiles] = await Promise.all([
@@ -70,6 +75,20 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
     for (const [charId, status] of allianceRankMap) allianceRankByCharId.set(charId, status)
   }
 
+  // Same file as Alliance Rank, but account+realm scoped rather than per-character.
+  const championPointsMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractChampionPoints(file)))
+  const championPointsByAccount = new Map<string, Map<string, number>>()
+  for (const championPointsMap of championPointsMapsByFile) {
+    for (const [accountName, realmToPoints] of championPointsMap) {
+      const existing = championPointsByAccount.get(accountName)
+      if (!existing) {
+        championPointsByAccount.set(accountName, new Map(realmToPoints))
+        continue
+      }
+      for (const [realm, points] of realmToPoints) existing.set(realm, points)
+    }
+  }
+
   const accounts: Account[] = []
 
   for (const rawAccount of rawAccounts.values()) {
@@ -88,9 +107,12 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
       }
     })
 
+    const championPoints = championPointsByAccount.get(rawAccount.accountName)
+
     accounts.push({
       accountName: rawAccount.accountName,
-      characters: characters.sort((a, b) => a.charName.localeCompare(b.charName))
+      characters: characters.sort((a, b) => a.charName.localeCompare(b.charName)),
+      championPoints: championPoints ? Object.fromEntries(championPoints) : {}
     })
   }
 

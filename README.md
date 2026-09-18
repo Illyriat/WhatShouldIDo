@@ -8,7 +8,7 @@
 [![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo-arm64.dmg)
 [![Download for Linux](https://img.shields.io/badge/Download-Linux%20(AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo.AppImage)
 
-These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
+These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) (see [CHANGELOG.md](./CHANGELOG.md) for what's in each version). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
 
     * For this app to work you first need the required addons installed in ESO (see below).
         ** Log into each character at least once with them active so they have data to read.
@@ -16,25 +16,70 @@ These always grab the newest release directly - no need to dig through the [Rele
 
 This app reads directly from your local ESO SavedVariables files - no manual entry, no separate account linking. It finds every account and character on your PC automatically from the standard `Documents\Elder Scrolls Online` location - and if Windows/OneDrive has redirected your Documents folder elsewhere, Settings lets you point it at the right one.
 
-As a whole this will track:
-- Today's three Undaunted Pledges, resolved against real dungeon names, with a note if a dungeon can't yet be mapped
-- Which of your characters still need to run each of today's pledge dungeons (per-character quest completion, not achievement-based, so it's accurate per character rather than per account)
-- Which characters are ready for their daily riding (Capacity/Stamina/Speed) training, and which have already maxed out
-- An Alliance Rank page: each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining
-- A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable
-- An Account and Server switcher, so multi-account and NA/EU players see only the characters relevant to what they've selected
-- An Alchemy page: pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline
-- An Enchanting page: pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons
-- A Music Boxes collection checklist (under Collections): every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app
+## Features
 
-The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) has two things: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
+### Home
+Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole).
+
+<details>
+<summary>Screenshot</summary>
 
 ![Home Page](./img/home.png)
+
+</details>
+
+### Dungeon Check List
+A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Dungeon Check List](./img/dungeon-checklist.png)
+
+</details>
+
+### Alliance Rank
+Each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Alliance Rank](./img/alliance-rank.png)
+
+</details>
+
+### Alchemy
+Pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Alchemy](./img/alchemy.png)
+
+</details>
+
+### Enchanting
+Pick Potency + Essence + Aspect runes and see the exact glyph produced - item type, effect, level and quality - or pick the glyph you want and the runes you need light up. Full essence-rune reference table, again with bundled official icons.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Enchanting](./img/enchanting.png)
+
+</details>
+
+### Music Boxes
+Under Collections: every currently-obtainable Music Box furnishing with its cost and source, tick off what you own. Tracked separately per account and server, and saved locally so it's there next time you open the app.
+
+<details>
+<summary>Screenshot</summary>
+
 ![Music Boxes](./img/music-boxes.png)
+
+</details>
+
+### Everywhere else
+Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
 ## Required Addons
 
@@ -45,7 +90,7 @@ Install and enable all three, then log into each character once with them active
 | [Urich's Skill Point Finder (USPF)](https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html) | Per-character dungeon quest completion (Pledges + Dungeon Check List) |
 | [Skill Lines](https://www.esoui.com/downloads/info4041-SkillLines.html) | Knowing which server (NA/EU) each character is on |
 | [Daily Craft Status](https://esoui.com/downloads/info2510-DailyCraftStatus.html) | Riding training status |
-| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress |
+| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress, account Champion Points |
 
 ## Running it
 
@@ -65,7 +110,7 @@ Unit/integration tests cover the app's actual data logic - pledge name matching,
 
 ## Feature flags
 
-`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
 
 Separately, users can turn off any feature the developer *did* ship, from Settings -> Features - a "declutter" checklist for hiding pages they don't personally use (e.g. no interest in Alliance Rank). This is per-user and persisted to `settings.json` (not `FEATURE_FLAGS`, and not `localStorage` - Electron's `file://`-loaded renderer doesn't reliably persist `localStorage` across app restarts, so this and `documentsPathOverride` both go through the main-process settings store instead). A feature the developer disabled never appears in this list at all; the user toggle can only narrow what's already shipped, never widen it.
 
@@ -86,10 +131,10 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 
 > **The release version comes from `package.json`, not from the git tag.** electron-builder reads `version` in `package.json` and publishes to a release named `v<that version>`. The tag name is only what triggers the workflow. If the tagged commit still has the old `version`, CI happily rebuilds the *old* version and re-uploads its assets over the existing release - the workflow goes green, but no new release appears and nobody gets an update. So the version bump **must be committed on the commit you tag.**
 
-1. Bump `version` in `package.json` (e.g. `0.1.1` -> `0.1.2`), and bump the `version-v0.1.1-blue` badge at the top of this README to match.
+1. Bump `version` in `package.json` (e.g. `0.1.1` -> `0.1.2`), and bump the `version-v0.1.1-blue` badge at the top of this README to match. In `CHANGELOG.md`, rename `[Unreleased]` to `[0.1.2] - <date>` (moving its notes under that heading) and add a fresh empty `[Unreleased]` above it, then fix up the compare-link footer at the bottom of the file.
 2. Commit that change and push it to `main`:
    ```
-   git add package.json README.md
+   git add package.json README.md CHANGELOG.md
    git commit -m "Bump version to 0.1.2"
    git push
    ```
