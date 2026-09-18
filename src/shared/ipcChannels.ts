@@ -6,6 +6,7 @@ export const IPC_CHANNELS = {
   getAppSettings: 'get-app-settings',
   getAddonStatus: 'get-addon-status',
   setDocumentsPathOverride: 'set-documents-path-override',
+  setDisabledFeatures: 'set-disabled-features',
   pickDocumentsFolder: 'pick-documents-folder',
   checkForUpdates: 'check-for-updates',
   quitAndInstallUpdate: 'quit-and-install-update',

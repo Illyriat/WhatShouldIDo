@@ -35,7 +35,12 @@ export async function getRecommendations(): Promise<RecommendationsResult> {
       : []
   }))
 
-  return { pledges, stale: todaysPledges.stale, fetchedAt: todaysPledges.fetchedAt }
+  return {
+    pledges,
+    upcoming: todaysPledges.upcoming,
+    stale: todaysPledges.stale,
+    fetchedAt: todaysPledges.fetchedAt
+  }
 }
 
 export function registerPledgesIpcHandlers(): void {

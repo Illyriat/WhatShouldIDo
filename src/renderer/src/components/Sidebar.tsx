@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import type { FeatureFlag } from '@shared/featureFlags'
+import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 export type Page = 'home' | 'dungeons' | 'alliancerank' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
 
@@ -7,35 +9,44 @@ interface Props {
   onToggleCollapsed: () => void
   activePage: Page
   onNavigate: (page: Page) => void
+  features: FeaturePreferences
 }
 
 type NavItem =
-  | { page: Page; label: string }
-  | { group: string; label: string; children: { page: Page; label: string }[] }
+  | { page: Page; label: string; flag?: FeatureFlag }
+  | { group: string; label: string; children: { page: Page; label: string; flag?: FeatureFlag }[] }
 
-const NAV_ITEMS: NavItem[] = [
+const ALL_NAV_ITEMS: NavItem[] = [
   { page: 'home', label: 'Home' },
-  { page: 'dungeons', label: 'Dungeon Check List' },
-  { page: 'alliancerank', label: 'Alliance Rank' },
+  { page: 'dungeons', label: 'Dungeon Check List', flag: 'dungeonChecklist' },
+  { page: 'alliancerank', label: 'Alliance Rank', flag: 'allianceRank' },
   {
     group: 'crafting',
     label: 'Crafting',
     children: [
-      { page: 'alchemy', label: 'Alchemy' },
-      { page: 'enchanting', label: 'Enchanting' }
+      { page: 'alchemy', label: 'Alchemy', flag: 'alchemy' },
+      { page: 'enchanting', label: 'Enchanting', flag: 'enchanting' }
     ]
   },
   {
     group: 'collections',
     label: 'Collections',
-    children: [{ page: 'musicboxes', label: 'Music Boxes' }]
+    children: [{ page: 'musicboxes', label: 'Music Boxes', flag: 'musicBoxes' }]
   }
 ]
 
-const GROUPS = NAV_ITEMS.filter((item): item is Extract<NavItem, { group: string }> => 'children' in item)
+function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, features }: Props): React.JSX.Element {
+  // Drop flagged-off items (developer build flag or user "declutter" toggle), then drop
+  // any group left with no children.
+  const navItems: NavItem[] = ALL_NAV_ITEMS.map((item) =>
+    'children' in item
+      ? { ...item, children: item.children.filter((c) => !c.flag || features.isEnabled(c.flag)) }
+      : item
+  ).filter((item) => ('children' in item ? item.children.length > 0 : !item.flag || features.isEnabled(item.flag)))
 
-function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props): React.JSX.Element {
-  const activeGroup = GROUPS.find((g) => g.children.some((c) => c.page === activePage))?.group ?? null
+  const groups = navItems.filter((item): item is Extract<NavItem, { group: string }> => 'children' in item)
+
+  const activeGroup = groups.find((g) => g.children.some((c) => c.page === activePage))?.group ?? null
   const [openGroups, setOpenGroups] = useState<Set<string>>(() => (activeGroup ? new Set([activeGroup]) : new Set()))
 
   // Reveal a group when navigation lands on one of its pages from elsewhere.
@@ -67,7 +78,7 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate }: Props
       </div>
 
       <nav className="sidebar__nav">
-        {NAV_ITEMS.map((item) =>
+        {navItems.map((item) =>
           'children' in item ? (
             <div key={item.group} className="sidebar__group">
               <button

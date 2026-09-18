@@ -5,17 +5,21 @@ import ServerSwitcher from '../components/ServerSwitcher'
 import PledgesBoard from '../components/PledgesBoard'
 import RidingBoard from '../components/RidingBoard'
 import type { AccountSelection } from '../hooks/useAccountSelection'
+import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 type RecommendationsState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'ready'; recommendations: RecommendationsResult }
 
+const EMPTY_RECOMMENDATIONS: RecommendationsResult = { pledges: [], upcoming: [], stale: false, fetchedAt: '' }
+
 interface Props {
   accountSelection: AccountSelection
+  features: FeaturePreferences
 }
 
-function HomePage({ accountSelection }: Props): React.JSX.Element {
+function HomePage({ accountSelection, features }: Props): React.JSX.Element {
   const {
     state,
     selectedAccount,
@@ -28,9 +32,13 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
     refreshToken
   } = accountSelection
 
-  const [recState, setRecState] = useState<RecommendationsState>({ status: 'loading' })
+  const [recState, setRecState] = useState<RecommendationsState>(() =>
+    features.isEnabled('pledges') ? { status: 'loading' } : { status: 'ready', recommendations: EMPTY_RECOMMENDATIONS }
+  )
 
   useEffect(() => {
+    if (!features.isEnabled('pledges')) return
+
     let cancelled = false
 
     window.api
@@ -118,8 +126,10 @@ function HomePage({ accountSelection }: Props): React.JSX.Element {
         </div>
       </div>
 
-      {filteredRecommendations && <PledgesBoard result={filteredRecommendations} />}
-      <RidingBoard characters={selectedCharacters} />
+      {features.isEnabled('pledges') && filteredRecommendations && (
+        <PledgesBoard result={filteredRecommendations} upcomingPledgesEnabled={features.isEnabled('upcomingPledges')} />
+      )}
+      {features.isEnabled('ridingTraining') && <RidingBoard characters={selectedCharacters} />}
     </div>
   )
 }

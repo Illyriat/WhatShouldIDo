@@ -1,10 +1,19 @@
+import { useState } from 'react'
 import type { RecommendationsResult } from '@shared/types'
 
 interface Props {
   result: RecommendationsResult
+  upcomingPledgesEnabled: boolean
 }
 
-function PledgesBoard({ result }: Props): React.JSX.Element {
+function formatUpcomingLabel(esoDay: string, index: number): string {
+  if (index === 0) return 'Tomorrow'
+  return new Date(`${esoDay}T00:00:00Z`).toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })
+}
+
+function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Element {
+  const [showUpcoming, setShowUpcoming] = useState(false)
+
   return (
     <section className="board-section">
       <div className="pledges-panel__title-row">
@@ -32,6 +41,33 @@ function PledgesBoard({ result }: Props): React.JSX.Element {
           </div>
         ))}
       </div>
+
+      {upcomingPledgesEnabled && result.upcoming.length > 0 && (
+        <div className="upcoming-pledges">
+          <button
+            type="button"
+            className="upcoming-pledges__toggle"
+            onClick={() => setShowUpcoming((v) => !v)}
+            aria-expanded={showUpcoming}
+          >
+            <span className={`upcoming-pledges__caret${showUpcoming ? ' is-open' : ''}`}>▸</span>
+            Show upcoming pledges ({result.upcoming.length} days)
+          </button>
+
+          {showUpcoming && (
+            <ul className="upcoming-pledges__list">
+              {result.upcoming.map((day, i) => (
+                <li key={day.esoDay} className="upcoming-pledges__day">
+                  <span className="upcoming-pledges__label">{formatUpcomingLabel(day.esoDay, i)}</span>
+                  <span className="upcoming-pledges__dungeons">
+                    {day.pledges.map((p) => p.scrapedName || 'Unknown').join(' · ')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       <h2 className="recommended-title">Recommended</h2>
 

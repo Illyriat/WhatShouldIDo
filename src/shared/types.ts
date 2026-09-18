@@ -58,8 +58,16 @@ export interface TodaysPledge {
   scrapedName: string
 }
 
+// One of the next few days' pledge line-ups (no per-character data - just the dungeons).
+export interface UpcomingPledgeDay {
+  // ISO date (YYYY-MM-DD) of the ESO day these pledges go live.
+  esoDay: string
+  pledges: TodaysPledge[]
+}
+
 export interface TodaysPledges {
   pledges: TodaysPledge[]
+  upcoming: UpcomingPledgeDay[]
   // Served from cache because the fresh fetch failed.
   stale: boolean
   fetchedAt: string
@@ -83,6 +91,7 @@ export interface PledgeRecommendation {
 
 export interface RecommendationsResult {
   pledges: PledgeRecommendation[]
+  upcoming: UpcomingPledgeDay[]
   stale: boolean
   fetchedAt: string
 }
@@ -107,4 +116,8 @@ export interface AppSettings {
   documentsPathOverride?: string
   // The OS default Documents path, shown in Settings for reference.
   defaultDocumentsPath: string
+  // User "declutter" toggles - feature flags (src/shared/featureFlags.ts) the user has
+  // turned off in Settings. Stored as plain strings (not FeatureFlag) since a value
+  // saved under an older build can name a flag that no longer exists.
+  disabledFeatures: string[]
 }
