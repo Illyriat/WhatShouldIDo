@@ -8,7 +8,7 @@
 [![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo-arm64.dmg)
 [![Download for Linux](https://img.shields.io/badge/Download-Linux%20(AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Illyriat/WhatShouldIDo/releases/latest/download/WhatShouldIDo.AppImage)
 
-These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
+These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) (see [CHANGELOG.md](./CHANGELOG.md) for what's in each version). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
 
     * For this app to work you first need the required addons installed in ESO (see below).
         ** Log into each character at least once with them active so they have data to read.
@@ -131,10 +131,10 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 
 > **The release version comes from `package.json`, not from the git tag.** electron-builder reads `version` in `package.json` and publishes to a release named `v<that version>`. The tag name is only what triggers the workflow. If the tagged commit still has the old `version`, CI happily rebuilds the *old* version and re-uploads its assets over the existing release - the workflow goes green, but no new release appears and nobody gets an update. So the version bump **must be committed on the commit you tag.**
 
-1. Bump `version` in `package.json` (e.g. `0.1.1` -> `0.1.2`), and bump the `version-v0.1.1-blue` badge at the top of this README to match.
+1. Bump `version` in `package.json` (e.g. `0.1.1` -> `0.1.2`), and bump the `version-v0.1.1-blue` badge at the top of this README to match. In `CHANGELOG.md`, rename `[Unreleased]` to `[0.1.2] - <date>` (moving its notes under that heading) and add a fresh empty `[Unreleased]` above it, then fix up the compare-link footer at the bottom of the file.
 2. Commit that change and push it to `main`:
    ```
-   git add package.json README.md
+   git add package.json README.md CHANGELOG.md
    git commit -m "Bump version to 0.1.2"
    git push
    ```
