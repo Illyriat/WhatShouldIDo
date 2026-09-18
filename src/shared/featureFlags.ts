@@ -9,7 +9,7 @@ export const FEATURE_FLAGS = {
   upcomingPledges: true,
   ridingTraining: true,
   dungeonChecklist: true,
-  allianceRank: false,
+  allianceRank: true,
   alchemy: true,
   enchanting: true,
   musicBoxes: true
