@@ -34,7 +34,12 @@ export const USER_TOGGLEABLE_FEATURES: {
   { flag: 'allianceRank', label: 'Alliance Rank', description: 'The Alliance Rank page.' },
   { flag: 'alchemy', label: 'Alchemy', description: 'The Alchemy calculator page.' },
   { flag: 'enchanting', label: 'Enchanting', description: 'The Enchanting calculator page.' },
-  { flag: 'musicBoxes', label: 'Music Boxes', description: 'The Music Boxes collection checklist.' }
+  { flag: 'musicBoxes', label: 'Music Boxes', description: 'The Music Boxes collection checklist.' },
+  {
+    flag: 'wealthTracker',
+    label: 'Wealth Tracker',
+    description: 'The Gold / Alliance Points / Tel Var Stones / Writ Vouchers board on the Home page.'
+  }
 ]
 
 export interface FeaturePreferences {

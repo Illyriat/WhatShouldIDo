@@ -76,8 +76,8 @@ const ADDONS: {
     file: 'WhatShouldIDoDataCollector.lua',
     required: false,
     description:
-      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress (powers the Alliance Rank page), and each account’s Champion Points per realm (shown on the Home page banner).',
-    relevantFlags: ['allianceRank', 'welcomeBanner']
+      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress (powers the Alliance Rank page), each account’s Champion Points per realm (shown on the Home page banner), and Gold / Alliance Points / Tel Var Stones / Writ Vouchers - both each character’s carried amount and the shared account-wide bank total per realm (powers the Wealth Tracker on the Home page).',
+    relevantFlags: ['allianceRank', 'welcomeBanner', 'wealthTracker']
   }
 ]
 
