@@ -148,7 +148,7 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
             onClick={() => onNavigate('achievements')}
           >
             <span className="sidebar__settings-icon" aria-hidden="true">
-              🏆
+              ★
             </span>
             {!collapsed && <span>Achievements</span>}
           </button>
