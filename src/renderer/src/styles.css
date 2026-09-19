@@ -210,17 +210,24 @@ body {
 
 .sidebar__footer {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar__footer .sidebar__nav-item {
+  padding: 3px 10px;
+  font-size: 0.8rem;
 }
 
 .sidebar__donate {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px 10px;
-  margin-top: 4px;
+  padding: 3px 10px;
   border-radius: 8px;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-decoration: none;
 }
 
@@ -230,7 +237,7 @@ body {
 
 .sidebar__donate-icon {
   margin-right: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: var(--accent);
 }
 
@@ -246,7 +253,7 @@ body {
 
 .sidebar__settings-icon {
   margin-right: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 .layout__content {
@@ -2043,4 +2050,70 @@ h1 {
 .alliance-circle__maxed {
   color: var(--good);
   font-weight: 600;
+}
+
+/* --- Achievements --- */
+.achievement-tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 18px 0;
+}
+
+.achievement-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 92px;
+  text-align: center;
+}
+
+.achievement-tier__medal {
+  width: 64px;
+  height: 74px;
+}
+
+.achievement-tier--locked .achievement-tier__medal {
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.achievement-tier--earned .achievement-tier__medal {
+  filter: none;
+  opacity: 1;
+}
+
+.achievement-tier--current .achievement-tier__name {
+  color: var(--accent);
+}
+
+.achievement-tier__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.achievement-tier--locked .achievement-tier__name {
+  color: var(--muted);
+}
+
+.achievement-tier__threshold {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.achievement-tier--wealth {
+  width: 104px;
+}
+
+.achievement-tier__requirements {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.65rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.achievement-card__status {
+  margin-top: 4px;
 }

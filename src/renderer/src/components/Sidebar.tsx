@@ -2,7 +2,15 @@ import { useEffect, useState } from 'react'
 import type { FeatureFlag } from '@shared/featureFlags'
 import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
-export type Page = 'home' | 'dungeons' | 'alliancerank' | 'alchemy' | 'enchanting' | 'musicboxes' | 'settings'
+export type Page =
+  | 'home'
+  | 'dungeons'
+  | 'alliancerank'
+  | 'alchemy'
+  | 'enchanting'
+  | 'musicboxes'
+  | 'achievements'
+  | 'settings'
 
 interface Props {
   collapsed: boolean
@@ -132,6 +140,20 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
       </nav>
 
       <div className="sidebar__footer">
+        {features.isEnabled('achievements') && (
+          <button
+            className={`sidebar__nav-item ${activePage === 'achievements' ? 'sidebar__nav-item--active' : ''}`}
+            title="Achievements"
+            aria-label="Achievements"
+            onClick={() => onNavigate('achievements')}
+          >
+            <span className="sidebar__settings-icon" aria-hidden="true">
+              ★
+            </span>
+            {!collapsed && <span>Achievements</span>}
+          </button>
+        )}
+
         <button
           className={`sidebar__nav-item ${activePage === 'settings' ? 'sidebar__nav-item--active' : ''}`}
           title="Settings"

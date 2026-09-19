@@ -1,64 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CURRENCY_LABEL, MUSIC_BOXES, musicBoxIconUrl, type MusicBox } from '@shared/musicBoxes'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import type { AccountSelection } from '../hooks/useAccountSelection'
-
-// Pre-account-scoping key: one shared checklist for everyone. Migrated into the first
-// resolved scope the first time this page loads under the new per-account/server scheme.
-const LEGACY_STORAGE_KEY = 'musicbox-collection-v1'
-const MIGRATED_MARKER = 'musicbox-collection-migrated-v1'
-
-// Bucket used when no ESO account/server data is available (no USPF/SkillLines addon
-// detected yet). It's still a real, stable scope - not a special case in storage.
-const NO_ACCOUNT = '_no_account_'
-const NO_SERVER = '_no_server_'
+import { useMusicBoxCollection } from '../hooks/useMusicBoxCollection'
 
 interface Props {
   accountSelection: AccountSelection
 }
 
 type Filter = 'all' | 'collected' | 'missing'
-
-function scopeKeyFor(accountName: string | null, server: string | null): string {
-  return `${LEGACY_STORAGE_KEY}::${accountName ?? NO_ACCOUNT}::${server ?? NO_SERVER}`
-}
-
-function validIds(ids: unknown): Set<string> {
-  if (!Array.isArray(ids)) return new Set()
-  const known = new Set(MUSIC_BOXES.map((b) => b.id))
-  return new Set(ids.filter((id): id is string => typeof id === 'string' && known.has(id)))
-}
-
-// Reads the collection for one account/server scope, migrating the old flat (pre-scoping)
-// key into whichever scope resolves first, exactly once.
-function loadCollected(scopeKey: string): Set<string> {
-  try {
-    const raw = localStorage.getItem(scopeKey)
-    if (raw) return validIds(JSON.parse(raw))
-
-    if (!localStorage.getItem(MIGRATED_MARKER)) {
-      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY)
-      localStorage.setItem(MIGRATED_MARKER, '1')
-      if (legacy) {
-        localStorage.setItem(scopeKey, legacy)
-        localStorage.removeItem(LEGACY_STORAGE_KEY)
-        return validIds(JSON.parse(legacy))
-      }
-    }
-    return new Set()
-  } catch {
-    return new Set()
-  }
-}
-
-function persistCollected(scopeKey: string, collected: Set<string>): void {
-  try {
-    localStorage.setItem(scopeKey, JSON.stringify([...collected]))
-  } catch {
-    /* private mode / storage disabled - progress just won't persist */
-  }
-}
 
 function costLabel(box: MusicBox): string {
   if (!box.cost) return '—'
@@ -68,38 +19,10 @@ function costLabel(box: MusicBox): string {
 function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
   const { state, selectedAccount, setSelectedAccount, selectedServer, setSelectedServer, availableServers } =
     accountSelection
+  const { accountsReady, hasAccounts, collected, toggle } = useMusicBoxCollection(accountSelection)
 
-  // Accounts resolve asynchronously (they're read from SavedVariables on disk); wait for
-  // that one-time read to settle before picking a scope, so we don't briefly load the
-  // no-account bucket and then swap it out from under the user a moment later. A missing
-  // addon (status 'error', or 'ready' with zero accounts) resolves immediately to the
-  // no-account scope - only 'loading' holds off rendering the checklist.
-  const accountsReady = state.status !== 'loading'
-  const hasAccounts = state.status === 'ready' && state.accounts.length > 0
-  const scopeKey = accountsReady ? scopeKeyFor(selectedAccount, selectedServer) : null
-
-  const [collected, setCollected] = useState<Set<string>>(new Set())
-  const scopeKeyRef = useRef<string | null>(null)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
-
-  useEffect(() => {
-    if (!scopeKey) return
-    scopeKeyRef.current = scopeKey
-    setCollected(loadCollected(scopeKey))
-  }, [scopeKey])
-
-  function toggle(id: string): void {
-    setCollected((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      // Written against the scope active at toggle time, not reactively off `collected` -
-      // that would race a scope switch and write the old account's set into the new one.
-      if (scopeKeyRef.current) persistCollected(scopeKeyRef.current, next)
-      return next
-    })
-  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

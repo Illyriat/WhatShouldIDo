@@ -31,14 +31,29 @@ export const USER_TOGGLEABLE_FEATURES: {
     label: 'Dungeon Check List',
     description: 'The full per-character dungeon completion checklist page.'
   },
-  { flag: 'allianceRank', label: 'Alliance Rank', description: 'The Alliance Rank page.' },
+  {
+    flag: 'allianceRank',
+    label: 'Alliance Rank',
+    description: 'The Alliance Rank page, and its Alliance War Veterans medal on the Achievements page.'
+  },
   { flag: 'alchemy', label: 'Alchemy', description: 'The Alchemy calculator page.' },
   { flag: 'enchanting', label: 'Enchanting', description: 'The Enchanting calculator page.' },
-  { flag: 'musicBoxes', label: 'Music Boxes', description: 'The Music Boxes collection checklist.' },
+  {
+    flag: 'musicBoxes',
+    label: 'Music Boxes',
+    description: 'The Music Boxes collection checklist, and its Music Box Collection medal on the Achievements page.'
+  },
   {
     flag: 'wealthTracker',
     label: 'Wealth Tracker',
-    description: 'The Gold / Alliance Points / Tel Var Stones / Writ Vouchers board on the Home page.'
+    description:
+      'The Gold / Alliance Points / Tel Var Stones / Writ Vouchers board on the Home page, and its Wealth medal on the Achievements page.'
+  },
+  {
+    flag: 'achievements',
+    label: 'Achievements',
+    description:
+      "This app's own achievements page: Music Box collection medals, Alliance War Veterans (characters at Alliance Rank 50), and Wealth classes (Gold / Alliance Points / Tel Var Stones / Writ Vouchers)."
   }
 ]
 

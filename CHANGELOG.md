@@ -5,6 +5,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ## [Unreleased]
 
 ### Added
+- Achievements page (above Settings in the sidebar): this app's own medals for progress you've already made elsewhere in the app - Music Box Collection (Tin-Gold: Owner/Collector/Curator/Maestro at 1/5/half/all collected), Alliance War Veterans (Tin-Platinum: Veteran/Champion/Warlord/Grand Marshal/Grand Overlord for 1/3/6/10/20 characters at Alliance Rank 50), and Wealth (Peasant through Magnate - gated on Gold, AP, Tel Var Stones and Writ Vouchers all clearing that class's bar at once, not just one of them; Magnate is intentionally the hardest medal in the app)
 - Alliance Rank page: each character's Alliance War rank as a dual-ring progress circle toward Rank 50, plus exact Alliance Points remaining - powered by the new **What Should I Do - Data Collector** companion addon
 - A welcome banner on Home naming the selected account, with that realm's total Champion Points shown underneath (also from the Data Collector addon)
 - Wealth Tracker board on Home, next to Today's Pledges: realm-wide Gold / Alliance Points / Tel Var Stones / Writ Vouchers totals (the shared account-wide bank plus every character's carried amount), with a collapsible breakdown showing the bank total and a per-character table - also powered by the Data Collector addon
@@ -15,7 +16,11 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ### Changed
 - Sidebar reorganized: Alliance Rank promoted to a top-level item, Alchemy/Enchanting grouped under Crafting, Music Boxes under Collections
 - Settings now hides an addon's row entirely once nothing currently enabled still needs it
+- Settings -> Features descriptions for Alliance Rank, Music Boxes and Wealth Tracker now note their tie-in with the new Achievements page, and the Achievements description lists all three achievements it covers
 - Refreshed every README screenshot in dark theme
+
+### Fixed
+- Achievements page: the Music Box Collection medal now hides itself when the Music Boxes feature is turned off in Settings, matching how the Alliance War Veterans and Wealth medals already behave; the page also shows a message instead of an empty screen if every underlying feature is disabled
 
 ## [0.2.0] - 2026-09-13
 
