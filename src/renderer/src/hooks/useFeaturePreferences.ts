@@ -39,6 +39,11 @@ export const USER_TOGGLEABLE_FEATURES: {
     flag: 'wealthTracker',
     label: 'Wealth Tracker',
     description: 'The Gold / Alliance Points / Tel Var Stones / Writ Vouchers board on the Home page.'
+  },
+  {
+    flag: 'achievements',
+    label: 'Achievements',
+    description: "This app's own achievements page (currently: Music Box collection medals)."
   }
 ]
 
