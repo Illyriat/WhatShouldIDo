@@ -5,7 +5,7 @@
  * some in-app progress. New achievements get their own factory function below.
  */
 
-export type AchievementTier = 'tin' | 'bronze' | 'silver' | 'gold'
+export type AchievementTier = 'tin' | 'bronze' | 'silver' | 'gold' | 'platinum'
 
 export interface AchievementTierDef {
   tier: AchievementTier
@@ -36,6 +36,26 @@ export function musicBoxAchievement(total: number): Achievement {
       { tier: 'bronze', name: 'Collector', threshold: Math.min(5, total) },
       { tier: 'silver', name: 'Curator', threshold: Math.ceil(total / 2) },
       { tier: 'gold', name: 'Maestro', threshold: total }
+    ]
+  }
+}
+
+// Fixed counts rather than a fraction of the account's roster - unlike Music Boxes there's
+// no fixed catalog size, and a character-count roster varies too much per account for a
+// relative split to mean the same thing for everyone. 20 is the max characters ESO allows
+// per account per megaserver, so Platinum means every possible slot maxed out.
+export function allianceRankAchievement(): Achievement {
+  return {
+    id: 'alliance-rank-maxer',
+    title: 'Alliance War Veterans',
+    description: 'Get characters to Alliance Rank 50, tracked on the Alliance Rank page.',
+    iconSet: 'alliance-rank',
+    tiers: [
+      { tier: 'tin', name: 'Veteran', threshold: 1 },
+      { tier: 'bronze', name: 'Champion', threshold: 3 },
+      { tier: 'silver', name: 'Warlord', threshold: 6 },
+      { tier: 'gold', name: 'Grand Marshal', threshold: 10 },
+      { tier: 'platinum', name: 'Grand Overlord', threshold: 20 }
     ]
   }
 }
