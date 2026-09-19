@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { allianceRankAchievement, currentAchievementTier, musicBoxAchievement } from '../../src/shared/achievements'
+import {
+  allianceRankAchievement,
+  currentAchievementTier,
+  currentWealthTier,
+  musicBoxAchievement,
+  wealthAchievement
+} from '../../src/shared/achievements'
 
 describe('musicBoxAchievement', () => {
   it('sets Tin/Bronze at fixed counts and Silver/Gold relative to the total', () => {
@@ -33,6 +39,89 @@ describe('allianceRankAchievement', () => {
       { tier: 'gold', name: 'Grand Marshal', threshold: 10 },
       { tier: 'platinum', name: 'Grand Overlord', threshold: 20 }
     ])
+  })
+})
+
+describe('wealthAchievement', () => {
+  it('requires all four currencies at once, strictly increasing tier over tier', () => {
+    const achievement = wealthAchievement()
+    expect(achievement.tiers).toEqual([
+      { tier: 'peasant', name: 'Peasant', requirement: { gold: 10_000, alliancePoints: 0, telVarStones: 0, writVouchers: 0 } },
+      {
+        tier: 'commoner',
+        name: 'Commoner',
+        requirement: { gold: 250_000, alliancePoints: 5_000, telVarStones: 1_000, writVouchers: 100 }
+      },
+      {
+        tier: 'merchant',
+        name: 'Merchant',
+        requirement: { gold: 5_000_000, alliancePoints: 250_000, telVarStones: 10_000, writVouchers: 500 }
+      },
+      {
+        tier: 'noble',
+        name: 'Noble',
+        requirement: { gold: 50_000_000, alliancePoints: 5_000_000, telVarStones: 100_000, writVouchers: 2_000 }
+      },
+      {
+        tier: 'baron',
+        name: 'Baron',
+        requirement: { gold: 500_000_000, alliancePoints: 50_000_000, telVarStones: 500_000, writVouchers: 6_000 }
+      },
+      {
+        tier: 'magnate',
+        name: 'Magnate',
+        requirement: {
+          gold: 5_000_000_000,
+          alliancePoints: 250_000_000,
+          telVarStones: 1_500_000,
+          writVouchers: 15_000
+        }
+      }
+    ])
+  })
+
+  it('every currency requirement strictly increases from tier to tier', () => {
+    const tiers = wealthAchievement().tiers
+    const keys = ['gold', 'alliancePoints', 'telVarStones', 'writVouchers'] as const
+    for (const key of keys) {
+      for (let i = 1; i < tiers.length; i++) {
+        expect(tiers[i].requirement[key]).toBeGreaterThan(tiers[i - 1].requirement[key])
+      }
+    }
+  })
+})
+
+describe('currentWealthTier', () => {
+  const tiers = wealthAchievement().tiers
+
+  it('is null below Peasant (needs at least 10,000 Gold)', () => {
+    expect(currentWealthTier(tiers, { gold: 9_999, alliancePoints: 0, telVarStones: 0, writVouchers: 0 })).toBeNull()
+  })
+
+  it('is Peasant with only Gold, even with nothing else', () => {
+    const amounts = { gold: 10_000, alliancePoints: 0, telVarStones: 0, writVouchers: 0 }
+    expect(currentWealthTier(tiers, amounts)?.tier).toBe('peasant')
+  })
+
+  it('is capped by whichever currency is weakest, not the strongest', () => {
+    // Gold/AP/Tel Var all clear Magnate, but Writ Vouchers only clears Baron.
+    const amounts = {
+      gold: 6_000_000_000,
+      alliancePoints: 300_000_000,
+      telVarStones: 2_000_000,
+      writVouchers: 6_500
+    }
+    expect(currentWealthTier(tiers, amounts)?.tier).toBe('baron')
+  })
+
+  it('reaches Magnate only once every currency clears it', () => {
+    const amounts = {
+      gold: 5_000_000_000,
+      alliancePoints: 250_000_000,
+      telVarStones: 1_500_000,
+      writVouchers: 15_000
+    }
+    expect(currentWealthTier(tiers, amounts)?.tier).toBe('magnate')
   })
 })
 
