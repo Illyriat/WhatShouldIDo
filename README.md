@@ -80,6 +80,9 @@ Under Collections: every currently-obtainable Music Box furnishing with its cost
 
 </details>
 
+### Achievements
+This app's own medals (Tin/Bronze/Silver/Gold), separate from anything ESO tracks - not gated behind an addon, just progress you've already made elsewhere in the app. Music Box Collection awards Owner (1 collected), Collector (5), Curator (half), Maestro (all of them). Alliance War Veterans awards Tin/Bronze/Silver/Gold/Platinum for how many characters you've gotten to Alliance Rank 50 - Veteran (1), Champion (3), Warlord (6), Grand Marshal (10), and Grand Overlord (20, the maximum characters allowed per account per megaserver).
+
 ### Everywhere else
 Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
