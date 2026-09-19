@@ -4,12 +4,12 @@
 // `define`/dead-code-elimination mechanism), so disabled code still ships in the
 // bundle, it just never renders or runs.
 export const FEATURE_FLAGS = {
-  welcomeBanner: false,
+  welcomeBanner: true,
   pledges: true,
   upcomingPledges: true,
   ridingTraining: true,
   dungeonChecklist: true,
-  allianceRank: false,
+  allianceRank: true,
   alchemy: true,
   enchanting: true,
   musicBoxes: true
