@@ -25,6 +25,16 @@ export interface AllianceRankStatus {
   currentRankEndAP: number
 }
 
+// Gold, Alliance Points, Tel Var Stones and Writ Vouchers - all character-specific
+// currencies in ESO, but bankable (see WealthAmounts usage on Account for the shared
+// account-wide bank total, vs. this per-character carried amount).
+export interface WealthAmounts {
+  gold: number
+  alliancePoints: number
+  telVarStones: number
+  writVouchers: number
+}
+
 export interface Character {
   charId: string
   charName: string
@@ -38,6 +48,9 @@ export interface Character {
   readyToTrainRiding: boolean
   // null when the AllianceRankTracker addon has no data yet for this character.
   allianceRank: AllianceRankStatus | null
+  // Currency this character is personally carrying. null when the
+  // WhatShouldIDoDataCollector addon has no data yet for this character.
+  wealth: WealthAmounts | null
 }
 
 export interface Account {
@@ -47,6 +60,10 @@ export interface Account {
   // realm, not per-character, so it lives here rather than on Character. Empty when the
   // WhatShouldIDoDataCollector addon has no data yet for that realm.
   championPoints: Record<string, number>
+  // Bank currency totals, keyed by server - shared by every character on that account +
+  // megaserver (see WealthAmounts), same account+realm scoping as championPoints. Empty
+  // when the WhatShouldIDoDataCollector addon has no data yet for that realm.
+  bankWealth: Record<string, WealthAmounts>
 }
 
 export interface PledgeMaster {

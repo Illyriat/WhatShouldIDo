@@ -51,14 +51,17 @@ async function writeFixtureDocuments(): Promise<string> {
     'utf-8'
   )
 
-  // Only Alice has alliance rank data; Bob and Carol fall back to null. Champion Points
-  // are account+realm scoped (not per-character), and EU has none yet - only NA does.
+  // Only Alice has alliance rank data / carried wealth; Bob and Carol fall back to null.
+  // Champion Points and the bank total are account+realm scoped (not per-character), and
+  // EU has neither yet - only NA does.
   await writeFile(
     join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
     `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
       `["championPoints"]=810,` +
+      `["bankWealth"]={["gold"]=500000,["alliancePoints"]=12000,["telVarStones"]=3000,["writVouchers"]=200},` +
       `["1001"]={["allianceRank"]={["rank"]=23,["subRank"]=1,["currentAP"]=6200000,["apForMaxRank"]=64680000,` +
-      `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400}}` +
+      `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400},` +
+      `["wealth"]={["gold"]=15000,["alliancePoints"]=800,["telVarStones"]=50,["writVouchers"]=10}}` +
       `}}}}}`,
     'utf-8'
   )
@@ -76,6 +79,9 @@ describe('buildAccounts', () => {
     expect(accounts[0].accountName).toBe('@TestAccount')
     // Account-wide per realm - NA has data, EU (Carol's realm) doesn't yet.
     expect(accounts[0].championPoints).toEqual({ 'NA Megaserver': 810 })
+    expect(accounts[0].bankWealth).toEqual({
+      'NA Megaserver': { gold: 500000, alliancePoints: 12000, telVarStones: 3000, writVouchers: 200 }
+    })
     expect(accounts[0].characters).toEqual([
       {
         charId: '1001',
@@ -91,7 +97,8 @@ describe('buildAccounts', () => {
           apForMaxRank: 64680000,
           currentRankStartAP: 6072000,
           currentRankEndAP: 6918400
-        }
+        },
+        wealth: { gold: 15000, alliancePoints: 800, telVarStones: 50, writVouchers: 10 }
       },
       {
         charId: '1002',
@@ -100,7 +107,8 @@ describe('buildAccounts', () => {
         completedDungeonKeys: [],
         ridingMaxed: false,
         readyToTrainRiding: false, // not present in the DailyCraftStatus fixture
-        allianceRank: null
+        allianceRank: null,
+        wealth: null
       },
       {
         charId: '2001',
@@ -109,7 +117,8 @@ describe('buildAccounts', () => {
         completedDungeonKeys: ['BC1', 'EH1'],
         ridingMaxed: false,
         readyToTrainRiding: false,
-        allianceRank: null
+        allianceRank: null,
+        wealth: null
       }
     ])
   })
