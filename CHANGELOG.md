@@ -18,6 +18,9 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Settings now hides an addon's row entirely once nothing currently enabled still needs it
 - Refreshed every README screenshot in dark theme
 
+### Fixed
+- Achievements page: the Music Box Collection medal now hides itself when the Music Boxes feature is turned off in Settings, matching how the Alliance War Veterans and Wealth medals already behave; the page also shows a message instead of an empty screen if every underlying feature is disabled
+
 ## [0.2.0] - 2026-09-13
 
 ### Added

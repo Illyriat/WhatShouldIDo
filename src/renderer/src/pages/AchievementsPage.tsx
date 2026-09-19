@@ -32,6 +32,8 @@ function AchievementsPage({ accountSelection, features }: Props): React.JSX.Elem
   const musicBox = useMemo(() => musicBoxAchievement(MUSIC_BOXES.length), [])
   const musicBoxCount = collected.size
 
+  const anyVisible = features.isEnabled('musicBoxes') || features.isEnabled('allianceRank') || features.isEnabled('wealthTracker')
+
   const allianceRank = useMemo(() => allianceRankAchievement(), [])
   const maxedCount = useMemo(
     () => selectedCharacters.filter((c) => c.allianceRank?.rank === 50).length,
@@ -83,14 +85,21 @@ function AchievementsPage({ accountSelection, features }: Props): React.JSX.Elem
 
       {!accountsReady ? (
         <p className="muted">Loading your ESO accounts…</p>
+      ) : !anyVisible ? (
+        <p className="muted">
+          Every achievement is tied to a feature you've turned off in Settings. Re-enable Music Boxes, Alliance Rank,
+          or Wealth Tracker to see progress here.
+        </p>
       ) : (
         <div className="achievement-list">
-          <AchievementCard
-            achievement={musicBox}
-            count={musicBoxCount}
-            progressLabel={`${musicBoxCount} / ${MUSIC_BOXES.length} collected`}
-            notStartedHint={`Collect your first Music Box to earn the ${musicBox.tiers[0].name} medal.`}
-          />
+          {features.isEnabled('musicBoxes') && (
+            <AchievementCard
+              achievement={musicBox}
+              count={musicBoxCount}
+              progressLabel={`${musicBoxCount} / ${MUSIC_BOXES.length} collected`}
+              notStartedHint={`Collect your first Music Box to earn the ${musicBox.tiers[0].name} medal.`}
+            />
+          )}
 
           {features.isEnabled('allianceRank') && (
             <AchievementCard
