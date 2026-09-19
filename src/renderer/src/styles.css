@@ -210,17 +210,24 @@ body {
 
 .sidebar__footer {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar__footer .sidebar__nav-item {
+  padding: 3px 10px;
+  font-size: 0.8rem;
 }
 
 .sidebar__donate {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px 10px;
-  margin-top: 4px;
+  padding: 3px 10px;
   border-radius: 8px;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-decoration: none;
 }
 
@@ -230,7 +237,7 @@ body {
 
 .sidebar__donate-icon {
   margin-right: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: var(--accent);
 }
 
@@ -246,7 +253,7 @@ body {
 
 .sidebar__settings-icon {
   margin-right: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 .layout__content {
