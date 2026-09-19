@@ -1,10 +1,11 @@
-import type { Account, AllianceRankStatus } from '@shared/types'
+import type { Account, AllianceRankStatus, WealthAmounts } from '@shared/types'
 import { findSavedVariablesFiles } from './savedVarsLocator'
 import { extractAccountsFromUspf, type RawAccount } from './uspfExtractor'
 import { extractCharacterServers } from './skillLinesExtractor'
 import { extractRidingStatus, type RidingStatus } from './ridingExtractor'
 import { extractAllianceRankStatus } from './allianceRankExtractor'
 import { extractChampionPoints } from './championPointsExtractor'
+import { extractCharacterWealth, extractBankWealth } from './wealthExtractor'
 
 const UNKNOWN_SERVER = 'Unknown Server'
 const NO_RIDING_DATA: RidingStatus = { ridingMaxed: false, readyToTrainRiding: false }
@@ -89,6 +90,27 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
     }
   }
 
+  // Same file, per-character carried currency (see wealthExtractor.ts).
+  const wealthMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractCharacterWealth(file)))
+  const wealthByCharId = new Map<string, WealthAmounts>()
+  for (const wealthMap of wealthMapsByFile) {
+    for (const [charId, wealth] of wealthMap) wealthByCharId.set(charId, wealth)
+  }
+
+  // Same file, account+realm scoped shared bank total (see wealthExtractor.ts).
+  const bankWealthMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractBankWealth(file)))
+  const bankWealthByAccount = new Map<string, Map<string, WealthAmounts>>()
+  for (const bankWealthMap of bankWealthMapsByFile) {
+    for (const [accountName, realmToWealth] of bankWealthMap) {
+      const existing = bankWealthByAccount.get(accountName)
+      if (!existing) {
+        bankWealthByAccount.set(accountName, new Map(realmToWealth))
+        continue
+      }
+      for (const [realm, wealth] of realmToWealth) existing.set(realm, wealth)
+    }
+  }
+
   const accounts: Account[] = []
 
   for (const rawAccount of rawAccounts.values()) {
@@ -103,16 +125,19 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
         completedDungeonKeys: character.completedDungeonKeys,
         ridingMaxed: riding.ridingMaxed,
         readyToTrainRiding: riding.readyToTrainRiding,
-        allianceRank: allianceRankByCharId.get(character.charId) ?? null
+        allianceRank: allianceRankByCharId.get(character.charId) ?? null,
+        wealth: wealthByCharId.get(character.charId) ?? null
       }
     })
 
     const championPoints = championPointsByAccount.get(rawAccount.accountName)
+    const bankWealth = bankWealthByAccount.get(rawAccount.accountName)
 
     accounts.push({
       accountName: rawAccount.accountName,
       characters: characters.sort((a, b) => a.charName.localeCompare(b.charName)),
-      championPoints: championPoints ? Object.fromEntries(championPoints) : {}
+      championPoints: championPoints ? Object.fromEntries(championPoints) : {},
+      bankWealth: bankWealth ? Object.fromEntries(bankWealth) : {}
     })
   }
 

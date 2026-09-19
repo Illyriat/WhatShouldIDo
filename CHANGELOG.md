@@ -7,6 +7,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ### Added
 - Alliance Rank page: each character's Alliance War rank as a dual-ring progress circle toward Rank 50, plus exact Alliance Points remaining - powered by the new **What Should I Do - Data Collector** companion addon
 - A welcome banner on Home naming the selected account, with that realm's total Champion Points shown underneath (also from the Data Collector addon)
+- Wealth Tracker board on Home, next to Today's Pledges: realm-wide Gold / Alliance Points / Tel Var Stones / Writ Vouchers totals (the shared account-wide bank plus every character's carried amount), with a collapsible breakdown showing the bank total and a per-character table - also powered by the Data Collector addon
 - Upcoming Pledges: a 5-day preview of future Undaunted Pledges, collapsed by default under Today's Pledges
 - Developer feature flags (`src/shared/featureFlags.ts`) to ship a release with a feature pulled, plus a matching Settings -> Features checklist so users can hide pages they don't personally use
 - Settings: collapsible Features/Addons lists and a jump-to-section nav, so the page stays manageable as more sections are added

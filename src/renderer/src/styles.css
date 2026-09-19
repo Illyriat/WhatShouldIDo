@@ -409,6 +409,104 @@ h1 {
   margin-top: 24px;
 }
 
+/* Home page: Wealth Tracker sits to the left of Today's Pledges, side by side. */
+.home-top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.home-top-row__wealth {
+  flex: 0 0 300px;
+}
+
+.home-top-row__main {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .home-top-row__wealth,
+  .home-top-row__main {
+    flex-basis: 100%;
+  }
+}
+
+.wealth-board__subtitle.muted {
+  margin: -10px 0 18px;
+  font-size: 0.75rem;
+}
+
+.wealth-bank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.wealth-bank-list__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.wealth-bank-list__row + .wealth-bank-list__row {
+  border-top: 1px solid var(--border);
+}
+
+.wealth-bank-list__label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.wealth-bank-list__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wealth-table-wrap {
+  overflow-x: auto;
+}
+
+.wealth-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.wealth-table th,
+.wealth-table td {
+  padding: 6px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wealth-table th:first-child,
+.wealth-table td:first-child {
+  text-align: left;
+}
+
+.wealth-table thead th {
+  color: var(--muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.wealth-table tbody tr + tr td {
+  border-top: 1px solid var(--border);
+}
+
+.wealth-table__char {
+  font-weight: 600;
+}
+
 .pledges-panel__title-row {
   display: flex;
   align-items: center;
