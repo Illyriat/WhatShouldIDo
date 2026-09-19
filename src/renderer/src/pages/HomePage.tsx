@@ -4,6 +4,7 @@ import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import PledgesBoard from '../components/PledgesBoard'
 import RidingBoard from '../components/RidingBoard'
+import WealthBoard from '../components/WealthBoard'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
@@ -116,6 +117,11 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     ? state.accounts.find((a) => a.accountName === selectedAccount)?.championPoints[selectedServer]
     : undefined
 
+  // Bank currency is account+realm scoped too, same reasoning as Champion Points above.
+  const bankWealth = selectedServer
+    ? state.accounts.find((a) => a.accountName === selectedAccount)?.bankWealth[selectedServer]
+    : undefined
+
   return (
     <div className="page">
       {features.isEnabled('welcomeBanner') && selectedAccount && (
@@ -144,10 +150,26 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
         </div>
       </div>
 
-      {features.isEnabled('pledges') && filteredRecommendations && (
-        <PledgesBoard result={filteredRecommendations} upcomingPledgesEnabled={features.isEnabled('upcomingPledges')} />
+      {(features.isEnabled('wealthTracker') ||
+        (features.isEnabled('pledges') && filteredRecommendations) ||
+        features.isEnabled('ridingTraining')) && (
+        <div className="home-top-row">
+          {features.isEnabled('wealthTracker') && (
+            <div className="home-top-row__wealth">
+              <WealthBoard bankWealth={bankWealth} characters={selectedCharacters} server={selectedServer} />
+            </div>
+          )}
+          <div className="home-top-row__main">
+            {features.isEnabled('pledges') && filteredRecommendations && (
+              <PledgesBoard
+                result={filteredRecommendations}
+                upcomingPledgesEnabled={features.isEnabled('upcomingPledges')}
+              />
+            )}
+            {features.isEnabled('ridingTraining') && <RidingBoard characters={selectedCharacters} />}
+          </div>
+        </div>
       )}
-      {features.isEnabled('ridingTraining') && <RidingBoard characters={selectedCharacters} />}
     </div>
   )
 }
