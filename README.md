@@ -83,6 +83,13 @@ Under Collections: every currently-obtainable Music Box furnishing with its cost
 ### Achievements
 This app's own medals, separate from anything ESO tracks - not gated behind an addon, just progress you've already made elsewhere in the app. Music Box Collection awards Tin/Bronze/Silver/Gold - Owner (1 collected), Collector (5), Curator (half), Maestro (all of them). Alliance War Veterans awards Tin/Bronze/Silver/Gold/Platinum for how many characters you've gotten to Alliance Rank 50 - Veteran (1), Champion (3), Warlord (6), Grand Marshal (10), and Grand Overlord (20, the maximum characters allowed per account per megaserver). Wealth ranks you Peasant through Magnate, but only once *every* currency clears that class's bar - Gold, Alliance Points, Tel Var Stones and Writ Vouchers (bank plus every character carrying them) all have to catch up, so a gold pile alone won't carry you past whichever currency you've neglected. Magnate is deliberately brutal (5 billion Gold, 250M AP, 1.5M Tel Var, 15,000 Writ Vouchers, all at once) - a reward for players who grind every currency, not just one, since a meaningful share of the playerbase already sits on billions of Gold alone. Each achievement is tied to the feature it tracks progress from (Music Boxes, Alliance Rank, Wealth Tracker) and disappears from this page if you've turned that feature off in Settings.
 
+<details>
+<summary>Screenshot</summary>
+
+![Achievements](./img/achievements.png)
+
+</details>
+
 ### Everywhere else
 Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
@@ -115,7 +122,7 @@ Unit/integration tests cover the app's actual data logic - pledge name matching,
 
 ## Feature flags
 
-`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, the wealth tracker, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, the wealth tracker, achievements, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
 
 Separately, users can turn off any feature the developer *did* ship, from Settings -> Features - a "declutter" checklist for hiding pages they don't personally use (e.g. no interest in Alliance Rank). This is per-user and persisted to `settings.json` (not `FEATURE_FLAGS`, and not `localStorage` - Electron's `file://`-loaded renderer doesn't reliably persist `localStorage` across app restarts, so this and `documentsPathOverride` both go through the main-process settings store instead). A feature the developer disabled never appears in this list at all; the user toggle can only narrow what's already shipped, never widen it.
 
