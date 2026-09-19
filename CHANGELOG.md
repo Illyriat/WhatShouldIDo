@@ -16,6 +16,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ### Changed
 - Sidebar reorganized: Alliance Rank promoted to a top-level item, Alchemy/Enchanting grouped under Crafting, Music Boxes under Collections
 - Settings now hides an addon's row entirely once nothing currently enabled still needs it
+- Settings -> Features descriptions for Alliance Rank, Music Boxes and Wealth Tracker now note their tie-in with the new Achievements page, and the Achievements description lists all three achievements it covers
 - Refreshed every README screenshot in dark theme
 
 ### Fixed
