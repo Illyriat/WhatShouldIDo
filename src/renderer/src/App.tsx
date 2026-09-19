@@ -7,6 +7,7 @@ import AllianceRankPage from './pages/AllianceRankPage'
 import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
 import MusicBoxesPage from './pages/MusicBoxesPage'
+import AchievementsPage from './pages/AchievementsPage'
 import SettingsPage from './pages/SettingsPage'
 import { useAccountSelection } from './hooks/useAccountSelection'
 import { useTheme } from './hooks/useTheme'
@@ -43,6 +44,9 @@ function App(): React.JSX.Element {
         {activePage === 'enchanting' && features.isEnabled('enchanting') && <EnchantingPage />}
         {activePage === 'musicboxes' && features.isEnabled('musicBoxes') && (
           <MusicBoxesPage accountSelection={accountSelection} />
+        )}
+        {activePage === 'achievements' && features.isEnabled('achievements') && (
+          <AchievementsPage accountSelection={accountSelection} />
         )}
         {activePage === 'settings' && (
           <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} features={features} />
