@@ -46,7 +46,7 @@ function App(): React.JSX.Element {
           <MusicBoxesPage accountSelection={accountSelection} />
         )}
         {activePage === 'achievements' && features.isEnabled('achievements') && (
-          <AchievementsPage accountSelection={accountSelection} />
+          <AchievementsPage accountSelection={accountSelection} features={features} />
         )}
         {activePage === 'settings' && (
           <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} features={features} />
