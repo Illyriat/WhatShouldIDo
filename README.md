@@ -21,7 +21,7 @@ This app reads directly from your local ESO SavedVariables files - no manual ent
 ## Features
 
 ### Home
-Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole).
+Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole). A Wealth Tracker board sits next to Today's Pledges showing that realm's total Gold, Alliance Points, Tel Var Stones and Writ Vouchers - the shared account-wide bank plus every character's carried amount - with a collapsible breakdown of the bank total and a per-character table underneath.
 
 <details>
 <summary>Screenshot</summary>
@@ -92,7 +92,7 @@ Install and enable all three, then log into each character once with them active
 | [Urich's Skill Point Finder (USPF)](https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html) | Per-character dungeon quest completion (Pledges + Dungeon Check List) |
 | [Skill Lines](https://www.esoui.com/downloads/info4041-SkillLines.html) | Knowing which server (NA/EU) each character is on |
 | [Daily Craft Status](https://esoui.com/downloads/info2510-DailyCraftStatus.html) | Riding training status |
-| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress, account Champion Points |
+| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank) |
 
 ## Running it
 
@@ -112,7 +112,7 @@ Unit/integration tests cover the app's actual data logic - pledge name matching,
 
 ## Feature flags
 
-`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+`src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, the wealth tracker, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
 
 Separately, users can turn off any feature the developer *did* ship, from Settings -> Features - a "declutter" checklist for hiding pages they don't personally use (e.g. no interest in Alliance Rank). This is per-user and persisted to `settings.json` (not `FEATURE_FLAGS`, and not `localStorage` - Electron's `file://`-loaded renderer doesn't reliably persist `localStorage` across app restarts, so this and `documentsPathOverride` both go through the main-process settings store instead). A feature the developer disabled never appears in this list at all; the user toggle can only narrow what's already shipped, never widen it.
 
