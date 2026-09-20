@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
+import { FEATURE_FLAGS, isFeatureFlagOn, type FeatureFlag } from '@shared/featureFlags'
 
 // User-facing "declutter" toggles - separate from FEATURE_FLAGS, which is the
 // developer's build-time kill switch. A feature the developer disabled never appears
@@ -90,7 +90,7 @@ export function useFeaturePreferences(): FeaturePreferences {
   }
 
   return {
-    isEnabled: (flag) => FEATURE_FLAGS[flag] && !userDisabled.has(flag),
+    isEnabled: (flag) => isFeatureFlagOn(FEATURE_FLAGS[flag]) && !userDisabled.has(flag),
     setUserEnabled
   }
 }

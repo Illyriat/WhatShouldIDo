@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import type { AddonStatus, AppSettings, UpdateStatus } from '@shared/types'
-import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
+import { FEATURE_FLAGS, isFeatureFlagOn, type FeatureFlag } from '@shared/featureFlags'
 import { SUPPORTED_LANGUAGES } from '@shared/i18n'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
@@ -126,7 +126,7 @@ function SettingsPage({ theme, accountSelection, updater, features, language }: 
   // Only offer a toggle for features the developer actually shipped (FEATURE_FLAGS
   // true), and only show a sub-toggle (like upcomingPledges) while its parent is on.
   const visibleToggleableFeatures = USER_TOGGLEABLE_FEATURES.filter(
-    (item) => FEATURE_FLAGS[item.flag] && (!item.dependsOn || features.isEnabled(item.dependsOn))
+    (item) => isFeatureFlagOn(FEATURE_FLAGS[item.flag]) && (!item.dependsOn || features.isEnabled(item.dependsOn))
   )
 
   const tocSections = [

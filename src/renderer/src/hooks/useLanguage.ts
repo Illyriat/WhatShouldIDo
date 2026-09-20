@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DEFAULT_LANGUAGE, isSupportedLanguage, type SupportedLanguage } from '@shared/i18n'
+import { DEFAULT_LANGUAGE, isLanguageEnabled, isSupportedLanguage, type SupportedLanguage } from '@shared/i18n'
 import i18n from '../i18n'
 
 export interface LanguageControl {
@@ -18,7 +18,9 @@ export function useLanguage(): LanguageControl {
     window.api.getAppSettings().then((settings) => {
       if (cancelled) return
       const stored = settings.language
-      if (stored && isSupportedLanguage(stored) && stored !== DEFAULT_LANGUAGE) {
+      // A previously-picked language whose languageSupport entry got disabled since (or
+      // was never enabled) falls back to the default, same as no preference at all.
+      if (stored && isSupportedLanguage(stored) && isLanguageEnabled(stored) && stored !== DEFAULT_LANGUAGE) {
         setLanguageState(stored)
         i18n.changeLanguage(stored)
       }
