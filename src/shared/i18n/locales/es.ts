@@ -18,7 +18,7 @@ export const es: typeof en = {
     loadingAccounts: 'Cargando tus cuentas de ESO…',
     noCharactersFoundTitle: 'No se encontraron personajes',
     noCharactersFoundBody:
-      'Instala y activa el addon <bold>USPF</bold> en ESO, luego inicia sesión con al menos un personaje para que pueda registrar tu progreso.',
+      'Instala y activa el addon <bold>WhatShouldIDoDataCollector</bold> en ESO, luego inicia sesión con al menos un personaje para que pueda registrar tu progreso.',
     clear: 'Borrar',
     character: 'Personaje',
     recommended: 'Recomendado'
@@ -44,7 +44,7 @@ export const es: typeof en = {
     greeting: 'Bienvenido,',
     couldntLoadTitle: 'No se pudieron cargar los datos de juramentos',
     couldntLoadHint:
-      'Asegúrate de que el addon USPF esté instalado y activado en ESO, y de haber iniciado sesión en el juego al menos una vez con él activo.'
+      'Asegúrate de que el addon WhatShouldIDoDataCollector esté instalado y activado en ESO, y de haber iniciado sesión en el juego al menos una vez con él activo.'
   },
 
   pledges: {
@@ -194,7 +194,7 @@ export const es: typeof en = {
     introTracked:
       'Todos los muebles «<bold>Caja de música</bold>» actualmente disponibles. Marca cada una al obtenerla. El progreso se sigue por separado según cuenta y servidor, y se guarda en este dispositivo.',
     introUntracked:
-      'Todos los muebles «<bold>Caja de música</bold>» actualmente disponibles. Marca cada una al obtenerla. El progreso se guarda en este dispositivo. Instala USPF y SkillLines e inicia sesión con un personaje para seguirlo por separado según cuenta y servidor.',
+      'Todos los muebles «<bold>Caja de música</bold>» actualmente disponibles. Marca cada una al obtenerla. El progreso se guarda en este dispositivo. Instala WhatShouldIDoDataCollector e inicia sesión con un personaje para seguirlo por separado según cuenta y servidor.',
     collected: '{{count}} / {{total}} obtenidas',
     filterPlaceholder: 'Filtrar por nombre, fuente o descripción…',
     all: 'Todas',
@@ -358,25 +358,10 @@ export const es: typeof en = {
       }
     },
     addonsList: {
-      skillLines: {
-        name: 'Skill Lines',
-        description:
-          'Etiqueta cada personaje con el megaservidor en el que vive (NA / EU). La aplicación se basa en esto para distinguir tus personajes y hacer que los selectores de Cuenta y Servidor funcionen.'
-      },
-      uspf: {
-        name: "Urich's Skill Point Finder (USPF)",
-        description:
-          'Registra qué misiones de mazmorra ha completado cada personaje. Alimenta las recomendaciones diarias de Juramentos de los Intrépidos y la Lista de mazmorras. Sin él, esas páginas no tienen datos. Esta es la función principal de WhatShouldIDo.'
-      },
-      dailyCraftStatus: {
-        name: 'Daily Craft Status',
-        description:
-          'Sigue el tiempo de reutilización del entrenamiento de montura y los niveles de Capacidad / Aguante / Velocidad de cada personaje. Alimenta el panel de entrenamiento de montura en la página de Inicio.'
-      },
       dataCollector: {
         name: 'What Should I Do - Data Collector',
         description:
-          'Un addon complementario diseñado a medida que registra el rango de Guerra de Alianza y el progreso de Puntos de Alianza de cada personaje (alimenta la página Rango de Alianza), los Puntos de Campeón por reino de cada cuenta (mostrados en el banner de la página de Inicio), y el Oro / Puntos de Alianza / Piedras de Tel Var / Vales de encargo - tanto la cantidad que lleva cada personaje como el total compartido del banco de la cuenta por reino (alimenta el Seguimiento de riqueza en la página de Inicio).'
+          'Un addon complementario diseñado a medida que registra el nombre y el servidor de cada personaje, qué misiones de mazmorra ha completado cada personaje (alimenta las recomendaciones diarias de Juramentos de los Intrépidos y la Lista de mazmorras - esta es la función principal de WhatShouldIDo), el tiempo de reutilización del entrenamiento de montura y los niveles de Capacidad / Aguante / Velocidad de cada personaje (alimenta el panel de entrenamiento de montura en la página de Inicio), el rango de Guerra de Alianza y el progreso de Puntos de Alianza de cada personaje (alimenta la página Rango de Alianza), los Puntos de Campeón por reino de cada cuenta (mostrados en el banner de la página de Inicio), y el Oro / Puntos de Alianza / Piedras de Tel Var / Vales de encargo - tanto la cantidad que lleva cada personaje como el total compartido del banco de la cuenta por reino (alimenta el Seguimiento de riqueza en la página de Inicio). Este es el único addon que WhatShouldIDo necesita - sin él, la aplicación no tiene ningún dato.'
       }
     }
   },

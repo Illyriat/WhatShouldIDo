@@ -53,36 +53,20 @@ export const ADDONS: {
   relevantFlags: FeatureFlag[]
 }[] = [
   {
-    nameKey: 'settings.addonsList.skillLines.name',
-    url: 'https://www.esoui.com/downloads/info4041-SkillLines.html',
-    file: 'SkillLines.lua',
-    required: true,
-    descriptionKey: 'settings.addonsList.skillLines.description',
-    relevantFlags: ['pledges', 'ridingTraining', 'dungeonChecklist', 'allianceRank', 'musicBoxes']
-  },
-  {
-    nameKey: 'settings.addonsList.uspf.name',
-    url: 'https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html',
-    file: 'USPF.lua',
-    required: true,
-    descriptionKey: 'settings.addonsList.uspf.description',
-    relevantFlags: ['pledges', 'dungeonChecklist']
-  },
-  {
-    nameKey: 'settings.addonsList.dailyCraftStatus.name',
-    url: 'https://www.esoui.com/downloads/info2510-DailyCraftStatus.html',
-    file: 'DailyCraftStatus.lua',
-    required: false,
-    descriptionKey: 'settings.addonsList.dailyCraftStatus.description',
-    relevantFlags: ['ridingTraining']
-  },
-  {
     nameKey: 'settings.addonsList.dataCollector.name',
     url: 'https://github.com/Illyriat/WhatShouldIDoDataCollector',
     file: 'WhatShouldIDoDataCollector.lua',
-    required: false,
+    required: true,
     descriptionKey: 'settings.addonsList.dataCollector.description',
-    relevantFlags: ['allianceRank', 'welcomeBanner', 'wealthTracker']
+    relevantFlags: [
+      'pledges',
+      'dungeonChecklist',
+      'ridingTraining',
+      'allianceRank',
+      'welcomeBanner',
+      'wealthTracker',
+      'musicBoxes'
+    ]
   }
 ]
 

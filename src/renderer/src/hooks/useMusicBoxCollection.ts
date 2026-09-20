@@ -7,8 +7,8 @@ import type { AccountSelection } from './useAccountSelection'
 const LEGACY_STORAGE_KEY = 'musicbox-collection-v1'
 const MIGRATED_MARKER = 'musicbox-collection-migrated-v1'
 
-// Bucket used when no ESO account/server data is available (no USPF/SkillLines addon
-// detected yet). It's still a real, stable scope - not a special case in storage.
+// Bucket used when no ESO account/server data is available (no WhatShouldIDoDataCollector
+// addon detected yet). It's still a real, stable scope - not a special case in storage.
 const NO_ACCOUNT = '_no_account_'
 const NO_SERVER = '_no_server_'
 
