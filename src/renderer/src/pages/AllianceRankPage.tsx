@@ -17,8 +17,7 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
     selectedServer,
     setSelectedServer,
     availableServers,
-    selectedCharacters,
-    refresh
+    selectedCharacters
   } = accountSelection
 
   if (state.status === 'loading') {
@@ -60,9 +59,6 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
   return (
     <div className="page page--wide">
       <div className="page__header">
-        <button className="refresh-button" onClick={refresh} title={t('common.refreshTitle')}>
-          ⟳ {t('common.refresh')}
-        </button>
         <div className="app__switchers">
           <AccountSwitcher accounts={state.accounts} selected={selectedAccount ?? ''} onChange={setSelectedAccount} />
           <ServerSwitcher servers={availableServers} selected={selectedServer ?? ''} onChange={setSelectedServer} />

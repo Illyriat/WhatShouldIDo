@@ -5,6 +5,7 @@ import type { AddonStatus, AppSettings } from '@shared/types'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 import { readPersistedSettings, writePersistedSettings } from '../settingsStore'
 import { detectAddons } from '../eso/addonDetector'
+import { restartAutoRefreshWatcher } from '../autoRefresh'
 
 function defaultDocumentsPath(): string {
   return join(homedir(), 'Documents')
@@ -28,6 +29,7 @@ export async function getAddonStatus(): Promise<AddonStatus> {
 export async function setDocumentsPathOverride(path: string | null): Promise<AppSettings> {
   const stored = await readPersistedSettings()
   await writePersistedSettings({ ...stored, documentsPathOverride: path ?? undefined })
+  restartAutoRefreshWatcher(path ?? undefined)
   return getAppSettings()
 }
 

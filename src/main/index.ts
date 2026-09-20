@@ -1,8 +1,9 @@
 import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { registerPledgesIpcHandlers } from './ipc/pledgesApi'
-import { registerSettingsIpcHandlers } from './ipc/settingsApi'
+import { getAppSettings, registerSettingsIpcHandlers } from './ipc/settingsApi'
 import { checkForUpdates, registerUpdateIpcHandlers, setUpdateTargetWindow } from './updater'
+import { restartAutoRefreshWatcher, setAutoRefreshTargetWindow } from './autoRefresh'
 
 function createWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -40,7 +41,9 @@ app.whenReady().then(() => {
 
   const window = createWindow()
   setUpdateTargetWindow(window)
+  setAutoRefreshTargetWindow(window)
   checkForUpdates()
+  getAppSettings().then((settings) => restartAutoRefreshWatcher(settings.documentsPathOverride))
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

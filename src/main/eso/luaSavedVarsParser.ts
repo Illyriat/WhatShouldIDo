@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises'
+import { readFile, stat } from 'fs/promises'
 import luaparse from 'luaparse'
 
 // ESO SavedVariables files are minified single-line Lua of the form `VarName={...}`.
@@ -68,9 +68,46 @@ function luaExpressionToJs(node: luaparse.Expression): unknown {
   }
 }
 
+interface CacheEntry {
+  mtimeMs: number
+  value: LuaTable | null
+}
+
+// One buildAccounts() call reads the same one or two SavedVariables files through
+// several independent extractors (character list, dungeon quests, riding, Alliance
+// Rank, Champion Points, Wealth, bank Wealth), and the renderer's getAccounts() and
+// getRecommendations() both build the full account list from scratch on every
+// refresh - so without this, a single refresh can parse the same file well over a
+// dozen times. Cached here by (filePath, globalName), invalidated by the file's own
+// mtime - self-correcting (any real SavedVariables write changes mtime, including
+// picked up correctly by the auto-refresh watcher in src/main/autoRefresh.ts) and
+// unbounded growth isn't a concern since this app only ever reads a small, stable set
+// of addon files.
+const cache = new Map<string, CacheEntry>()
+
+function cacheKey(filePath: string, globalName: string): string {
+  return `${filePath}\u0000${globalName}`
+}
+
 // Returns the value assigned to `globalName` (e.g. "WhatShouldIDoDataCollectorVars") in a
 // SavedVariables file, or null if it isn't assigned there.
 export async function parseSavedVariables(filePath: string, globalName: string): Promise<LuaTable | null> {
+  const key = cacheKey(filePath, globalName)
+  // .mtime (whole milliseconds) rather than the more precise .mtimeMs - utimes() can
+  // only set millisecond precision, so comparing at that same precision is what's
+  // actually reproducible; real SavedVariables writes are never fractions of a
+  // millisecond apart anyway.
+  const mtimeMs = (await stat(filePath)).mtime.getTime()
+
+  const cached = cache.get(key)
+  if (cached && cached.mtimeMs === mtimeMs) return cached.value
+
+  const value = await parseSavedVariablesUncached(filePath, globalName)
+  cache.set(key, { mtimeMs, value })
+  return value
+}
+
+async function parseSavedVariablesUncached(filePath: string, globalName: string): Promise<LuaTable | null> {
   // Read latin1 so luaparse's 'pseudo-latin1' mode hands back string bytes intact.
   // Under the default mode StringLiteral.value is null; this also round-trips
   // non-ASCII character names.

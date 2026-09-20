@@ -12,5 +12,7 @@ export const IPC_CHANNELS = {
   checkForUpdates: 'check-for-updates',
   quitAndInstallUpdate: 'quit-and-install-update',
   // main -> renderer push, not invoke/handle
-  updateStatus: 'update-status'
+  updateStatus: 'update-status',
+  // main -> renderer push: a watched SavedVariables file changed on disk
+  savedVariablesChanged: 'saved-variables-changed'
 } as const

@@ -188,6 +188,12 @@ function SettingsPage({ theme, accountSelection, updater, features, language }: 
         </nav>
 
         <div className="settings-sections">
+          <div className="page__header">
+            <button className="refresh-button" onClick={accountSelection.refresh} title={t('common.refreshTitle')}>
+              ⟳ {t('common.refresh')}
+            </button>
+          </div>
+
           <section id="settings-data-folder" className="board-section">
             <div className="pledges-panel__title-row">
               <h3 className="settings-section-title">{t('settings.dataFolderTitle')}</h3>
