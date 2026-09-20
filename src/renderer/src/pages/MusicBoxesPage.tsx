@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { CURRENCY_LABEL, MUSIC_BOXES, musicBoxIconUrl, type MusicBox } from '@shared/musicBoxes'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
@@ -17,6 +18,7 @@ function costLabel(box: MusicBox): string {
 }
 
 function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const { state, selectedAccount, setSelectedAccount, selectedServer, setSelectedServer, availableServers } =
     accountSelection
   const { accountsReady, hasAccounts, collected, toggle } = useMusicBoxCollection(accountSelection)
@@ -44,7 +46,7 @@ function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
 
   return (
     <div className="page page--wide">
-      <h2 className="settings-title">Music Boxes</h2>
+      <h2 className="settings-title">{t('musicBoxes.pageTitle')}</h2>
 
       {hasAccounts && (
         <div className="page__header">
@@ -60,17 +62,12 @@ function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
       )}
 
       <p className="muted alchemy-intro">
-        Every currently obtainable <strong>Music Box</strong> furnishing. Tick one off once you own it.
-        {hasAccounts
-          ? ' Progress is tracked separately per account and server, and saved on this device.'
-          : ' Progress is saved on this device. Install USPF and SkillLines and log in with a character to track it separately per account and server.'}
+        <Trans i18nKey={hasAccounts ? 'musicBoxes.introTracked' : 'musicBoxes.introUntracked'} components={{ bold: <strong /> }} />
       </p>
 
       <section className="board-section">
         <div className="pledges-panel__title-row musicbox-head">
-          <h3 className="settings-section-title">
-            Collected {collectedCount} / {total}
-          </h3>
+          <h3 className="settings-section-title">{t('musicBoxes.collected', { count: collectedCount, total })}</h3>
           <div className="musicbox-progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
             <div className="musicbox-progress__fill" style={{ width: `${pct}%` }} />
           </div>
@@ -81,44 +78,44 @@ function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
           <input
             className="dropdown musicbox-search"
             type="search"
-            placeholder="Filter by name, source, or description…"
+            placeholder={t('musicBoxes.filterPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <div className="alchemy-mode-toggle" role="group" aria-label="Filter by collected status">
+          <div className="alchemy-mode-toggle" role="group" aria-label={t('musicBoxes.filterByCollected')}>
             <button
               className={`alchemy-mode-btn ${filter === 'all' ? 'alchemy-mode-btn--active' : ''}`}
               onClick={() => setFilter('all')}
             >
-              All
+              {t('musicBoxes.all')}
             </button>
             <button
               className={`alchemy-mode-btn ${filter === 'missing' ? 'alchemy-mode-btn--active' : ''}`}
               onClick={() => setFilter('missing')}
             >
-              Missing
+              {t('musicBoxes.missing')}
             </button>
             <button
               className={`alchemy-mode-btn ${filter === 'collected' ? 'alchemy-mode-btn--active' : ''}`}
               onClick={() => setFilter('collected')}
             >
-              Collected
+              {t('musicBoxes.collectedFilter')}
             </button>
           </div>
         </div>
 
         {!accountsReady ? (
-          <p className="muted">Loading your ESO accounts…</p>
+          <p className="muted">{t('common.loadingAccounts')}</p>
         ) : (
           <div className="dungeon-table-scroll">
             <table className="dungeon-table musicbox-table">
               <thead>
                 <tr>
-                  <th className="musicbox-table__check-col">Got it</th>
+                  <th className="musicbox-table__check-col">{t('musicBoxes.gotIt')}</th>
                   <th className="musicbox-table__icon-col"></th>
-                  <th>Name</th>
-                  <th>Source</th>
-                  <th>Cost</th>
+                  <th>{t('musicBoxes.name')}</th>
+                  <th>{t('musicBoxes.source')}</th>
+                  <th>{t('musicBoxes.cost')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +146,7 @@ function MusicBoxesPage({ accountSelection }: Props): React.JSX.Element {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={5} className="muted musicbox-table__empty">
-                      No music box matches “{query}”.
+                      {t('musicBoxes.noMatches', { query })}
                     </td>
                   </tr>
                 )}
