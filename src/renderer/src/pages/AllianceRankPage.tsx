@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import AllianceRankCircle from '../components/AllianceRankCircle'
@@ -8,6 +9,7 @@ interface Props {
 }
 
 function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const {
     state,
     selectedAccount,
@@ -22,7 +24,7 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
   if (state.status === 'loading') {
     return (
       <div className="page page--centered">
-        <p>Loading your ESO characters…</p>
+        <p>{t('common.loadingCharacters')}</p>
       </div>
     )
   }
@@ -31,7 +33,7 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>Couldn't load character data</h1>
+          <h1>{t('allianceRank.couldntLoadTitle')}</h1>
           <p>{state.message}</p>
         </div>
       </div>
@@ -42,10 +44,9 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>No characters found</h1>
+          <h1>{t('common.noCharactersFoundTitle')}</h1>
           <p>
-            Install and enable the <strong>USPF</strong> addon in ESO, then log into at least one character so it
-            can record your progress.
+            <Trans i18nKey="common.noCharactersFoundBody" components={{ bold: <strong /> }} />
           </p>
         </div>
       </div>
@@ -59,12 +60,8 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
   return (
     <div className="page page--wide">
       <div className="page__header">
-        <button
-          className="refresh-button"
-          onClick={refresh}
-          title="Re-read SavedVariables from disk (ESO only writes them on logout / /reloadui)"
-        >
-          ⟳ Refresh
+        <button className="refresh-button" onClick={refresh} title={t('common.refreshTitle')}>
+          ⟳ {t('common.refresh')}
         </button>
         <div className="app__switchers">
           <AccountSwitcher accounts={state.accounts} selected={selectedAccount ?? ''} onChange={setSelectedAccount} />
@@ -74,10 +71,8 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
 
       <section className="board-section">
         <div className="pledges-panel__title-row musicbox-head">
-          <h2>Alliance Rank:</h2>
-          <h3 className="settings-section-title">
-            {maxedCount} / {total} at max rank
-          </h3>
+          <h2>{t('allianceRank.heading')}</h2>
+          <h3 className="settings-section-title">{t('allianceRank.atMaxRank', { count: maxedCount, total })}</h3>
           <div
             className="musicbox-progress"
             role="progressbar"
@@ -98,7 +93,7 @@ function AllianceRankPage({ accountSelection }: Props): React.JSX.Element {
                 <AllianceRankCircle status={character.allianceRank} />
               ) : (
                 <p className="muted alliance-rank-card__empty">
-                  No data yet - log in with the <strong>WhatShouldIDoDataCollector</strong> addon active.
+                  <Trans i18nKey="allianceRank.noDataYet" components={{ bold: <strong /> }} />
                 </p>
               )}
             </div>

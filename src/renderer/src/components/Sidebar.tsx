@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { tKey } from '../i18nDynamicKey'
 import type { FeatureFlag } from '@shared/featureFlags'
 import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
@@ -20,30 +22,35 @@ interface Props {
   features: FeaturePreferences
 }
 
-type NavItem =
-  | { page: Page; label: string; flag?: FeatureFlag }
-  | { group: string; label: string; children: { page: Page; label: string; flag?: FeatureFlag }[] }
+export type NavItem =
+  | { page: Page; labelKey: string; flag?: FeatureFlag }
+  | { group: string; labelKey: string; children: { page: Page; labelKey: string; flag?: FeatureFlag }[] }
 
-const ALL_NAV_ITEMS: NavItem[] = [
-  { page: 'home', label: 'Home' },
-  { page: 'dungeons', label: 'Dungeon Check List', flag: 'dungeonChecklist' },
-  { page: 'alliancerank', label: 'Alliance Rank', flag: 'allianceRank' },
+// Exported so tests can verify every labelKey resolves against en.ts - tKey() bypasses
+// t()'s compile-time key checking for exactly this kind of data-driven key, so nothing
+// else catches a typo'd or renamed key here.
+export const ALL_NAV_ITEMS: NavItem[] = [
+  { page: 'home', labelKey: 'sidebar.home' },
+  { page: 'dungeons', labelKey: 'sidebar.dungeonChecklist', flag: 'dungeonChecklist' },
+  { page: 'alliancerank', labelKey: 'sidebar.allianceRank', flag: 'allianceRank' },
   {
     group: 'crafting',
-    label: 'Crafting',
+    labelKey: 'sidebar.crafting',
     children: [
-      { page: 'alchemy', label: 'Alchemy', flag: 'alchemy' },
-      { page: 'enchanting', label: 'Enchanting', flag: 'enchanting' }
+      { page: 'alchemy', labelKey: 'sidebar.alchemy', flag: 'alchemy' },
+      { page: 'enchanting', labelKey: 'sidebar.enchanting', flag: 'enchanting' }
     ]
   },
   {
     group: 'collections',
-    label: 'Collections',
-    children: [{ page: 'musicboxes', label: 'Music Boxes', flag: 'musicBoxes' }]
+    labelKey: 'sidebar.collections',
+    children: [{ page: 'musicboxes', labelKey: 'sidebar.musicBoxes', flag: 'musicBoxes' }]
   }
 ]
 
 function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, features }: Props): React.JSX.Element {
+  const { t } = useTranslation()
+
   // Drop flagged-off items (developer build flag or user "declutter" toggle), then drop
   // any group left with no children.
   const navItems: NavItem[] = ALL_NAV_ITEMS.map((item) =>
@@ -78,8 +85,8 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
         <button
           className="sidebar__toggle"
           onClick={onToggleCollapsed}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
+          aria-label={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >
           {collapsed ? '»' : '«'}
         </button>
@@ -93,15 +100,15 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
                 className={`sidebar__nav-item sidebar__group-toggle ${
                   activeGroup === item.group && !openGroups.has(item.group) ? 'sidebar__nav-item--active' : ''
                 }`}
-                title={item.label}
+                title={tKey(t, item.labelKey)}
                 aria-expanded={openGroups.has(item.group)}
                 onClick={() => toggleGroup(item.group)}
               >
                 {collapsed ? (
-                  item.label.slice(0, 1)
+                  tKey(t, item.labelKey).slice(0, 1)
                 ) : (
                   <>
-                    <span>{item.label}</span>
+                    <span>{tKey(t, item.labelKey)}</span>
                     <span className="sidebar__group-caret" aria-hidden="true">
                       {openGroups.has(item.group) ? '▾' : '▸'}
                     </span>
@@ -117,10 +124,10 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
                       className={`sidebar__nav-item sidebar__nav-item--child ${
                         activePage === child.page ? 'sidebar__nav-item--active' : ''
                       }`}
-                      title={child.label}
+                      title={tKey(t, child.labelKey)}
                       onClick={() => onNavigate(child.page)}
                     >
-                      {collapsed ? child.label.slice(0, 1) : child.label}
+                      {collapsed ? tKey(t, child.labelKey).slice(0, 1) : tKey(t, child.labelKey)}
                     </button>
                   ))}
                 </div>
@@ -130,10 +137,10 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
             <button
               key={item.page}
               className={`sidebar__nav-item ${activePage === item.page ? 'sidebar__nav-item--active' : ''}`}
-              title={item.label}
+              title={tKey(t, item.labelKey)}
               onClick={() => onNavigate(item.page)}
             >
-              {collapsed ? item.label.slice(0, 1) : item.label}
+              {collapsed ? tKey(t, item.labelKey).slice(0, 1) : tKey(t, item.labelKey)}
             </button>
           )
         )}
@@ -143,27 +150,27 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
         {features.isEnabled('achievements') && (
           <button
             className={`sidebar__nav-item ${activePage === 'achievements' ? 'sidebar__nav-item--active' : ''}`}
-            title="Achievements"
-            aria-label="Achievements"
+            title={t('sidebar.achievements')}
+            aria-label={t('sidebar.achievements')}
             onClick={() => onNavigate('achievements')}
           >
             <span className="sidebar__settings-icon" aria-hidden="true">
               ★
             </span>
-            {!collapsed && <span>Achievements</span>}
+            {!collapsed && <span>{t('sidebar.achievements')}</span>}
           </button>
         )}
 
         <button
           className={`sidebar__nav-item ${activePage === 'settings' ? 'sidebar__nav-item--active' : ''}`}
-          title="Settings"
-          aria-label="Settings"
+          title={t('sidebar.settings')}
+          aria-label={t('sidebar.settings')}
           onClick={() => onNavigate('settings')}
         >
           <span className="sidebar__settings-icon" aria-hidden="true">
             ⚙
           </span>
-          {!collapsed && <span>Settings</span>}
+          {!collapsed && <span>{t('sidebar.settings')}</span>}
         </button>
 
         <a
@@ -171,13 +178,13 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
           href="https://james-robson.dev/"
           target="_blank"
           rel="noreferrer"
-          title="Support the project"
-          aria-label="Support the project"
+          title={t('sidebar.supportProject')}
+          aria-label={t('sidebar.supportProject')}
         >
           <span className="sidebar__donate-icon" aria-hidden="true">
             ♥
           </span>
-          {!collapsed && <span>Support the project</span>}
+          {!collapsed && <span>{t('sidebar.supportProject')}</span>}
         </a>
       </div>
     </aside>

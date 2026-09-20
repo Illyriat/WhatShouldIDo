@@ -90,8 +90,11 @@ This app's own medals, separate from anything ESO tracks - not gated behind an a
 
 </details>
 
+### Language
+Settings -> Language switches what this app's own text (labels, buttons, headings, descriptions) is shown in - currently English, French, German, Spanish, Polish and Russian. It's per-device, applies instantly, and persists across restarts. ESO's own game data - dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions - always stays in English, regardless of the app's language, since there's no official ESO terminology to match for most of the languages planned after French.
+
 ### Everywhere else
-Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
+Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
 ## Required Addons
 
@@ -123,6 +126,8 @@ Unit/integration tests cover the app's actual data logic - pledge name matching,
 ## Feature flags
 
 `src/shared/featureFlags.ts` has a `FEATURE_FLAGS` object with one boolean per major feature (the welcome banner, pledges, riding training, the dungeon checklist, alliance rank, alchemy, enchanting, music boxes, the wealth tracker, achievements, and the upcoming-pledges preview). Flip one to `false` and rebuild to ship a release without that feature - the sidebar entry, page, any associated background fetch, and its "Required"/"Optional" addon row in Settings all disappear. There's no in-app UI for this; it's a source edit for the developer only, meant to be reverted before the next normal build.
+
+`languageSupport` is the one exception: instead of a boolean, its value is an array of `{ code, enabled }` entries, one per language, so a specific language (e.g. French, while still being translated) can be pulled from a release without disabling language support altogether. `isFeatureFlagOn()` normalizes both shapes to a single boolean everywhere a flag's on/off state is checked, so the rest of the app doesn't need to know the difference.
 
 Separately, users can turn off any feature the developer *did* ship, from Settings -> Features - a "declutter" checklist for hiding pages they don't personally use (e.g. no interest in Alliance Rank). This is per-user and persisted to `settings.json` (not `FEATURE_FLAGS`, and not `localStorage` - Electron's `file://`-loaded renderer doesn't reliably persist `localStorage` across app restarts, so this and `documentsPathOverride` both go through the main-process settings store instead). A feature the developer disabled never appears in this list at all; the user toggle can only narrow what's already shipped, never widen it.
 

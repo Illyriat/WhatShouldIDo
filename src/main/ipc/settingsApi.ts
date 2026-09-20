@@ -15,7 +15,8 @@ export async function getAppSettings(): Promise<AppSettings> {
   return {
     documentsPathOverride: stored.documentsPathOverride,
     defaultDocumentsPath: defaultDocumentsPath(),
-    disabledFeatures: stored.disabledFeatures ?? []
+    disabledFeatures: stored.disabledFeatures ?? [],
+    language: stored.language
   }
 }
 
@@ -36,6 +37,12 @@ export async function setDisabledFeatures(flags: string[]): Promise<AppSettings>
   return getAppSettings()
 }
 
+export async function setLanguage(language: string): Promise<AppSettings> {
+  const stored = await readPersistedSettings()
+  await writePersistedSettings({ ...stored, language })
+  return getAppSettings()
+}
+
 // Opens a native folder picker. Null if the user cancelled.
 export async function pickDocumentsFolder(): Promise<string | null> {
   const result = await dialog.showOpenDialog({
@@ -53,5 +60,6 @@ export function registerSettingsIpcHandlers(): void {
     setDocumentsPathOverride(path)
   )
   ipcMain.handle(IPC_CHANNELS.setDisabledFeatures, (_event, flags: string[]) => setDisabledFeatures(flags))
+  ipcMain.handle(IPC_CHANNELS.setLanguage, (_event, language: string) => setLanguage(language))
   ipcMain.handle(IPC_CHANNELS.pickDocumentsFolder, () => pickDocumentsFolder())
 }

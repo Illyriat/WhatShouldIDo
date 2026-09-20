@@ -5,6 +5,7 @@ import { readFile, writeFile, mkdir } from 'fs/promises'
 interface PersistedSettings {
   documentsPathOverride?: string
   disabledFeatures?: string[]
+  language?: string
 }
 
 function settingsFilePath(): string {

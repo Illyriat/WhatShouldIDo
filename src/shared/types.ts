@@ -141,4 +141,8 @@ export interface AppSettings {
   // turned off in Settings. Stored as plain strings (not FeatureFlag) since a value
   // saved under an older build can name a flag that no longer exists.
   disabledFeatures: string[]
+  // Selected app-display language (e.g. "fr"). Undefined = the default (English) - see
+  // src/shared/i18n/index.ts for the supported-language list. Only covers this app's own
+  // UI text, never ESO's own game data.
+  language?: string
 }

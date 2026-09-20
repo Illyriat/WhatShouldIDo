@@ -5,6 +5,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ## [Unreleased]
 
 ### Added
+- Language support: a Settings -> Language picker for switching this app's own UI text (labels, buttons, headings, descriptions) between English, French, German, Spanish, Polish and Russian, applied instantly and persisted across restarts. ESO's own game data (dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions) always stays in English. Gated behind a `languageSupport` developer flag whose value is an array of per-language switches, so an individual language can be pulled without disabling the feature altogether. Polish and Russian use CLDR's four-form plural system (one/few/many/other) rather than English's one/other
 - Achievements page (above Settings in the sidebar): this app's own medals for progress you've already made elsewhere in the app - Music Box Collection (Tin-Gold: Owner/Collector/Curator/Maestro at 1/5/half/all collected), Alliance War Veterans (Tin-Platinum: Veteran/Champion/Warlord/Grand Marshal/Grand Overlord for 1/3/6/10/20 characters at Alliance Rank 50), and Wealth (Peasant through Magnate - gated on Gold, AP, Tel Var Stones and Writ Vouchers all clearing that class's bar at once, not just one of them; Magnate is intentionally the hardest medal in the app)
 - Alliance Rank page: each character's Alliance War rank as a dual-ring progress circle toward Rank 50, plus exact Alliance Points remaining - powered by the new **What Should I Do - Data Collector** companion addon
 - A welcome banner on Home naming the selected account, with that realm's total Champion Points shown underneath (also from the Data Collector addon)
@@ -18,6 +19,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Settings now hides an addon's row entirely once nothing currently enabled still needs it
 - Settings -> Features descriptions for Alliance Rank, Music Boxes and Wealth Tracker now note their tie-in with the new Achievements page, and the Achievements description lists all three achievements it covers
 - Refreshed every README screenshot in dark theme
+- Number formatting (Gold, Alliance Points, Tel Var Stones, Writ Vouchers, Champion Points) now follows the selected app language's locale instead of the OS default
 
 ### Fixed
 - Achievements page: the Music Box Collection medal now hides itself when the Music Boxes feature is turned off in Settings, matching how the Alliance War Veterans and Wealth medals already behave; the page also shows a message instead of an empty screen if every underlying feature is disabled

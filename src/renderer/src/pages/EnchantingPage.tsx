@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import {
   ADDITIVE_POTENCY,
   ASPECT_RUNES,
@@ -43,11 +45,25 @@ function loadPersisted(): Persisted {
   }
 }
 
-const ITEM_TYPE_LABEL: Record<GlyphItemType, string> = { weapon: 'Weapon', armor: 'Armor', jewelry: 'Jewelry' }
+function itemTypeLabel(t: TFunction, itemType: GlyphItemType): string {
+  switch (itemType) {
+    case 'weapon':
+      return t('enchanting.weapon')
+    case 'armor':
+      return t('enchanting.armor')
+    case 'jewelry':
+      return t('enchanting.jewelry')
+  }
+}
+
+function potencyTypeLabel(t: TFunction, potencyType: PotencyType): string {
+  return potencyType === 'additive' ? t('enchanting.additive') : t('enchanting.subtractive')
+}
+
 const ITEM_TYPE_ORDER: GlyphItemType[] = ['weapon', 'armor', 'jewelry']
-const POTENCY_TYPE_LABEL: Record<PotencyType, string> = { additive: 'Additive', subtractive: 'Subtractive' }
 
 function EnchantingPage(): React.JSX.Element {
+  const { t } = useTranslation()
   const [state, setState] = useState<Persisted>(loadPersisted)
   const { potencyId, essenceId, aspectId, targetGlyphId } = state
 
@@ -100,8 +116,8 @@ function EnchantingPage(): React.JSX.Element {
     return (
       <div className={`ench-potency-col ${dimmed ? 'ench-potency-col--dimmed' : ''}`}>
         <span className="ench-potency-col__title">
-          {POTENCY_TYPE_LABEL[type]}
-          {needed && <span className="badge badge--warning ench-needed">needed</span>}
+          {potencyTypeLabel(t, type)}
+          {needed && <span className="badge badge--warning ench-needed">{t('enchanting.needed')}</span>}
         </span>
         <div className="ench-potency-list">
           {runes.map((r) => (
@@ -122,25 +138,23 @@ function EnchantingPage(): React.JSX.Element {
 
   return (
     <div className="page page--wide">
-      <h2 className="settings-title">Enchanting</h2>
+      <h2 className="settings-title">{t('enchanting.pageTitle')}</h2>
 
       <p className="muted alchemy-intro">
-        Build a glyph from the bottom up, or pick the <strong>glyph you want</strong> and the runes you need light up.
-        Potency sets the glyph's level and whether it's <strong>additive</strong> or <strong>subtractive</strong>;
-        Essence sets the effect; Aspect sets the quality.
+        <Trans i18nKey="enchanting.intro" components={{ bold: <strong />, bold2: <strong /> }} />
       </p>
 
       <section className="board-section ench-target">
         <div className="pledges-panel__title-row ench-target__head">
-          <h3 className="settings-section-title">I want to make…</h3>
+          <h3 className="settings-section-title">{t('enchanting.iWantToMake')}</h3>
           <select
             className="dropdown"
             value={targetGlyphId ?? ''}
             onChange={(e) => (e.target.value ? setTarget(e.target.value) : patch({ targetGlyphId: null }))}
           >
-            <option value="">— any glyph (build manually) —</option>
+            <option value="">{t('enchanting.anyGlyph')}</option>
             {ITEM_TYPE_ORDER.map((it) => (
-              <optgroup key={it} label={`${ITEM_TYPE_LABEL[it]} glyphs`}>
+              <optgroup key={it} label={t('enchanting.glyphsGroup', { itemType: itemTypeLabel(t, it) })}>
                 {GLYPHS.filter((g) => g.itemType === it)
                   .slice()
                   .sort((a, b) => a.name.localeCompare(b.name))
@@ -154,7 +168,7 @@ function EnchantingPage(): React.JSX.Element {
           </select>
           {targetGlyphId && (
             <button className="refresh-button" onClick={() => patch({ targetGlyphId: null })}>
-              Clear target
+              {t('enchanting.clearTarget')}
             </button>
           )}
         </div>
@@ -163,10 +177,12 @@ function EnchantingPage(): React.JSX.Element {
           <div className="ench-target__hint">
             <img src={glyphIconUrl(targetGlyph.id)} alt="" />
             <p className="muted">
-              <strong>{targetGlyph.name}</strong> ({ITEM_TYPE_LABEL[targetGlyph.itemType]}) — use essence rune{' '}
-              <strong>{target.essence.name}</strong> ({target.essence.translation}) with any{' '}
-              <strong>{POTENCY_TYPE_LABEL[target.potencyType]}</strong> potency rune for the level you want
-              (highlighted below). Add an Aspect rune for quality.
+              <strong>{targetGlyph.name}</strong> ({itemTypeLabel(t, targetGlyph.itemType)}) —{' '}
+              <Trans
+                i18nKey="enchanting.targetHint"
+                values={{ essence: target.essence.name, translation: target.essence.translation, potencyType: potencyTypeLabel(t, target.potencyType) }}
+                components={{ bold: <strong /> }}
+              />
             </p>
           </div>
         )}
@@ -174,7 +190,7 @@ function EnchantingPage(): React.JSX.Element {
 
       <section className="board-section alchemy-builder">
         <div className="ench-picker-block">
-          <h3 className="settings-section-title">Potency rune</h3>
+          <h3 className="settings-section-title">{t('enchanting.potencyRune')}</h3>
           <div className="ench-potency-grid">
             {renderPotencyColumn('additive', ADDITIVE_POTENCY)}
             {renderPotencyColumn('subtractive', SUBTRACTIVE_POTENCY)}
@@ -182,7 +198,7 @@ function EnchantingPage(): React.JSX.Element {
         </div>
 
         <div className="ench-picker-block">
-          <h3 className="settings-section-title">Essence rune</h3>
+          <h3 className="settings-section-title">{t('enchanting.essenceRune')}</h3>
           <div className="alchemy-grid">
             {ESSENCE_RUNES.map((r) => {
               const isActive = effectiveEssenceId === r.id
@@ -204,7 +220,7 @@ function EnchantingPage(): React.JSX.Element {
         </div>
 
         <div className="ench-picker-block">
-          <h3 className="settings-section-title">Aspect rune</h3>
+          <h3 className="settings-section-title">{t('enchanting.aspectRune')}</h3>
           <div className="ench-aspect-row">
             {ASPECT_RUNES.map((r) => (
               <button
@@ -225,42 +241,38 @@ function EnchantingPage(): React.JSX.Element {
 
       <section className="board-section alchemy-result ench-result">
         <div className="pledges-panel__title-row">
-          <h3 className="settings-section-title">Resulting Glyph</h3>
+          <h3 className="settings-section-title">{t('enchanting.resultingGlyph')}</h3>
         </div>
 
         {!result ? (
-          <p className="muted">
-            {target
-              ? 'Pick a highlighted Potency rune to finish the glyph.'
-              : 'Choose a Potency and an Essence rune to see the glyph.'}
-          </p>
+          <p className="muted">{target ? t('enchanting.pickHighlightedPotency') : t('enchanting.chooseTwoRunes')}</p>
         ) : (
           <div className="ench-glyph">
             <img className="ench-glyph__icon" src={glyphIconUrl(result.glyph.id)} alt="" />
             <div className="ench-glyph__body">
               <div className="ench-glyph__headline">
                 <span className="ench-glyph__name">{result.glyph.name}</span>
-                <span className="badge badge--muted">{ITEM_TYPE_LABEL[result.glyph.itemType]} glyph</span>
+                <span className="badge badge--muted">{t('enchanting.glyph', { itemType: itemTypeLabel(t, result.glyph.itemType) })}</span>
                 <span className={`badge ench-badge--${result.potency.type}`}>{result.potency.type}</span>
               </div>
               <p className="ench-glyph__effect">{result.glyph.effect}</p>
               <dl className="ench-glyph__stats">
                 <div>
-                  <dt>Level</dt>
+                  <dt>{t('enchanting.level')}</dt>
                   <dd>{result.levelLabel}</dd>
                 </div>
                 <div>
-                  <dt>Quality</dt>
+                  <dt>{t('enchanting.quality')}</dt>
                   <dd>
                     {result.aspect ? (
                       <span style={{ color: result.aspect.color }}>{result.aspect.quality}</span>
                     ) : (
-                      <span className="muted">pick an Aspect rune</span>
+                      <span className="muted">{t('enchanting.pickAnAspectRune')}</span>
                     )}
                   </dd>
                 </div>
                 <div>
-                  <dt>Runes</dt>
+                  <dt>{t('enchanting.runes')}</dt>
                   <dd>
                     {result.potency.name} + {result.essence.name}
                     {result.aspect ? ` + ${result.aspect.name}` : ''}
@@ -274,17 +286,17 @@ function EnchantingPage(): React.JSX.Element {
 
       <section className="board-section">
         <div className="pledges-panel__title-row">
-          <h3 className="settings-section-title">Essence rune reference</h3>
-          <span className="muted">Click a glyph to target it above.</span>
+          <h3 className="settings-section-title">{t('enchanting.essenceRuneReference')}</h3>
+          <span className="muted">{t('enchanting.clickGlyphToTarget')}</span>
         </div>
         <div className="dungeon-table-scroll">
           <table className="dungeon-table ench-ref-table">
             <thead>
               <tr>
-                <th>Essence</th>
-                <th>Translation</th>
-                <th>+ Additive potency</th>
-                <th>+ Subtractive potency</th>
+                <th>{t('enchanting.essence')}</th>
+                <th>{t('enchanting.translation')}</th>
+                <th>{t('enchanting.additivePotencyCol')}</th>
+                <th>{t('enchanting.subtractivePotencyCol')}</th>
               </tr>
             </thead>
             <tbody>
@@ -308,7 +320,7 @@ function EnchantingPage(): React.JSX.Element {
                           >
                             <img src={glyphIconUrl(g.id)} alt="" />
                             <span>
-                              {g.name} <span className="muted">({ITEM_TYPE_LABEL[g.itemType]})</span>
+                              {g.name} <span className="muted">({itemTypeLabel(t, g.itemType)})</span>
                             </span>
                           </button>
                         )}

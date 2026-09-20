@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { RecommendationsResult } from '@shared/types'
 
 interface Props {
@@ -6,21 +7,22 @@ interface Props {
   upcomingPledgesEnabled: boolean
 }
 
-function formatUpcomingLabel(esoDay: string, index: number): string {
-  if (index === 0) return 'Tomorrow'
-  return new Date(`${esoDay}T00:00:00Z`).toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })
-}
-
 function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Element {
+  const { t, i18n } = useTranslation()
   const [showUpcoming, setShowUpcoming] = useState(false)
+
+  function formatUpcomingLabel(esoDay: string, index: number): string {
+    if (index === 0) return t('pledges.tomorrow')
+    return new Date(`${esoDay}T00:00:00Z`).toLocaleDateString(i18n.language, { weekday: 'short', timeZone: 'UTC' })
+  }
 
   return (
     <section className="board-section">
       <div className="pledges-panel__title-row">
-        <h2>Today's Pledges</h2>
+        <h2>{t('pledges.title')}</h2>
         {result.stale && (
-          <span className="badge badge--warning" title={`Last fetched ${result.fetchedAt}`}>
-            showing cached data
+          <span className="badge badge--warning" title={t('pledges.cachedTitle', { fetchedAt: result.fetchedAt })}>
+            {t('pledges.cachedBadge')}
           </span>
         )}
       </div>
@@ -29,12 +31,12 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
         {result.pledges.map((pledge) => (
           <div key={pledge.master.name} className="pledge-col">
             <span className="pledge-card__master">{pledge.master.name}</span>
-            <span className="pledge-card__tier">{pledge.master.tier === 'dlc' ? 'DLC' : 'Base'}</span>
+            <span className="pledge-card__tier">{pledge.master.tier === 'dlc' ? t('pledges.dlc') : t('pledges.base')}</span>
             <span className="pledge-card__dungeon">
-              {pledge.scrapedName || 'Unknown'}
+              {pledge.scrapedName || t('pledges.unknownDungeon')}
               {!pledge.dungeon && (
-                <span className="badge badge--muted" title="No completion data mapped for this dungeon yet">
-                  no data
+                <span className="badge badge--muted" title={t('pledges.noDataMapped')}>
+                  {t('pledges.noDataBadge')}
                 </span>
               )}
             </span>
@@ -51,7 +53,7 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
             aria-expanded={showUpcoming}
           >
             <span className={`upcoming-pledges__caret${showUpcoming ? ' is-open' : ''}`}>▸</span>
-            Show upcoming pledges ({result.upcoming.length} days)
+            {t('pledges.showUpcoming', { count: result.upcoming.length })}
           </button>
 
           {showUpcoming && (
@@ -60,7 +62,7 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
                 <li key={day.esoDay} className="upcoming-pledges__day">
                   <span className="upcoming-pledges__label">{formatUpcomingLabel(day.esoDay, i)}</span>
                   <span className="upcoming-pledges__dungeons">
-                    {day.pledges.map((p) => p.scrapedName || 'Unknown').join(' · ')}
+                    {day.pledges.map((p) => p.scrapedName || t('pledges.unknownDungeon')).join(' · ')}
                   </span>
                 </li>
               ))}
@@ -69,7 +71,7 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
         </div>
       )}
 
-      <h2 className="recommended-title">Recommended</h2>
+      <h2 className="recommended-title">{t('common.recommended')}</h2>
 
       <div className="characters-row">
         {result.pledges.map((pledge) => {
@@ -78,9 +80,9 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
           return (
             <div key={pledge.master.name} className="character-col">
               {!pledge.dungeon ? (
-                <p className="muted">No data.</p>
+                <p className="muted">{t('pledges.noData')}</p>
               ) : recommended.length === 0 ? (
-                <p className="muted">Every character has done this one.</p>
+                <p className="muted">{t('pledges.everyoneDone')}</p>
               ) : (
                 <ul>
                   {recommended.map((c) => (

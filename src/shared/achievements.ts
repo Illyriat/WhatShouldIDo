@@ -4,6 +4,10 @@
  * public/achievements/) and a handful of tiers, reached by hitting a threshold against
  * some in-app progress. New achievements get their own factory function below.
  *
+ * Titles/descriptions/tier names are translation keys, not display strings - this file
+ * has no UI text of its own, since it's shared code with no access to `t()`. Components
+ * rendering an Achievement (AchievementCard, WealthAchievementCard) resolve the keys.
+ *
  * Wealth is shaped differently (WealthTierDef/currentWealthTier below) - it gates on four
  * independent currency amounts at once rather than one number, so it doesn't fit the
  * single-`threshold` Achievement/AchievementTierDef shape the other achievements use.
@@ -19,15 +23,15 @@ export type AchievementTier = string
 
 export interface AchievementTierDef {
   tier: AchievementTier
-  // The medal's display name for this specific achievement (e.g. "Owner", "Peasant").
-  name: string
+  // Translation key for this tier's display name (e.g. "achievements.musicBox.tiers.tin").
+  nameKey: string
   threshold: number
 }
 
 export interface Achievement {
   id: string
-  title: string
-  description: string
+  titleKey: string
+  descriptionKey: string
   // Folder name under public/achievements/ holding this achievement's tin/bronze/... SVGs.
   iconSet: string
   tiers: AchievementTierDef[]
@@ -38,14 +42,14 @@ export interface Achievement {
 export function musicBoxAchievement(total: number): Achievement {
   return {
     id: 'music-box-collector',
-    title: 'Music Box Collection',
-    description: 'Collect Music Box furnishings, tracked on the Music Boxes page.',
+    titleKey: 'achievements.musicBox.title',
+    descriptionKey: 'achievements.musicBox.description',
     iconSet: 'music-box',
     tiers: [
-      { tier: 'tin', name: 'Owner', threshold: Math.min(1, total) },
-      { tier: 'bronze', name: 'Collector', threshold: Math.min(5, total) },
-      { tier: 'silver', name: 'Curator', threshold: Math.ceil(total / 2) },
-      { tier: 'gold', name: 'Maestro', threshold: total }
+      { tier: 'tin', nameKey: 'achievements.musicBox.tiers.tin', threshold: Math.min(1, total) },
+      { tier: 'bronze', nameKey: 'achievements.musicBox.tiers.bronze', threshold: Math.min(5, total) },
+      { tier: 'silver', nameKey: 'achievements.musicBox.tiers.silver', threshold: Math.ceil(total / 2) },
+      { tier: 'gold', nameKey: 'achievements.musicBox.tiers.gold', threshold: total }
     ]
   }
 }
@@ -57,30 +61,30 @@ export function musicBoxAchievement(total: number): Achievement {
 export function allianceRankAchievement(): Achievement {
   return {
     id: 'alliance-rank-maxer',
-    title: 'Alliance War Veterans',
-    description: 'Get characters to Alliance Rank 50, tracked on the Alliance Rank page.',
+    titleKey: 'achievements.allianceRank.title',
+    descriptionKey: 'achievements.allianceRank.description',
     iconSet: 'alliance-rank',
     tiers: [
-      { tier: 'tin', name: 'Veteran', threshold: 1 },
-      { tier: 'bronze', name: 'Champion', threshold: 3 },
-      { tier: 'silver', name: 'Warlord', threshold: 6 },
-      { tier: 'gold', name: 'Grand Marshal', threshold: 10 },
-      { tier: 'platinum', name: 'Grand Overlord', threshold: 20 }
+      { tier: 'tin', nameKey: 'achievements.allianceRank.tiers.tin', threshold: 1 },
+      { tier: 'bronze', nameKey: 'achievements.allianceRank.tiers.bronze', threshold: 3 },
+      { tier: 'silver', nameKey: 'achievements.allianceRank.tiers.silver', threshold: 6 },
+      { tier: 'gold', nameKey: 'achievements.allianceRank.tiers.gold', threshold: 10 },
+      { tier: 'platinum', nameKey: 'achievements.allianceRank.tiers.platinum', threshold: 20 }
     ]
   }
 }
 
 export interface WealthTierDef {
   tier: AchievementTier
-  name: string
+  nameKey: string
   // Must clear every currency, not just one - a gold pile alone doesn't make a Baron.
   requirement: WealthAmounts
 }
 
 export interface WealthAchievement {
   id: string
-  title: string
-  description: string
+  titleKey: string
+  descriptionKey: string
   iconSet: string
   tiers: WealthTierDef[]
 }
@@ -98,39 +102,38 @@ export interface WealthAchievement {
 export function wealthAchievement(): WealthAchievement {
   return {
     id: 'wealth-class',
-    title: 'Wealth',
-    description:
-      'Get every currency up - Gold, Alliance Points, Tel Var Stones and Writ Vouchers - the shared bank plus every character carrying them.',
+    titleKey: 'achievements.wealth.title',
+    descriptionKey: 'achievements.wealth.description',
     iconSet: 'wealth',
     tiers: [
       {
         tier: 'peasant',
-        name: 'Peasant',
+        nameKey: 'achievements.wealth.tiers.peasant',
         requirement: { gold: 10_000, alliancePoints: 0, telVarStones: 0, writVouchers: 0 }
       },
       {
         tier: 'commoner',
-        name: 'Commoner',
+        nameKey: 'achievements.wealth.tiers.commoner',
         requirement: { gold: 250_000, alliancePoints: 5_000, telVarStones: 1_000, writVouchers: 100 }
       },
       {
         tier: 'merchant',
-        name: 'Merchant',
+        nameKey: 'achievements.wealth.tiers.merchant',
         requirement: { gold: 5_000_000, alliancePoints: 250_000, telVarStones: 10_000, writVouchers: 500 }
       },
       {
         tier: 'noble',
-        name: 'Noble',
+        nameKey: 'achievements.wealth.tiers.noble',
         requirement: { gold: 50_000_000, alliancePoints: 5_000_000, telVarStones: 100_000, writVouchers: 2_000 }
       },
       {
         tier: 'baron',
-        name: 'Baron',
+        nameKey: 'achievements.wealth.tiers.baron',
         requirement: { gold: 500_000_000, alliancePoints: 50_000_000, telVarStones: 500_000, writVouchers: 6_000 }
       },
       {
         tier: 'magnate',
-        name: 'Magnate',
+        nameKey: 'achievements.wealth.tiers.magnate',
         requirement: {
           gold: 5_000_000_000,
           alliancePoints: 250_000_000,

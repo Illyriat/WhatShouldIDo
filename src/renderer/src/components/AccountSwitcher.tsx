@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Account } from '@shared/types'
 
 interface Props {
@@ -7,9 +8,10 @@ interface Props {
 }
 
 function AccountSwitcher({ accounts, selected, onChange }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <label className="dropdown-label">
-      Account
+      {t('common.account')}
       <select className="dropdown" value={selected} onChange={(e) => onChange(e.target.value)}>
         {accounts.map((account) => (
           <option key={account.accountName} value={account.accountName}>

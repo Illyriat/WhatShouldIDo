@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
+import { FEATURE_FLAGS, isFeatureFlagOn, type FeatureFlag } from '@shared/featureFlags'
 
 // User-facing "declutter" toggles - separate from FEATURE_FLAGS, which is the
 // developer's build-time kill switch. A feature the developer disabled never appears
@@ -7,53 +7,52 @@ import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
 // the user can only ever narrow what's already shipped, never widen it.
 export const USER_TOGGLEABLE_FEATURES: {
   flag: FeatureFlag
-  label: string
-  description: string
+  labelKey: string
+  descriptionKey: string
   // Only offered while this other flag is also enabled - hides a sub-toggle (like the
   // upcoming-pledges preview) once its parent feature is turned off, since it'd do nothing.
   dependsOn?: FeatureFlag
 }[] = [
-  {
-    flag: 'welcomeBanner',
-    label: 'Welcome banner',
-    description: 'The "Welcome, <account>!" banner (and Champion Points) at the top of the Home page.'
-  },
-  { flag: 'pledges', label: "Today's Pledges", description: "Today's Undaunted Pledge dungeons and recommendations on the Home page." },
+  { flag: 'welcomeBanner', labelKey: 'settings.features.welcomeBanner.label', descriptionKey: 'settings.features.welcomeBanner.description' },
+  { flag: 'pledges', labelKey: 'settings.features.pledges.label', descriptionKey: 'settings.features.pledges.description' },
   {
     flag: 'upcomingPledges',
-    label: 'Upcoming pledges preview',
-    description: "The 5-day upcoming-pledges toggle under Today's Pledges.",
+    labelKey: 'settings.features.upcomingPledges.label',
+    descriptionKey: 'settings.features.upcomingPledges.description',
     dependsOn: 'pledges'
   },
-  { flag: 'ridingTraining', label: 'Riding Training', description: 'The Riding Training board on the Home page.' },
+  { flag: 'ridingTraining', labelKey: 'settings.features.ridingTraining.label', descriptionKey: 'settings.features.ridingTraining.description' },
   {
     flag: 'dungeonChecklist',
-    label: 'Dungeon Check List',
-    description: 'The full per-character dungeon completion checklist page.'
+    labelKey: 'settings.features.dungeonChecklist.label',
+    descriptionKey: 'settings.features.dungeonChecklist.description'
   },
   {
     flag: 'allianceRank',
-    label: 'Alliance Rank',
-    description: 'The Alliance Rank page, and its Alliance War Veterans medal on the Achievements page.'
+    labelKey: 'settings.features.allianceRank.label',
+    descriptionKey: 'settings.features.allianceRank.description'
   },
-  { flag: 'alchemy', label: 'Alchemy', description: 'The Alchemy calculator page.' },
-  { flag: 'enchanting', label: 'Enchanting', description: 'The Enchanting calculator page.' },
+  { flag: 'alchemy', labelKey: 'settings.features.alchemy.label', descriptionKey: 'settings.features.alchemy.description' },
+  { flag: 'enchanting', labelKey: 'settings.features.enchanting.label', descriptionKey: 'settings.features.enchanting.description' },
   {
     flag: 'musicBoxes',
-    label: 'Music Boxes',
-    description: 'The Music Boxes collection checklist, and its Music Box Collection medal on the Achievements page.'
+    labelKey: 'settings.features.musicBoxes.label',
+    descriptionKey: 'settings.features.musicBoxes.description'
   },
   {
     flag: 'wealthTracker',
-    label: 'Wealth Tracker',
-    description:
-      'The Gold / Alliance Points / Tel Var Stones / Writ Vouchers board on the Home page, and its Wealth medal on the Achievements page.'
+    labelKey: 'settings.features.wealthTracker.label',
+    descriptionKey: 'settings.features.wealthTracker.description'
   },
   {
     flag: 'achievements',
-    label: 'Achievements',
-    description:
-      "This app's own achievements page: Music Box collection medals, Alliance War Veterans (characters at Alliance Rank 50), and Wealth classes (Gold / Alliance Points / Tel Var Stones / Writ Vouchers)."
+    labelKey: 'settings.features.achievements.label',
+    descriptionKey: 'settings.features.achievements.description'
+  },
+  {
+    flag: 'languageSupport',
+    labelKey: 'settings.features.languageSupport.label',
+    descriptionKey: 'settings.features.languageSupport.description'
   }
 ]
 
@@ -91,7 +90,7 @@ export function useFeaturePreferences(): FeaturePreferences {
   }
 
   return {
-    isEnabled: (flag) => FEATURE_FLAGS[flag] && !userDisabled.has(flag),
+    isEnabled: (flag) => isFeatureFlagOn(FEATURE_FLAGS[flag]) && !userDisabled.has(flag),
     setUserEnabled
   }
 }

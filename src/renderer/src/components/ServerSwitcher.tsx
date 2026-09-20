@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 interface Props {
   servers: string[]
   selected: string
@@ -5,11 +7,12 @@ interface Props {
 }
 
 function ServerSwitcher({ servers, selected, onChange }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   if (servers.length <= 1) return <></>
 
   return (
     <label className="dropdown-label">
-      Server
+      {t('common.server')}
       <select className="dropdown" value={selected} onChange={(e) => onChange(e.target.value)}>
         {servers.map((server) => (
           <option key={server} value={server}>

@@ -11,20 +11,20 @@ describe('musicBoxAchievement', () => {
   it('sets Tin/Bronze at fixed counts and Silver/Gold relative to the total', () => {
     const achievement = musicBoxAchievement(52)
     expect(achievement.tiers).toEqual([
-      { tier: 'tin', name: 'Owner', threshold: 1 },
-      { tier: 'bronze', name: 'Collector', threshold: 5 },
-      { tier: 'silver', name: 'Curator', threshold: 26 },
-      { tier: 'gold', name: 'Maestro', threshold: 52 }
+      { tier: 'tin', nameKey: 'achievements.musicBox.tiers.tin', threshold: 1 },
+      { tier: 'bronze', nameKey: 'achievements.musicBox.tiers.bronze', threshold: 5 },
+      { tier: 'silver', nameKey: 'achievements.musicBox.tiers.silver', threshold: 26 },
+      { tier: 'gold', nameKey: 'achievements.musicBox.tiers.gold', threshold: 52 }
     ])
   })
 
   it('rounds Silver up for an odd total, and never sets a threshold above the total', () => {
     const achievement = musicBoxAchievement(3)
     expect(achievement.tiers).toEqual([
-      { tier: 'tin', name: 'Owner', threshold: 1 },
-      { tier: 'bronze', name: 'Collector', threshold: 3 },
-      { tier: 'silver', name: 'Curator', threshold: 2 },
-      { tier: 'gold', name: 'Maestro', threshold: 3 }
+      { tier: 'tin', nameKey: 'achievements.musicBox.tiers.tin', threshold: 1 },
+      { tier: 'bronze', nameKey: 'achievements.musicBox.tiers.bronze', threshold: 3 },
+      { tier: 'silver', nameKey: 'achievements.musicBox.tiers.silver', threshold: 2 },
+      { tier: 'gold', nameKey: 'achievements.musicBox.tiers.gold', threshold: 3 }
     ])
   })
 })
@@ -33,11 +33,11 @@ describe('allianceRankAchievement', () => {
   it('uses fixed character-count thresholds up to the 20-character-per-realm cap', () => {
     const achievement = allianceRankAchievement()
     expect(achievement.tiers).toEqual([
-      { tier: 'tin', name: 'Veteran', threshold: 1 },
-      { tier: 'bronze', name: 'Champion', threshold: 3 },
-      { tier: 'silver', name: 'Warlord', threshold: 6 },
-      { tier: 'gold', name: 'Grand Marshal', threshold: 10 },
-      { tier: 'platinum', name: 'Grand Overlord', threshold: 20 }
+      { tier: 'tin', nameKey: 'achievements.allianceRank.tiers.tin', threshold: 1 },
+      { tier: 'bronze', nameKey: 'achievements.allianceRank.tiers.bronze', threshold: 3 },
+      { tier: 'silver', nameKey: 'achievements.allianceRank.tiers.silver', threshold: 6 },
+      { tier: 'gold', nameKey: 'achievements.allianceRank.tiers.gold', threshold: 10 },
+      { tier: 'platinum', nameKey: 'achievements.allianceRank.tiers.platinum', threshold: 20 }
     ])
   })
 })
@@ -46,30 +46,34 @@ describe('wealthAchievement', () => {
   it('requires all four currencies at once, strictly increasing tier over tier', () => {
     const achievement = wealthAchievement()
     expect(achievement.tiers).toEqual([
-      { tier: 'peasant', name: 'Peasant', requirement: { gold: 10_000, alliancePoints: 0, telVarStones: 0, writVouchers: 0 } },
+      {
+        tier: 'peasant',
+        nameKey: 'achievements.wealth.tiers.peasant',
+        requirement: { gold: 10_000, alliancePoints: 0, telVarStones: 0, writVouchers: 0 }
+      },
       {
         tier: 'commoner',
-        name: 'Commoner',
+        nameKey: 'achievements.wealth.tiers.commoner',
         requirement: { gold: 250_000, alliancePoints: 5_000, telVarStones: 1_000, writVouchers: 100 }
       },
       {
         tier: 'merchant',
-        name: 'Merchant',
+        nameKey: 'achievements.wealth.tiers.merchant',
         requirement: { gold: 5_000_000, alliancePoints: 250_000, telVarStones: 10_000, writVouchers: 500 }
       },
       {
         tier: 'noble',
-        name: 'Noble',
+        nameKey: 'achievements.wealth.tiers.noble',
         requirement: { gold: 50_000_000, alliancePoints: 5_000_000, telVarStones: 100_000, writVouchers: 2_000 }
       },
       {
         tier: 'baron',
-        name: 'Baron',
+        nameKey: 'achievements.wealth.tiers.baron',
         requirement: { gold: 500_000_000, alliancePoints: 50_000_000, telVarStones: 500_000, writVouchers: 6_000 }
       },
       {
         tier: 'magnate',
-        name: 'Magnate',
+        nameKey: 'achievements.wealth.tiers.magnate',
         requirement: {
           gold: 5_000_000_000,
           alliancePoints: 250_000_000,
