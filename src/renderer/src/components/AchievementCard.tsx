@@ -1,29 +1,44 @@
+import { Trans, useTranslation } from 'react-i18next'
 import type { Achievement } from '@shared/achievements'
 import { achievementMedalUrl, currentAchievementTier } from '@shared/achievements'
+import { tKey } from '../i18nDynamicKey'
 
 interface Props {
   achievement: Achievement
   count: number
-  progressLabel: string
-  notStartedHint: string
+  // e.g. 'achievements.musicBox.progress' with { count, total }.
+  progressKey: string
+  progressParams: Record<string, unknown>
+  // e.g. 'achievements.musicBox.notStarted' with { tier: <first tier's translated name> }.
+  notStartedKey: string
+  notStartedParams: Record<string, unknown>
 }
 
-function AchievementCard({ achievement, count, progressLabel, notStartedHint }: Props): React.JSX.Element {
+function AchievementCard({
+  achievement,
+  count,
+  progressKey,
+  progressParams,
+  notStartedKey,
+  notStartedParams
+}: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const earned = currentAchievementTier(achievement.tiers, count)
 
   return (
     <section className="board-section achievement-card">
       <div className="pledges-panel__title-row">
-        <h3 className="settings-section-title">{achievement.title}</h3>
-        <span className="muted">{progressLabel}</span>
+        <h3 className="settings-section-title">{tKey(t, achievement.titleKey)}</h3>
+        <span className="muted">{tKey(t, progressKey, progressParams)}</span>
       </div>
 
-      <p className="muted">{achievement.description}</p>
+      <p className="muted">{tKey(t, achievement.descriptionKey)}</p>
 
       <div className="achievement-tiers">
         {achievement.tiers.map((tier) => {
           const reached = count >= tier.threshold
           const isCurrent = earned?.tier === tier.tier
+          const tierName = tKey(t, tier.nameKey)
           return (
             <div
               key={tier.tier}
@@ -34,9 +49,9 @@ function AchievementCard({ achievement, count, progressLabel, notStartedHint }: 
               <img
                 className="achievement-tier__medal"
                 src={achievementMedalUrl(achievement.iconSet, tier.tier)}
-                alt={reached ? `${tier.name} medal, earned` : `${tier.name} medal, locked`}
+                alt={reached ? t('achievements.medalAltEarned', { tier: tierName }) : t('achievements.medalAltLocked', { tier: tierName })}
               />
-              <span className="achievement-tier__name">{tier.name}</span>
+              <span className="achievement-tier__name">{tierName}</span>
               <span className="achievement-tier__threshold">{tier.threshold.toLocaleString()}</span>
             </div>
           )
@@ -45,11 +60,9 @@ function AchievementCard({ achievement, count, progressLabel, notStartedHint }: 
 
       <p className="muted achievement-card__status">
         {earned ? (
-          <>
-            Current medal: <strong>{earned.name}</strong>
-          </>
+          <Trans i18nKey="achievements.currentMedal" values={{ name: tKey(t, earned.nameKey) }} components={{ bold: <strong /> }} />
         ) : (
-          notStartedHint
+          tKey(t, notStartedKey, notStartedParams)
         )}
       </p>
     </section>

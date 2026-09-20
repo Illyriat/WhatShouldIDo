@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { WealthAmounts } from '@shared/types'
 import { MUSIC_BOXES } from '@shared/musicBoxes'
 import { allianceRankAchievement, musicBoxAchievement, wealthAchievement } from '@shared/achievements'
@@ -9,6 +10,7 @@ import WealthAchievementCard from '../components/WealthAchievementCard'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 import { useMusicBoxCollection } from '../hooks/useMusicBoxCollection'
+import { tKey } from '../i18nDynamicKey'
 
 const WEALTH_KEYS: (keyof WealthAmounts)[] = ['gold', 'alliancePoints', 'telVarStones', 'writVouchers']
 
@@ -18,6 +20,7 @@ interface Props {
 }
 
 function AchievementsPage({ accountSelection, features }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const {
     state,
     selectedAccount,
@@ -61,7 +64,7 @@ function AchievementsPage({ accountSelection, features }: Props): React.JSX.Elem
 
   return (
     <div className="page">
-      <h2 className="settings-title">Achievements</h2>
+      <h2 className="settings-title">{t('achievements.pageTitle')}</h2>
 
       {hasAccounts && (
         <div className="page__header">
@@ -76,28 +79,22 @@ function AchievementsPage({ accountSelection, features }: Props): React.JSX.Elem
         </div>
       )}
 
-      <p className="muted alchemy-intro">
-        What Should I Do's own medals, earned as you make progress in the app.
-        {hasAccounts
-          ? ' Tracked separately per account and server, and saved on this device.'
-          : ' Saved on this device.'}
-      </p>
+      <p className="muted alchemy-intro">{t(hasAccounts ? 'achievements.introTracked' : 'achievements.introUntracked')}</p>
 
       {!accountsReady ? (
-        <p className="muted">Loading your ESO accounts…</p>
+        <p className="muted">{t('common.loadingAccounts')}</p>
       ) : !anyVisible ? (
-        <p className="muted">
-          Every achievement is tied to a feature you've turned off in Settings. Re-enable Music Boxes, Alliance Rank,
-          or Wealth Tracker to see progress here.
-        </p>
+        <p className="muted">{t('achievements.noneVisible')}</p>
       ) : (
         <div className="achievement-list">
           {features.isEnabled('musicBoxes') && (
             <AchievementCard
               achievement={musicBox}
               count={musicBoxCount}
-              progressLabel={`${musicBoxCount} / ${MUSIC_BOXES.length} collected`}
-              notStartedHint={`Collect your first Music Box to earn the ${musicBox.tiers[0].name} medal.`}
+              progressKey="achievements.musicBox.progress"
+              progressParams={{ count: musicBoxCount, total: MUSIC_BOXES.length }}
+              notStartedKey="achievements.musicBox.notStarted"
+              notStartedParams={{ tier: tKey(t, musicBox.tiers[0].nameKey) }}
             />
           )}
 
@@ -105,8 +102,10 @@ function AchievementsPage({ accountSelection, features }: Props): React.JSX.Elem
             <AchievementCard
               achievement={allianceRank}
               count={maxedCount}
-              progressLabel={`${maxedCount} at Rank 50`}
-              notStartedHint={`Get one character to Alliance Rank 50 to earn the ${allianceRank.tiers[0].name} medal.`}
+              progressKey="achievements.allianceRank.progress"
+              progressParams={{ count: maxedCount }}
+              notStartedKey="achievements.allianceRank.notStarted"
+              notStartedParams={{ tier: tKey(t, allianceRank.tiers[0].nameKey) }}
             />
           )}
 

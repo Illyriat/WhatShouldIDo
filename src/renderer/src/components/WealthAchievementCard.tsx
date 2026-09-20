@@ -1,36 +1,34 @@
+import { Trans, useTranslation } from 'react-i18next'
 import type { WealthAmounts } from '@shared/types'
 import type { WealthAchievement } from '@shared/achievements'
 import { achievementMedalUrl, currentWealthTier } from '@shared/achievements'
+import { tKey } from '../i18nDynamicKey'
 
 interface Props {
   achievement: WealthAchievement
   amounts: WealthAmounts
 }
 
-const NUMBER_FORMAT = new Intl.NumberFormat()
-
-// Matches WealthBoard's currency order and short labels, so the two pages read the same way.
-const CURRENCY_ROWS: { key: keyof WealthAmounts; short: string }[] = [
-  { key: 'gold', short: 'Gold' },
-  { key: 'alliancePoints', short: 'AP' },
-  { key: 'telVarStones', short: 'Tel Var' },
-  { key: 'writVouchers', short: 'Writ' }
-]
-
 function WealthAchievementCard({ achievement, amounts }: Props): React.JSX.Element {
+  const { t, i18n } = useTranslation()
   const earned = currentWealthTier(achievement.tiers, amounts)
+  const fmt = new Intl.NumberFormat(i18n.language)
 
   return (
     <section className="board-section achievement-card">
       <div className="pledges-panel__title-row">
-        <h3 className="settings-section-title">{achievement.title}</h3>
+        <h3 className="settings-section-title">{tKey(t, achievement.titleKey)}</h3>
         <span className="muted">
-          {NUMBER_FORMAT.format(amounts.gold)} Gold · {NUMBER_FORMAT.format(amounts.alliancePoints)} AP ·{' '}
-          {NUMBER_FORMAT.format(amounts.telVarStones)} Tel Var · {NUMBER_FORMAT.format(amounts.writVouchers)} Writ
+          {t('achievements.wealth.amountsSummary', {
+            gold: fmt.format(amounts.gold),
+            ap: fmt.format(amounts.alliancePoints),
+            telVar: fmt.format(amounts.telVarStones),
+            writ: fmt.format(amounts.writVouchers)
+          })}
         </span>
       </div>
 
-      <p className="muted">{achievement.description}</p>
+      <p className="muted">{tKey(t, achievement.descriptionKey)}</p>
 
       <div className="achievement-tiers">
         {achievement.tiers.map((tier) => {
@@ -40,6 +38,7 @@ function WealthAchievementCard({ achievement, amounts }: Props): React.JSX.Eleme
             amounts.telVarStones >= tier.requirement.telVarStones &&
             amounts.writVouchers >= tier.requirement.writVouchers
           const isCurrent = earned?.tier === tier.tier
+          const tierName = tKey(t, tier.nameKey)
           return (
             <div
               key={tier.tier}
@@ -50,15 +49,22 @@ function WealthAchievementCard({ achievement, amounts }: Props): React.JSX.Eleme
               <img
                 className="achievement-tier__medal"
                 src={achievementMedalUrl(achievement.iconSet, tier.tier)}
-                alt={reached ? `${tier.name} class, earned` : `${tier.name} class, locked`}
+                alt={reached ? t('achievements.classAltEarned', { tier: tierName }) : t('achievements.classAltLocked', { tier: tierName })}
               />
-              <span className="achievement-tier__name">{tier.name}</span>
+              <span className="achievement-tier__name">{tierName}</span>
               <div className="achievement-tier__requirements">
-                {CURRENCY_ROWS.map((c) => (
-                  <span key={c.key}>
-                    {c.short} {NUMBER_FORMAT.format(tier.requirement[c.key])}
-                  </span>
-                ))}
+                <span>
+                  {t('wealth.goldShort')} {fmt.format(tier.requirement.gold)}
+                </span>
+                <span>
+                  {t('wealth.apShort')} {fmt.format(tier.requirement.alliancePoints)}
+                </span>
+                <span>
+                  {t('wealth.telVarShort')} {fmt.format(tier.requirement.telVarStones)}
+                </span>
+                <span>
+                  {t('wealth.writShort')} {fmt.format(tier.requirement.writVouchers)}
+                </span>
               </div>
             </div>
           )
@@ -67,13 +73,12 @@ function WealthAchievementCard({ achievement, amounts }: Props): React.JSX.Eleme
 
       <p className="muted achievement-card__status">
         {earned ? (
-          <>
-            Current class: <strong>{earned.name}</strong>
-          </>
+          <Trans i18nKey="achievements.currentClass" values={{ name: tKey(t, earned.nameKey) }} components={{ bold: <strong /> }} />
         ) : (
-          `Reach ${NUMBER_FORMAT.format(achievement.tiers[0].requirement.gold)} Gold to earn the ${
-            achievement.tiers[0].name
-          } class.`
+          t('achievements.wealth.notStarted', {
+            gold: fmt.format(achievement.tiers[0].requirement.gold),
+            tier: tKey(t, achievement.tiers[0].nameKey)
+          })
         )}
       </p>
     </section>
