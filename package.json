@@ -21,7 +21,6 @@
     "publish": "npm run build && electron-builder --publish always"
   },
   "dependencies": {
-    "cheerio": "^1.0.0",
     "electron-updater": "^6.8.9",
     "i18next": "^26.4.2",
     "luaparse": "^0.3.1",

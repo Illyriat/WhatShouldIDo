@@ -8,6 +8,9 @@ export interface PledgeDungeon {
   tier: PledgeTier
   // Quest id the WhatShouldIDoDataCollector addon checks to mark this dungeon's quest as done.
   questId: number
+  // ESO zone id, used to resolve today's Pledge rotation (recorded by the addon via
+  // LibUndauntedPledges) back to this dungeon - see src/shared/pledgeDungeons.ts.
+  zoneId: number
 }
 
 export interface AllianceRankStatus {
@@ -74,12 +77,13 @@ export interface PledgeMaster {
   tier: PledgeTier
 }
 
-// One of today's three pledge dungeons, resolved against PledgeDungeon data.
+// One of a day's three pledge dungeons, resolved against PledgeDungeon data.
 export interface TodaysPledge {
   master: PledgeMaster
   dungeon: PledgeDungeon | null
-  // Raw scraped name, kept even when it doesn't resolve to a known dungeon.
-  scrapedName: string
+  // Raw dungeon name recorded by the addon, kept even when it doesn't resolve to a
+  // known PledgeDungeon (e.g. this app's zoneId list is behind the game's latest DLC).
+  dungeonName: string
 }
 
 // One of the next few days' pledge line-ups (no per-character data - just the dungeons).
@@ -87,14 +91,6 @@ export interface UpcomingPledgeDay {
   // ISO date (YYYY-MM-DD) of the ESO day these pledges go live.
   esoDay: string
   pledges: TodaysPledge[]
-}
-
-export interface TodaysPledges {
-  pledges: TodaysPledge[]
-  upcoming: UpcomingPledgeDay[]
-  // Served from cache because the fresh fetch failed.
-  stale: boolean
-  fetchedAt: string
 }
 
 export interface CharacterRecommendation {
@@ -109,15 +105,21 @@ export interface CharacterRecommendation {
 export interface PledgeRecommendation {
   master: PledgeMaster
   dungeon: PledgeDungeon | null
-  scrapedName: string
+  dungeonName: string
   characters: CharacterRecommendation[]
 }
 
-export interface RecommendationsResult {
+// Today's Pledge rotation is realm-scoped (NA and EU can differ on the same calendar
+// day near their different daily-reset times - see WhatShouldIDoDataCollector's
+// data/Pledges.lua), so recommendations are grouped per realm rather than one global list.
+export interface RealmPledgeRecommendations {
+  server: string
   pledges: PledgeRecommendation[]
   upcoming: UpcomingPledgeDay[]
-  stale: boolean
-  fetchedAt: string
+}
+
+export interface RecommendationsResult {
+  pledgesByRealm: RealmPledgeRecommendations[]
 }
 
 // Pushed from main to renderer as the auto-updater's state changes (src/main/updater.ts).

@@ -49,8 +49,6 @@ export const es: typeof en = {
 
   pledges: {
     title: 'Juramentos de hoy',
-    cachedBadge: 'mostrando datos en caché',
-    cachedTitle: 'Última actualización: {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Base',
     unknownDungeon: 'Desconocida',

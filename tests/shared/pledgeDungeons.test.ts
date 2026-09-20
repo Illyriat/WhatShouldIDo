@@ -1,35 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { findPledgeDungeonByName, PLEDGE_DUNGEONS } from '../../src/shared/pledgeDungeons'
+import { findPledgeDungeonByZoneId, PLEDGE_DUNGEONS, PLEDGE_MASTERS } from '../../src/shared/pledgeDungeons'
 
-describe('findPledgeDungeonByName', () => {
-  it('matches an exact name', () => {
-    expect(findPledgeDungeonByName('City of Ash II')?.key).toBe('CA2')
+describe('findPledgeDungeonByZoneId', () => {
+  it('matches a known zone id', () => {
+    expect(findPledgeDungeonByZoneId(681)?.key).toBe('CA2')
   })
 
-  it('matches when eso-hub adds a leading "The " the stored name lacks', () => {
-    // The exact regression this app shipped with: eso-hub scrapes "The Banished
-    // Cells II" but this file stores "Banished Cells II" (no "The").
-    expect(findPledgeDungeonByName('The Banished Cells II')?.key).toBe('BC2')
-  })
-
-  it('matches when both sides already have "The "', () => {
-    expect(findPledgeDungeonByName('The Dread Cellar')?.key).toBe('TDC')
-  })
-
-  it('matches when the stored name has "The " but the scraped one does not', () => {
-    expect(findPledgeDungeonByName('Cauldron')?.key).toBe('TC')
-  })
-
-  it('is case-insensitive and trims whitespace', () => {
-    expect(findPledgeDungeonByName('  banished cells ii  ')?.key).toBe('BC2')
-  })
-
-  it('returns null for an unknown name', () => {
-    expect(findPledgeDungeonByName('Not A Real Dungeon')).toBeNull()
-  })
-
-  it('returns null for an empty string', () => {
-    expect(findPledgeDungeonByName('')).toBeNull()
+  it('returns null for an unknown zone id', () => {
+    expect(findPledgeDungeonByZoneId(999999)).toBeNull()
   })
 
   it('every dungeon key is unique', () => {
@@ -37,9 +15,25 @@ describe('findPledgeDungeonByName', () => {
     expect(new Set(keys).size).toBe(keys.length)
   })
 
-  it('normalizing every stored name still resolves back to itself (no accidental collisions)', () => {
+  it('every dungeon zoneId is unique', () => {
+    const zoneIds = PLEDGE_DUNGEONS.map((d) => d.zoneId)
+    expect(new Set(zoneIds).size).toBe(zoneIds.length)
+  })
+
+  it('resolving every stored zoneId resolves back to itself (no accidental collisions)', () => {
     for (const dungeon of PLEDGE_DUNGEONS) {
-      expect(findPledgeDungeonByName(dungeon.dungeonName)?.key).toBe(dungeon.key)
+      expect(findPledgeDungeonByZoneId(dungeon.zoneId)?.key).toBe(dungeon.key)
     }
+  })
+})
+
+describe('PLEDGE_MASTERS', () => {
+  it('lists the three pledge givers in base1/base2/dlc1 order', () => {
+    expect(PLEDGE_MASTERS.map((m) => m.name)).toEqual([
+      'Maj al-Ragath',
+      'Glirion the Redbeard',
+      'Urgarlag Chief-bane'
+    ])
+    expect(PLEDGE_MASTERS.map((m) => m.tier)).toEqual(['base', 'base', 'dlc'])
   })
 })

@@ -21,7 +21,7 @@ This app reads directly from your local ESO SavedVariables files - no manual ent
 ## Features
 
 ### Home
-Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole). A Wealth Tracker board sits next to Today's Pledges showing that realm's total Gold, Alliance Points, Tel Var Stones and Writ Vouchers - the shared account-wide bank plus every character's carried amount - with a collapsible breakdown of the bank total and a per-character table underneath.
+Today's three Undaunted Pledges, resolved against real dungeon names (with a note if one can't yet be mapped), plus a 5-day upcoming-pledges preview - computed by the Data Collector addon itself (via LibUndauntedPledges), not scraped from a website, and scoped per realm since NA and EU can differ on the same calendar day. Shows which of your characters still need to run each pledge dungeon - per-character quest completion, not achievement-based, so it's accurate per character rather than per account - and which are ready for their daily riding (Capacity/Stamina/Speed) training. A welcome banner names the selected account, with that realm's total Champion Points underneath (Champion Points are earned per account *per megaserver*, so it's tied to the Server switcher, not the account as a whole). A Wealth Tracker board sits next to Today's Pledges showing that realm's total Gold, Alliance Points, Tel Var Stones and Writ Vouchers - the shared account-wide bank plus every character's carried amount - with a collapsible breakdown of the bank total and a per-character table underneath.
 
 <details>
 <summary>Screenshot</summary>
@@ -96,13 +96,14 @@ Settings -> Language switches what this app's own text (labels, buttons, heading
 ### Everywhere else
 Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
-## Required Addon
+## Required Addons
 
-Install and enable it, then log into each character once with it active:
+Install and enable both, then log into each character once with them active:
 
 | Addon | Used for |
 |---|---|
-| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's only addon dependency. |
+| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), today's + upcoming Undaunted Pledge rotation, riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's own companion addon. |
+| [LibUndauntedPledges](https://www.esoui.com/downloads/info3946-LibUndauntedPledges.html) | A small, widely-used library the Data Collector addon depends on to compute the Undaunted Pledge rotation locally (a deterministic, client-visible formula), instead of this app scraping a website for it. |
 
 ## Running it
 
@@ -118,7 +119,7 @@ npm run typecheck
 npm test
 ```
 
-Unit/integration tests cover the app's actual data logic - pledge name matching, the Lua SavedVariables parser (including its Unicode round-trip), and the WhatShouldIDoDataCollector extractors and their multi-realm-bucket merging (the trickiest, least-obvious part of this app, per `accountBuilder.test.ts`'s fixture-based end-to-end case) - plus the Alchemy/Enchanting calculators. No UI/renderer tests yet. CI (`.github/workflows/ci.yml`) runs both on every push and PR.
+Unit/integration tests cover the app's actual data logic - pledge zoneId matching, the Lua SavedVariables parser (including its Unicode round-trip), and the WhatShouldIDoDataCollector extractors and their multi-realm-bucket merging (the trickiest, least-obvious part of this app, per `accountBuilder.test.ts`'s fixture-based end-to-end case) - plus the Alchemy/Enchanting calculators. No UI/renderer tests yet. CI (`.github/workflows/ci.yml`) runs both on every push and PR.
 
 ## Feature flags
 

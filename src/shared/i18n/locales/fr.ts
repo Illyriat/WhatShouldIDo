@@ -49,8 +49,6 @@ export const fr: typeof en = {
 
   pledges: {
     title: 'Vœux du jour',
-    cachedBadge: 'données en cache',
-    cachedTitle: 'Dernière récupération : {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Base',
     unknownDungeon: 'Inconnu',

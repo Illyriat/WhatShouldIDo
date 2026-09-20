@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { RecommendationsResult } from '@shared/types'
+import type { PledgeRecommendation, UpcomingPledgeDay } from '@shared/types'
 
 interface Props {
-  result: RecommendationsResult
+  pledges: PledgeRecommendation[]
+  upcoming: UpcomingPledgeDay[]
   upcomingPledgesEnabled: boolean
 }
 
-function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Element {
+function PledgesBoard({ pledges, upcoming, upcomingPledgesEnabled }: Props): React.JSX.Element {
   const { t, i18n } = useTranslation()
   const [showUpcoming, setShowUpcoming] = useState(false)
 
@@ -20,20 +21,15 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
     <section className="board-section">
       <div className="pledges-panel__title-row">
         <h2>{t('pledges.title')}</h2>
-        {result.stale && (
-          <span className="badge badge--warning" title={t('pledges.cachedTitle', { fetchedAt: result.fetchedAt })}>
-            {t('pledges.cachedBadge')}
-          </span>
-        )}
       </div>
 
       <div className="pledges-row">
-        {result.pledges.map((pledge) => (
+        {pledges.map((pledge) => (
           <div key={pledge.master.name} className="pledge-col">
             <span className="pledge-card__master">{pledge.master.name}</span>
             <span className="pledge-card__tier">{pledge.master.tier === 'dlc' ? t('pledges.dlc') : t('pledges.base')}</span>
             <span className="pledge-card__dungeon">
-              {pledge.scrapedName || t('pledges.unknownDungeon')}
+              {pledge.dungeonName || t('pledges.unknownDungeon')}
               {!pledge.dungeon && (
                 <span className="badge badge--muted" title={t('pledges.noDataMapped')}>
                   {t('pledges.noDataBadge')}
@@ -44,7 +40,7 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
         ))}
       </div>
 
-      {upcomingPledgesEnabled && result.upcoming.length > 0 && (
+      {upcomingPledgesEnabled && upcoming.length > 0 && (
         <div className="upcoming-pledges">
           <button
             type="button"
@@ -53,16 +49,16 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
             aria-expanded={showUpcoming}
           >
             <span className={`upcoming-pledges__caret${showUpcoming ? ' is-open' : ''}`}>▸</span>
-            {t('pledges.showUpcoming', { count: result.upcoming.length })}
+            {t('pledges.showUpcoming', { count: upcoming.length })}
           </button>
 
           {showUpcoming && (
             <ul className="upcoming-pledges__list">
-              {result.upcoming.map((day, i) => (
+              {upcoming.map((day, i) => (
                 <li key={day.esoDay} className="upcoming-pledges__day">
                   <span className="upcoming-pledges__label">{formatUpcomingLabel(day.esoDay, i)}</span>
                   <span className="upcoming-pledges__dungeons">
-                    {day.pledges.map((p) => p.scrapedName || t('pledges.unknownDungeon')).join(' · ')}
+                    {day.pledges.map((p) => p.dungeonName || t('pledges.unknownDungeon')).join(' · ')}
                   </span>
                 </li>
               ))}
@@ -74,7 +70,7 @@ function PledgesBoard({ result, upcomingPledgesEnabled }: Props): React.JSX.Elem
       <h2 className="recommended-title">{t('common.recommended')}</h2>
 
       <div className="characters-row">
-        {result.pledges.map((pledge) => {
+        {pledges.map((pledge) => {
           const recommended = pledge.characters.filter((c) => c.recommended)
 
           return (

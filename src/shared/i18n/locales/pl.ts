@@ -60,8 +60,6 @@ const plTranslation = {
 
   pledges: {
     title: 'Dzisiejsze zobowiązania',
-    cachedBadge: 'wyświetlane dane z pamięci podręcznej',
-    cachedTitle: 'Ostatnio pobrano {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Podstawowa gra',
     unknownDungeon: 'Nieznany',
