@@ -14,7 +14,8 @@ export const FEATURE_FLAGS = {
   enchanting: true,
   musicBoxes: true,
   wealthTracker: false,
-  achievements: true
+  achievements: true,
+  languageSupport: true
 } as const
 
 export type FeatureFlag = keyof typeof FEATURE_FLAGS
