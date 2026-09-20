@@ -12,16 +12,16 @@
 // language in the array is enabled; disabling every language falls back to English, same
 // as a user who's never picked one.
 export const FEATURE_FLAGS = {
-  welcomeBanner: false,
+  welcomeBanner: true,
   pledges: true,
   upcomingPledges: true,
   ridingTraining: true,
   dungeonChecklist: true,
-  allianceRank: false,
+  allianceRank: true,
   alchemy: true,
   enchanting: true,
   musicBoxes: true,
-  wealthTracker: false,
+  wealthTracker: true,
   achievements: true,
   languageSupport: [
     { code: 'en', enabled: true },
@@ -40,6 +40,6 @@ export type FeatureFlag = keyof typeof FEATURE_FLAGS
 // user "declutter" overrides in useFeaturePreferences - goes through this so both shapes
 // resolve to a single boolean rather than relying on an array's own (always-true)
 // truthiness.
-export function isFeatureFlagOn(value: (typeof FEATURE_FLAGS)[FeatureFlag]): boolean {
+export function isFeatureFlagOn(value: boolean | { code: string; enabled: boolean }[]): boolean {
   return typeof value === 'boolean' ? value : value.some((entry) => entry.enabled)
 }
