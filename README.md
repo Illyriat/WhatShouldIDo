@@ -91,7 +91,7 @@ This app's own medals, separate from anything ESO tracks - not gated behind an a
 </details>
 
 ### Language
-Settings -> Language switches what this app's own text (labels, buttons, headings, descriptions) is shown in - currently English, French, German and Spanish. It's per-device, applies instantly, and persists across restarts. ESO's own game data - dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions - always stays in English, regardless of the app's language, since there's no official ESO terminology to match for most of the languages planned after French.
+Settings -> Language switches what this app's own text (labels, buttons, headings, descriptions) is shown in - currently English, French, German, Spanish, Polish and Russian. It's per-device, applies instantly, and persists across restarts. ESO's own game data - dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions - always stays in English, regardless of the app's language, since there's no official ESO terminology to match for most of the languages planned after French.
 
 ### Everywhere else
 Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
