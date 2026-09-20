@@ -49,8 +49,6 @@ export const de: typeof en = {
 
   pledges: {
     title: 'Heutige Gelöbnisse',
-    cachedBadge: 'zeigt zwischengespeicherte Daten',
-    cachedTitle: 'Zuletzt abgerufen: {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Basis',
     unknownDungeon: 'Unbekannt',

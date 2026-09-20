@@ -59,8 +59,6 @@ const ruTranslation = {
 
   pledges: {
     title: 'Сегодняшние обеты',
-    cachedBadge: 'показаны кэшированные данные',
-    cachedTitle: 'Последнее обновление {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Базовая игра',
     unknownDungeon: 'Неизвестно',

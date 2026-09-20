@@ -46,8 +46,6 @@ export const en = {
 
   pledges: {
     title: "Today's Pledges",
-    cachedBadge: 'showing cached data',
-    cachedTitle: 'Last fetched {{fetchedAt}}',
     dlc: 'DLC',
     base: 'Base',
     unknownDungeon: 'Unknown',
