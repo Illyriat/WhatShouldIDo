@@ -14,7 +14,7 @@ type RecommendationsState =
   | { status: 'error'; message: string }
   | { status: 'ready'; recommendations: RecommendationsResult }
 
-const EMPTY_RECOMMENDATIONS: RecommendationsResult = { pledges: [], upcoming: [], stale: false, fetchedAt: '' }
+const EMPTY_RECOMMENDATIONS: RecommendationsResult = { pledgesByRealm: [] }
 
 interface Props {
   accountSelection: AccountSelection
@@ -58,21 +58,21 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     // Depend on refreshToken so one Refresh click reloads pledges alongside accounts.
   }, [refreshToken])
 
-  const filteredRecommendations = useMemo(() => {
-    if (recState.status !== 'ready') return null
+  // Pledges are realm-scoped (see pledgesApi.ts) - pick the recommendations for whichever
+  // realm is currently selected, then filter its characters down to the selected account
+  // (the realm filter is already baked in by picking this entry).
+  const realmPledges = useMemo(() => {
+    if (recState.status !== 'ready' || !selectedServer) return null
+    return recState.recommendations.pledgesByRealm.find((r) => r.server === selectedServer) ?? null
+  }, [recState, selectedServer])
 
-    return {
-      ...recState.recommendations,
-      pledges: recState.recommendations.pledges.map((pledge) => ({
-        ...pledge,
-        characters: pledge.characters.filter(
-          (c) =>
-            (!selectedAccount || c.accountName === selectedAccount) &&
-            (!selectedServer || c.server === selectedServer)
-        )
-      }))
-    }
-  }, [recState, selectedAccount, selectedServer])
+  const filteredPledges = useMemo(() => {
+    if (!realmPledges) return null
+    return realmPledges.pledges.map((pledge) => ({
+      ...pledge,
+      characters: pledge.characters.filter((c) => !selectedAccount || c.accountName === selectedAccount)
+    }))
+  }, [realmPledges, selectedAccount])
 
   if (state.status === 'loading' || recState.status === 'loading') {
     return (
@@ -143,7 +143,7 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
       </div>
 
       {(features.isEnabled('wealthTracker') ||
-        (features.isEnabled('pledges') && filteredRecommendations) ||
+        (features.isEnabled('pledges') && filteredPledges) ||
         features.isEnabled('ridingTraining')) && (
         <div className="home-top-row">
           {features.isEnabled('wealthTracker') && (
@@ -152,9 +152,10 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
             </div>
           )}
           <div className="home-top-row__main">
-            {features.isEnabled('pledges') && filteredRecommendations && (
+            {features.isEnabled('pledges') && filteredPledges && realmPledges && (
               <PledgesBoard
-                result={filteredRecommendations}
+                pledges={filteredPledges}
+                upcoming={realmPledges.upcoming}
                 upcomingPledgesEnabled={features.isEnabled('upcomingPledges')}
               />
             )}
