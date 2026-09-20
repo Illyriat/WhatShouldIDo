@@ -18,7 +18,7 @@ export const fr: typeof en = {
     loadingAccounts: 'Chargement de vos comptes ESO…',
     noCharactersFoundTitle: 'Aucun personnage trouvé',
     noCharactersFoundBody:
-      "Installez et activez l'addon <bold>USPF</bold> dans ESO, puis connectez-vous avec au moins un personnage pour qu'il puisse enregistrer votre progression.",
+      "Installez et activez l'addon <bold>WhatShouldIDoDataCollector</bold> dans ESO, puis connectez-vous avec au moins un personnage pour qu'il puisse enregistrer votre progression.",
     clear: 'Effacer',
     character: 'Personnage',
     recommended: 'Recommandé'
@@ -44,7 +44,7 @@ export const fr: typeof en = {
     greeting: 'Bienvenue,',
     couldntLoadTitle: 'Impossible de charger les données des vœux',
     couldntLoadHint:
-      "Vérifiez que l'addon USPF est installé et activé dans ESO, et que vous vous êtes connecté au jeu au moins une fois avec lui actif."
+      "Vérifiez que l'addon WhatShouldIDoDataCollector est installé et activé dans ESO, et que vous vous êtes connecté au jeu au moins une fois avec lui actif."
   },
 
   pledges: {
@@ -195,7 +195,7 @@ export const fr: typeof en = {
     introTracked:
       'Tous les meublants « <bold>Boîte à musique</bold> » actuellement disponibles. Cochez-les au fur et à mesure que vous les obtenez. La progression est suivie séparément par compte et par serveur, et enregistrée sur cet appareil.',
     introUntracked:
-      "Tous les meublants « <bold>Boîte à musique</bold> » actuellement disponibles. Cochez-les au fur et à mesure que vous les obtenez. La progression est enregistrée sur cet appareil. Installez USPF et SkillLines et connectez-vous avec un personnage pour la suivre séparément par compte et par serveur.",
+      "Tous les meublants « <bold>Boîte à musique</bold> » actuellement disponibles. Cochez-les au fur et à mesure que vous les obtenez. La progression est enregistrée sur cet appareil. Installez WhatShouldIDoDataCollector et connectez-vous avec un personnage pour la suivre séparément par compte et par serveur.",
     collected: 'Obtenues {{count}} / {{total}}',
     filterPlaceholder: 'Filtrer par nom, source ou description…',
     all: 'Toutes',
@@ -359,25 +359,10 @@ export const fr: typeof en = {
       }
     },
     addonsList: {
-      skillLines: {
-        name: 'Skill Lines',
-        description:
-          "Associe chaque personnage au mégaserveur sur lequel il vit (NA / EU). L'application s'en sert pour distinguer vos personnages et faire fonctionner les sélecteurs de compte et de serveur."
-      },
-      uspf: {
-        name: "Urich's Skill Point Finder (USPF)",
-        description:
-          "Enregistre les quêtes de donjon terminées par chaque personnage. Alimente les recommandations quotidiennes de Vœux Intrépides et la Liste des donjons. Sans lui, ces pages n'ont aucune donnée. C'est la fonctionnalité principale de WhatShouldIDo."
-      },
-      dailyCraftStatus: {
-        name: 'Daily Craft Status',
-        description:
-          "Suit le temps de recharge d'entraînement de monture et les niveaux de Capacité / Endurance / Vitesse de chaque personnage. Alimente le tableau d'entraînement de monture sur la page Accueil."
-      },
       dataCollector: {
         name: 'What Should I Do - Data Collector',
         description:
-          "Un addon compagnon dédié qui enregistre le rang de guerre d'Alliance et la progression en Points d'Alliance de chaque personnage (alimente la page Rang d'Alliance), les Points de Championnat par royaume de chaque compte (affichés sur la bannière de la page Accueil), et l'Or / les Points d'Alliance / les Pierres de Tel Var / les Bons de commande - à la fois le montant transporté par chaque personnage et le total de la banque commune du compte par royaume (alimente le Suivi de richesse sur la page Accueil)."
+          "Un addon compagnon dédié qui enregistre le nom et le serveur de chaque personnage, les quêtes de donjon terminées par chaque personnage (alimente les recommandations quotidiennes de Vœux Intrépides et la Liste des donjons - c'est la fonctionnalité principale de WhatShouldIDo), le temps de recharge d'entraînement de monture et les niveaux de Capacité / Endurance / Vitesse de chaque personnage (alimente le tableau d'entraînement de monture sur la page Accueil), le rang de guerre d'Alliance et la progression en Points d'Alliance de chaque personnage (alimente la page Rang d'Alliance), les Points de Championnat par royaume de chaque compte (affichés sur la bannière de la page Accueil), et l'Or / les Points d'Alliance / les Pierres de Tel Var / les Bons de commande - à la fois le montant transporté par chaque personnage et le total de la banque commune du compte par royaume (alimente le Suivi de richesse sur la page Accueil). C'est le seul addon dont WhatShouldIDo a besoin - sans lui, l'application n'a aucune donnée."
       }
     }
   },

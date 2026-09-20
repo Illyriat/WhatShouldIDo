@@ -16,7 +16,7 @@ export const en = {
     loadingCharacters: 'Loading your ESO characters…',
     loadingAccounts: 'Loading your ESO accounts…',
     noCharactersFoundTitle: 'No characters found',
-    noCharactersFoundBody: 'Install and enable the <bold>USPF</bold> addon in ESO, then log into at least one character so it can record your progress.',
+    noCharactersFoundBody: 'Install and enable the <bold>WhatShouldIDoDataCollector</bold> addon in ESO, then log into at least one character so it can record your progress.',
     clear: 'Clear',
     character: 'Character',
     recommended: 'Recommended'
@@ -41,7 +41,7 @@ export const en = {
   home: {
     greeting: 'Welcome,',
     couldntLoadTitle: "Couldn't load pledge data",
-    couldntLoadHint: "Make sure the USPF addon is installed and enabled in ESO, and that you've logged into the game at least once with it active."
+    couldntLoadHint: "Make sure the WhatShouldIDoDataCollector addon is installed and enabled in ESO, and that you've logged into the game at least once with it active."
   },
 
   pledges: {
@@ -183,7 +183,7 @@ export const en = {
   musicBoxes: {
     pageTitle: 'Music Boxes',
     introTracked: 'Every currently obtainable <bold>Music Box</bold> furnishing. Tick one off once you own it. Progress is tracked separately per account and server, and saved on this device.',
-    introUntracked: 'Every currently obtainable <bold>Music Box</bold> furnishing. Tick one off once you own it. Progress is saved on this device. Install USPF and SkillLines and log in with a character to track it separately per account and server.',
+    introUntracked: 'Every currently obtainable <bold>Music Box</bold> furnishing. Tick one off once you own it. Progress is saved on this device. Install WhatShouldIDoDataCollector and log in with a character to track it separately per account and server.',
     collected: 'Collected {{count}} / {{total}}',
     filterPlaceholder: 'Filter by name, source, or description…',
     all: 'All',
@@ -336,21 +336,9 @@ export const en = {
       }
     },
     addonsList: {
-      skillLines: {
-        name: 'Skill Lines',
-        description: 'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.'
-      },
-      uspf: {
-        name: "Urich's Skill Point Finder (USPF)",
-        description: 'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. This is the core feature of WhatShouldIDo.'
-      },
-      dailyCraftStatus: {
-        name: 'Daily Craft Status',
-        description: "Tracks each character's riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page."
-      },
       dataCollector: {
         name: 'What Should I Do - Data Collector',
-        description: "A purpose-built companion addon that records each character's Alliance War rank and Alliance Points progress (powers the Alliance Rank page), each account's Champion Points per realm (shown on the Home page banner), and Gold / Alliance Points / Tel Var Stones / Writ Vouchers - both each character's carried amount and the shared account-wide bank total per realm (powers the Wealth Tracker on the Home page)."
+        description: "A purpose-built companion addon that records each character's name and server, which dungeon quests each character has finished (powers the daily Undaunted Pledge recommendations and the Dungeon Check List - this is the core feature of WhatShouldIDo), each character's riding-training cooldown and Capacity / Stamina / Speed levels (powers the Riding Training board on the Home page), each character's Alliance War rank and Alliance Points progress (powers the Alliance Rank page), each account's Champion Points per realm (shown on the Home page banner), and Gold / Alliance Points / Tel Var Stones / Writ Vouchers - both each character's carried amount and the shared account-wide bank total per realm (powers the Wealth Tracker on the Home page). This is the only addon WhatShouldIDo needs - without it the app has no data at all."
       }
     }
   },

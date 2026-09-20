@@ -18,7 +18,7 @@ export const de: typeof en = {
     loadingAccounts: 'Deine ESO-Konten werden geladen…',
     noCharactersFoundTitle: 'Keine Charaktere gefunden',
     noCharactersFoundBody:
-      'Installiere und aktiviere das Addon <bold>USPF</bold> in ESO und melde dich dann mit mindestens einem Charakter an, damit er deinen Fortschritt aufzeichnen kann.',
+      'Installiere und aktiviere das Addon <bold>WhatShouldIDoDataCollector</bold> in ESO und melde dich dann mit mindestens einem Charakter an, damit er deinen Fortschritt aufzeichnen kann.',
     clear: 'Leeren',
     character: 'Charakter',
     recommended: 'Empfohlen'
@@ -44,7 +44,7 @@ export const de: typeof en = {
     greeting: 'Willkommen,',
     couldntLoadTitle: 'Gelöbnisdaten konnten nicht geladen werden',
     couldntLoadHint:
-      'Stelle sicher, dass das Addon USPF in ESO installiert und aktiviert ist und dass du dich mindestens einmal mit aktivem Addon ins Spiel eingeloggt hast.'
+      'Stelle sicher, dass das Addon WhatShouldIDoDataCollector in ESO installiert und aktiviert ist und dass du dich mindestens einmal mit aktivem Addon ins Spiel eingeloggt hast.'
   },
 
   pledges: {
@@ -194,7 +194,7 @@ export const de: typeof en = {
     introTracked:
       'Alle aktuell erhältlichen Einrichtungsgegenstände „<bold>Spieluhr</bold>“. Hake sie ab, sobald du sie besitzt. Der Fortschritt wird getrennt nach Konto und Server verfolgt und auf diesem Gerät gespeichert.',
     introUntracked:
-      'Alle aktuell erhältlichen Einrichtungsgegenstände „<bold>Spieluhr</bold>“. Hake sie ab, sobald du sie besitzt. Der Fortschritt wird auf diesem Gerät gespeichert. Installiere USPF und SkillLines und melde dich mit einem Charakter an, um ihn getrennt nach Konto und Server zu verfolgen.',
+      'Alle aktuell erhältlichen Einrichtungsgegenstände „<bold>Spieluhr</bold>“. Hake sie ab, sobald du sie besitzt. Der Fortschritt wird auf diesem Gerät gespeichert. Installiere WhatShouldIDoDataCollector und melde dich mit einem Charakter an, um ihn getrennt nach Konto und Server zu verfolgen.',
     collected: '{{count}} / {{total}} gesammelt',
     filterPlaceholder: 'Nach Name, Quelle oder Beschreibung filtern…',
     all: 'Alle',
@@ -358,25 +358,10 @@ export const de: typeof en = {
       }
     },
     addonsList: {
-      skillLines: {
-        name: 'Skill Lines',
-        description:
-          'Kennzeichnet jeden Charakter mit dem Megaserver, auf dem er lebt (NA / EU). Die App nutzt dies, um deine Charaktere zu unterscheiden und die Konto- und Server-Auswahl funktionsfähig zu machen.'
-      },
-      uspf: {
-        name: "Urich's Skill Point Finder (USPF)",
-        description:
-          'Zeichnet auf, welche Dungeon-Quests jeder Charakter abgeschlossen hat. Treibt die täglichen Empfehlungen für Unbeugsame Gelöbnisse und die Dungeon-Checkliste an. Ohne dieses Addon haben diese Seiten keine Daten. Dies ist die Kernfunktion von WhatShouldIDo.'
-      },
-      dailyCraftStatus: {
-        name: 'Daily Craft Status',
-        description:
-          'Verfolgt die Abklingzeit des Reittrainings sowie die Kapazitäts-, Ausdauer- und Geschwindigkeitsstufen jedes Charakters. Treibt das Reittraining-Board auf der Startseite an.'
-      },
       dataCollector: {
         name: 'What Should I Do - Data Collector',
         description:
-          'Ein eigens entwickeltes Begleit-Addon, das den Allianzkriegsrang und den Allianzpunkte-Fortschritt jedes Charakters aufzeichnet (treibt die Seite Allianzrang an), die Champion-Punkte jedes Kontos pro Realm (angezeigt auf dem Banner der Startseite) sowie Gold / Allianzpunkte / Tel-Var-Steine / Auftragsgutscheine - sowohl den von jedem Charakter getragenen Betrag als auch das gemeinsame kontoweite Bankguthaben pro Realm (treibt die Vermögensübersicht auf der Startseite an).'
+          'Ein eigens entwickeltes Begleit-Addon, das Name und Server jedes Charakters aufzeichnet, welche Dungeon-Quests jeder Charakter abgeschlossen hat (treibt die täglichen Empfehlungen für Unbeugsame Gelöbnisse und die Dungeon-Checkliste an - dies ist die Kernfunktion von WhatShouldIDo), die Abklingzeit des Reittrainings sowie die Kapazitäts-, Ausdauer- und Geschwindigkeitsstufen jedes Charakters (treibt das Reittraining-Board auf der Startseite an), den Allianzkriegsrang und den Allianzpunkte-Fortschritt jedes Charakters (treibt die Seite Allianzrang an), die Champion-Punkte jedes Kontos pro Realm (angezeigt auf dem Banner der Startseite) sowie Gold / Allianzpunkte / Tel-Var-Steine / Auftragsgutscheine - sowohl den von jedem Charakter getragenen Betrag als auch das gemeinsame kontoweite Bankguthaben pro Realm (treibt die Vermögensübersicht auf der Startseite an). Dies ist das einzige Addon, das WhatShouldIDo benötigt - ohne es hat die App überhaupt keine Daten.'
       }
     }
   },

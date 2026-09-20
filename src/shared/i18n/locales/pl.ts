@@ -29,7 +29,7 @@ const plTranslation = {
     loadingAccounts: 'Wczytywanie Twoich kont ESO…',
     noCharactersFoundTitle: 'Nie znaleziono postaci',
     noCharactersFoundBody:
-      'Zainstaluj i włącz dodatek <bold>USPF</bold> w ESO, a następnie zaloguj się na co najmniej jedną postać, aby dodatek mógł zapisywać Twoje postępy.',
+      'Zainstaluj i włącz dodatek <bold>WhatShouldIDoDataCollector</bold> w ESO, a następnie zaloguj się na co najmniej jedną postać, aby dodatek mógł zapisywać Twoje postępy.',
     clear: 'Wyczyść',
     character: 'Postać',
     recommended: 'Polecane'
@@ -55,7 +55,7 @@ const plTranslation = {
     greeting: 'Witaj,',
     couldntLoadTitle: 'Nie udało się wczytać danych zobowiązań',
     couldntLoadHint:
-      'Upewnij się, że dodatek USPF jest zainstalowany i włączony w ESO oraz że zalogowałeś się do gry przynajmniej raz z aktywnym dodatkiem.'
+      'Upewnij się, że dodatek WhatShouldIDoDataCollector jest zainstalowany i włączony w ESO oraz że zalogowałeś się do gry przynajmniej raz z aktywnym dodatkiem.'
   },
 
   pledges: {
@@ -208,7 +208,7 @@ const plTranslation = {
     introTracked:
       'Wszystkie obecnie dostępne meble typu <bold>Pozytywka</bold>. Odhacz, gdy już je posiadasz. Postęp jest śledzony osobno dla każdego konta i serwera oraz zapisywany na tym urządzeniu.',
     introUntracked:
-      'Wszystkie obecnie dostępne meble typu <bold>Pozytywka</bold>. Odhacz, gdy już je posiadasz. Postęp jest zapisywany na tym urządzeniu. Zainstaluj USPF i SkillLines oraz zaloguj się na postać, aby śledzić go osobno dla każdego konta i serwera.',
+      'Wszystkie obecnie dostępne meble typu <bold>Pozytywka</bold>. Odhacz, gdy już je posiadasz. Postęp jest zapisywany na tym urządzeniu. Zainstaluj WhatShouldIDoDataCollector oraz zaloguj się na postać, aby śledzić go osobno dla każdego konta i serwera.',
     collected: 'Zebrano {{count}} / {{total}}',
     filterPlaceholder: 'Filtruj według nazwy, źródła lub opisu…',
     all: 'Wszystkie',
@@ -375,25 +375,10 @@ const plTranslation = {
       }
     },
     addonsList: {
-      skillLines: {
-        name: 'Skill Lines',
-        description:
-          'Oznacza każdą postać megaserwerem, na którym się znajduje (NA / EU). Aplikacja wykorzystuje to do rozróżniania Twoich postaci oraz do działania przełączników Konta i Serwera.'
-      },
-      uspf: {
-        name: "Urich's Skill Point Finder (USPF)",
-        description:
-          'Zapisuje, które zadania lochów ukończyła każda postać. Napędza codzienne rekomendacje Nieustraszonych Zobowiązań oraz Listę lochów. Bez niego te strony nie mają danych. To podstawowa funkcja WhatShouldIDo.'
-      },
-      dailyCraftStatus: {
-        name: 'Daily Craft Status',
-        description:
-          'Śledzi czas odnowienia treningu jeździeckiego oraz poziomy Pojemności / Wytrzymałości / Szybkości każdej postaci. Napędza panel Treningu jeździeckiego na stronie Start.'
-      },
       dataCollector: {
         name: 'What Should I Do - Data Collector',
         description:
-          'Dedykowany dodatek towarzyszący, który zapisuje rangę Wojny Sojuszy i postęp Punktów Sojuszu każdej postaci (napędza stronę Ranga Sojuszu), Punkty Championa każdego konta na realm (widoczne na banerze strony Start) oraz Złoto / Punkty Sojuszu / Kamienie Tel Var / Bony za nakazy - zarówno kwotę niesioną przez każdą postać, jak i wspólne saldo banku dla całego konta na realm (napędza Śledzenie Majątku na stronie Start).'
+          'Dedykowany dodatek towarzyszący, który zapisuje imię i serwer każdej postaci, które zadania lochów ukończyła każda postać (napędza codzienne rekomendacje Nieustraszonych Zobowiązań oraz Listę lochów - to podstawowa funkcja WhatShouldIDo), czas odnowienia treningu jeździeckiego oraz poziomy Pojemności / Wytrzymałości / Szybkości każdej postaci (napędza panel Treningu jeździeckiego na stronie Start), rangę Wojny Sojuszy i postęp Punktów Sojuszu każdej postaci (napędza stronę Ranga Sojuszu), Punkty Championa każdego konta na realm (widoczne na banerze strony Start) oraz Złoto / Punkty Sojuszu / Kamienie Tel Var / Bony za nakazy - zarówno kwotę niesioną przez każdą postać, jak i wspólne saldo banku dla całego konta na realm (napędza Śledzenie Majątku na stronie Start). To jedyny dodatek, którego potrzebuje WhatShouldIDo - bez niego aplikacja nie ma żadnych danych.'
       }
     }
   },

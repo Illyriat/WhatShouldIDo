@@ -68,7 +68,7 @@ function luaExpressionToJs(node: luaparse.Expression): unknown {
   }
 }
 
-// Returns the value assigned to `globalName` (e.g. "USPF_Settings") in a
+// Returns the value assigned to `globalName` (e.g. "WhatShouldIDoDataCollectorVars") in a
 // SavedVariables file, or null if it isn't assigned there.
 export async function parseSavedVariables(filePath: string, globalName: string): Promise<LuaTable | null> {
   // Read latin1 so luaparse's 'pseudo-latin1' mode hands back string bytes intact.

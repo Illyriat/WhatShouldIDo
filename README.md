@@ -96,16 +96,13 @@ Settings -> Language switches what this app's own text (labels, buttons, heading
 ### Everywhere else
 Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
-## Required Addons
+## Required Addon
 
-Install and enable all three, then log into each character once with them active:
+Install and enable it, then log into each character once with it active:
 
 | Addon | Used for |
 |---|---|
-| [Urich's Skill Point Finder (USPF)](https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html) | Per-character dungeon quest completion (Pledges + Dungeon Check List) |
-| [Skill Lines](https://www.esoui.com/downloads/info4041-SkillLines.html) | Knowing which server (NA/EU) each character is on |
-| [Daily Craft Status](https://esoui.com/downloads/info2510-DailyCraftStatus.html) | Riding training status |
-| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Per-character Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank) |
+| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's only addon dependency. |
 
 ## Running it
 
@@ -121,7 +118,7 @@ npm run typecheck
 npm test
 ```
 
-Unit/integration tests cover the app's actual data logic - pledge name matching, the Lua SavedVariables parser (including its Unicode round-trip), and the USPF/SkillLines/DailyCraftStatus extractors and their multi-realm-bucket merging (the trickiest, least-obvious part of this app, per `accountBuilder.test.ts`'s fixture-based end-to-end case) - plus the Alchemy/Enchanting calculators. No UI/renderer tests yet. CI (`.github/workflows/ci.yml`) runs both on every push and PR.
+Unit/integration tests cover the app's actual data logic - pledge name matching, the Lua SavedVariables parser (including its Unicode round-trip), and the WhatShouldIDoDataCollector extractors and their multi-realm-bucket merging (the trickiest, least-obvious part of this app, per `accountBuilder.test.ts`'s fixture-based end-to-end case) - plus the Alchemy/Enchanting calculators. No UI/renderer tests yet. CI (`.github/workflows/ci.yml`) runs both on every push and PR.
 
 ## Feature flags
 

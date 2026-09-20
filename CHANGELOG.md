@@ -4,6 +4,10 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+- Character list, server labels and dungeon quest completion (Pledges + Dungeon Check List) now come from the **What Should I Do - Data Collector** companion addon (v1.3.0+) instead of USPF and Skill Lines - those two addons are no longer required or read at all. Existing users need to install the updated Data Collector addon and log into each character once with it active before upgrading.
+- Riding training status now also comes from the **What Should I Do - Data Collector** addon (v1.4.0+) instead of DailyCraftStatus, which is no longer required or read at all. WhatShouldIDo now depends on a single addon.
+
 ### Added
 - Language support: a Settings -> Language picker for switching this app's own UI text (labels, buttons, headings, descriptions) between English, French, German, Spanish, Polish and Russian, applied instantly and persisted across restarts. ESO's own game data (dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions) always stays in English. Gated behind a `languageSupport` developer flag whose value is an array of per-language switches, so an individual language can be pulled without disabling the feature altogether. Polish and Russian use CLDR's four-form plural system (one/few/many/other) rather than English's one/other
 - Achievements page (above Settings in the sidebar): this app's own medals for progress you've already made elsewhere in the app - Music Box Collection (Tin-Gold: Owner/Collector/Curator/Maestro at 1/5/half/all collected), Alliance War Veterans (Tin-Platinum: Veteran/Champion/Warlord/Grand Marshal/Grand Overlord for 1/3/6/10/20 characters at Alliance Rank 50), and Wealth (Peasant through Magnate - gated on Gold, AP, Tel Var Stones and Writ Vouchers all clearing that class's bar at once, not just one of them; Magnate is intentionally the hardest medal in the app)

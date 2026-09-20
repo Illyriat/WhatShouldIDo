@@ -1,11 +1,12 @@
 export type PledgeTier = 'base' | 'dlc'
 
 export interface PledgeDungeon {
-  // USPF's short key from its GD table, e.g. "BC1", "TC".
+  // Short key this app uses for the dungeon, e.g. "BC1", "TC" (mirrored in the
+  // WhatShouldIDoDataCollector addon's own WSIDC.PLEDGE_DUNGEONS table).
   key: string
   dungeonName: string
   tier: PledgeTier
-  // Quest id USPF checks to mark this dungeon's quest as done.
+  // Quest id the WhatShouldIDoDataCollector addon checks to mark this dungeon's quest as done.
   questId: number
 }
 
@@ -38,9 +39,11 @@ export interface WealthAmounts {
 export interface Character {
   charId: string
   charName: string
-  // e.g. "NA Megaserver"; "Unknown Server" when SkillLines has no record of this character.
+  // e.g. "NA Megaserver" - the realm bucket this character's data lives under in
+  // WhatShouldIDoDataCollector.lua.
   server: string
-  // GD keys this character has completed. Per-character, not account-wide.
+  // PledgeDungeon keys this character has completed the intro quest for. Per-character,
+  // not account-wide.
   completedDungeonKeys: string[]
   // All 3 riding stats (Capacity/Stamina/Speed) already at cap.
   ridingMaxed: boolean
@@ -128,7 +131,7 @@ export type UpdateStatus =
   | { state: 'error'; message: string }
 
 // Which addon SavedVariables files were found on disk, keyed by file name
-// (e.g. "USPF.lua"). true = the addon has written data at least once.
+// (e.g. "WhatShouldIDoDataCollector.lua"). true = the addon has written data at least once.
 export type AddonStatus = Record<string, boolean>
 
 export interface AppSettings {
