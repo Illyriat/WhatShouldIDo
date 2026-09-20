@@ -22,13 +22,11 @@ async function makeDocumentsDir(files: string[]): Promise<string> {
 
 describe('detectAddons', () => {
   it('flags each addon file that is present and each that is missing', async () => {
-    const documentsDir = await makeDocumentsDir(['USPF.lua', 'SkillLines.lua'])
+    const documentsDir = await makeDocumentsDir(['WhatShouldIDoDataCollector.lua'])
 
     expect(await detectAddons(documentsDir)).toEqual({
-      'USPF.lua': true,
-      'SkillLines.lua': true,
       'DailyCraftStatus.lua': false,
-      'WhatShouldIDoDataCollector.lua': false
+      'WhatShouldIDoDataCollector.lua': true
     })
   })
 
@@ -37,8 +35,6 @@ describe('detectAddons', () => {
     tmpDirs.push(documentsDir)
 
     expect(await detectAddons(documentsDir)).toEqual({
-      'USPF.lua': false,
-      'SkillLines.lua': false,
       'DailyCraftStatus.lua': false,
       'WhatShouldIDoDataCollector.lua': false
     })

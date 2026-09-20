@@ -9,36 +9,35 @@ afterEach(async () => {
   await Promise.all(tmpDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })))
 })
 
-// Writes a fake Documents/Elder Scrolls Online/live/SavedVariables/ folder with all
-// three addon files in the real on-disk layout, so this exercises the whole pipeline
-// end to end: locator, parser, every extractor, and the merge in buildAccounts.
+// Writes a fake Documents/Elder Scrolls Online/live/SavedVariables/ folder with both
+// addon files in the real on-disk layout, so this exercises the whole pipeline end to
+// end: locator, parser, every extractor, and the merge in buildAccounts.
 async function writeFixtureDocuments(): Promise<string> {
   const documentsDir = await mkdtemp(join(tmpdir(), 'wsid-docs-'))
   tmpDirs.push(documentsDir)
   const savedVarsDir = join(documentsDir, 'Elder Scrolls Online', 'live', 'SavedVariables')
   await mkdir(savedVarsDir, { recursive: true })
 
-  // Alice (NA) and Bob are in the default bucket; Carol is in a nested EU bucket.
-  // See findRealmBuckets in uspfExtractor for why the nesting looks like this.
+  // Alice and Bob are on NA; Carol is on EU. All three, plus their dungeon-quest
+  // completion, Alliance Rank, Wealth, Champion Points and bank totals, come from a
+  // single WhatShouldIDoDataCollector.lua fixture - it's the sole source of the
+  // character list and server labels now (no more USPF/SkillLines).
   await writeFile(
-    join(savedVarsDir, 'USPF.lua'),
-    `USPF_Settings={["Default"]={["@TestAccount"]={` +
-      `["charInfo"]={{["charId"]="1001",["charName"]="Alice"},{["charId"]="1002",["charName"]="Bob"}},` +
-      `["ptsData"]={["1001"]={["GD"]={["BC1"]=1}},["1002"]={["GD"]={}}},` +
+    join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
+    `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={` +
+      `["NA Megaserver"]={` +
+      `["championPoints"]=810,` +
+      `["bankWealth"]={["gold"]=500000,["alliancePoints"]=12000,["telVarStones"]=3000,["writVouchers"]=200},` +
+      `["1001"]={["name"]="Alice",` +
+      `["allianceRank"]={["rank"]=23,["subRank"]=1,["currentAP"]=6200000,["apForMaxRank"]=64680000,` +
+      `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400},` +
+      `["wealth"]={["gold"]=15000,["alliancePoints"]=800,["telVarStones"]=50,["writVouchers"]=10},` +
+      `["completedDungeonQuests"]={["BC1"]=1}},` +
+      `["1002"]={["name"]="Bob",["completedDungeonQuests"]={}}` +
+      `},` +
       `["EU Megaserver"]={` +
-      `["charInfo"]={{["charId"]="2001",["charName"]="Carol"}},` +
-      `["ptsData"]={["2001"]={["GD"]={["BC1"]=1,["EH1"]=1}}}` +
-      `}}}}`,
-    'utf-8'
-  )
-
-  // Deliberately omits Bob, so buildAccounts must fall back to "Unknown Server" for him.
-  await writeFile(
-    join(savedVarsDir, 'SkillLines.lua'),
-    `SkillLinesSavedVars={["Default"]={["@TestAccount"]={["$AccountWide"]={` +
-      `["NA Megaserver"]={["@TestAccount"]={["Alice"]={}}},` +
-      `["EU Megaserver"]={["@TestAccount"]={["Carol"]={}}}` +
-      `}}}}`,
+      `["2001"]={["name"]="Carol",["completedDungeonQuests"]={["BC1"]=1,["EH1"]=1}}` +
+      `}}}}}`,
     'utf-8'
   )
 
@@ -51,26 +50,11 @@ async function writeFixtureDocuments(): Promise<string> {
     'utf-8'
   )
 
-  // Only Alice has alliance rank data / carried wealth; Bob and Carol fall back to null.
-  // Champion Points and the bank total are account+realm scoped (not per-character), and
-  // EU has neither yet - only NA does.
-  await writeFile(
-    join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
-    `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
-      `["championPoints"]=810,` +
-      `["bankWealth"]={["gold"]=500000,["alliancePoints"]=12000,["telVarStones"]=3000,["writVouchers"]=200},` +
-      `["1001"]={["allianceRank"]={["rank"]=23,["subRank"]=1,["currentAP"]=6200000,["apForMaxRank"]=64680000,` +
-      `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400},` +
-      `["wealth"]={["gold"]=15000,["alliancePoints"]=800,["telVarStones"]=50,["writVouchers"]=10}}` +
-      `}}}}}`,
-    'utf-8'
-  )
-
   return documentsDir
 }
 
 describe('buildAccounts', () => {
-  it('joins USPF quest completion, SkillLines server labels and riding status by character, with correct fallbacks', async () => {
+  it('joins the character list, dungeon-quest completion, server labels and riding status by character, with correct fallbacks', async () => {
     const documentsDir = await writeFixtureDocuments()
 
     const accounts = await buildAccounts(documentsDir)
@@ -103,7 +87,7 @@ describe('buildAccounts', () => {
       {
         charId: '1002',
         charName: 'Bob',
-        server: 'Unknown Server', // not present in the SkillLines fixture
+        server: 'NA Megaserver',
         completedDungeonKeys: [],
         ridingMaxed: false,
         readyToTrainRiding: false, // not present in the DailyCraftStatus fixture
@@ -121,6 +105,24 @@ describe('buildAccounts', () => {
         wealth: null
       }
     ])
+  })
+
+  it('skips a character bucket that has no name yet (addon data collected before an upgrade)', async () => {
+    const documentsDir = await mkdtemp(join(tmpdir(), 'wsid-docs-'))
+    tmpDirs.push(documentsDir)
+    const savedVarsDir = join(documentsDir, 'Elder Scrolls Online', 'live', 'SavedVariables')
+    await mkdir(savedVarsDir, { recursive: true })
+
+    await writeFile(
+      join(savedVarsDir, 'WhatShouldIDoDataCollector.lua'),
+      `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={` +
+        `["NA Megaserver"]={["1001"]={["allianceRank"]={["rank"]=1,["subRank"]=1,["currentAP"]=0,` +
+        `["apForMaxRank"]=64680000,["currentRankStartAP"]=0,["currentRankEndAP"]=700}}}` +
+        `}}}}`,
+      'utf-8'
+    )
+
+    expect(await buildAccounts(documentsDir)).toEqual([])
   })
 
   it('returns an empty list when there is no ESO data at the given path', async () => {

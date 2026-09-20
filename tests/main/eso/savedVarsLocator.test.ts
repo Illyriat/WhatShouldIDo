@@ -21,10 +21,10 @@ describe('findSavedVariablesFiles', () => {
     for (const profile of ['live', 'pts']) {
       const dir = join(documentsDir, 'Elder Scrolls Online', profile, 'SavedVariables')
       await mkdir(dir, { recursive: true })
-      await writeFile(join(dir, 'USPF.lua'), 'USPF_Settings={}', 'utf-8')
+      await writeFile(join(dir, 'WhatShouldIDoDataCollector.lua'), 'WhatShouldIDoDataCollectorVars={}', 'utf-8')
     }
 
-    const found = await findSavedVariablesFiles('USPF.lua', documentsDir)
+    const found = await findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsDir)
     expect(found).toHaveLength(2)
     expect(found.some((p) => p.includes('live'))).toBe(true)
     expect(found.some((p) => p.includes('pts'))).toBe(true)
@@ -36,15 +36,15 @@ describe('findSavedVariablesFiles', () => {
     const withoutFile = join(documentsDir, 'Elder Scrolls Online', 'pts', 'SavedVariables')
     await mkdir(withFile, { recursive: true })
     await mkdir(withoutFile, { recursive: true })
-    await writeFile(join(withFile, 'USPF.lua'), 'USPF_Settings={}', 'utf-8')
+    await writeFile(join(withFile, 'WhatShouldIDoDataCollector.lua'), 'WhatShouldIDoDataCollectorVars={}', 'utf-8')
 
-    const found = await findSavedVariablesFiles('USPF.lua', documentsDir)
+    const found = await findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsDir)
     expect(found).toHaveLength(1)
     expect(found[0]).toContain('live')
   })
 
   it('returns an empty list when there is no "Elder Scrolls Online" folder at all', async () => {
     const documentsDir = await makeDocumentsDir()
-    expect(await findSavedVariablesFiles('USPF.lua', documentsDir)).toEqual([])
+    expect(await findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsDir)).toEqual([])
   })
 })

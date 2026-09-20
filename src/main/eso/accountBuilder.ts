@@ -1,13 +1,12 @@
 import type { Account, AllianceRankStatus, WealthAmounts } from '@shared/types'
 import { findSavedVariablesFiles } from './savedVarsLocator'
-import { extractAccountsFromUspf, type RawAccount } from './uspfExtractor'
-import { extractCharacterServers } from './skillLinesExtractor'
+import { extractCharacters, type RawAccount } from './characterExtractor'
+import { extractCompletedDungeonQuests } from './dungeonQuestsExtractor'
 import { extractRidingStatus, type RidingStatus } from './ridingExtractor'
 import { extractAllianceRankStatus } from './allianceRankExtractor'
 import { extractChampionPoints } from './championPointsExtractor'
 import { extractCharacterWealth, extractBankWealth } from './wealthExtractor'
 
-const UNKNOWN_SERVER = 'Unknown Server'
 const NO_RIDING_DATA: RidingStatus = { ridingMaxed: false, readyToTrainRiding: false }
 
 function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccount> {
@@ -29,10 +28,12 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
 }
 
 /**
- * Builds the Account[] the app renders. Reads USPF (per-character dungeon-quest
- * completion, one file per profile), SkillLines (server labels), DailyCraftStatus
- * (riding-training status) and WhatShouldIDoDataCollector (Alliance Rank, Champion
- * Points) and joins them onto each character or account.
+ * Builds the Account[] the app renders. Reads WhatShouldIDoDataCollector.lua (the
+ * character list with server labels, per-character dungeon-quest completion, Alliance
+ * Rank, Champion Points, Wealth) and DailyCraftStatus.lua (riding-training status) and
+ * joins them by charId. WhatShouldIDoDataCollector is a purpose-built companion addon
+ * (github.com/Illyriat/WhatShouldIDoDataCollector) that replaced USPF + SkillLines as
+ * the character/dungeon-quest data source - see its own data/DungeonQuests.lua.
  *
  * Dungeon-quest and riding data are per-character in ESO, so there's no cross-character
  * unioning - a character's own flags are correct once it has logged in with the addon.
@@ -41,27 +42,18 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
  * than on each character.
  */
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
-  const [uspfFiles, skillLinesFiles, ridingFiles, allianceRankFiles] = await Promise.all([
-    findSavedVariablesFiles('USPF.lua', documentsOverride),
-    findSavedVariablesFiles('SkillLines.lua', documentsOverride),
-    findSavedVariablesFiles('DailyCraftStatus.lua', documentsOverride),
-    findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride)
+  const [wsidcFiles, ridingFiles] = await Promise.all([
+    findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride),
+    findSavedVariablesFiles('DailyCraftStatus.lua', documentsOverride)
   ])
 
-  const rawAccountLists = await Promise.all(uspfFiles.map((file) => extractAccountsFromUspf(file)))
+  const rawAccountLists = await Promise.all(wsidcFiles.map((file) => extractCharacters(file)))
   const rawAccounts = mergeRawAccounts(rawAccountLists)
 
-  const serverMapsByFile = await Promise.all(skillLinesFiles.map((file) => extractCharacterServers(file)))
-  const serversByAccount = new Map<string, Map<string, string>>()
-  for (const serverMaps of serverMapsByFile) {
-    for (const [accountName, charToServer] of serverMaps) {
-      const existing = serversByAccount.get(accountName)
-      if (!existing) {
-        serversByAccount.set(accountName, new Map(charToServer))
-        continue
-      }
-      for (const [charName, server] of charToServer) existing.set(charName, server)
-    }
+  const dungeonQuestMapsByFile = await Promise.all(wsidcFiles.map((file) => extractCompletedDungeonQuests(file)))
+  const dungeonQuestsByCharId = new Map<string, string[]>()
+  for (const dungeonQuestMap of dungeonQuestMapsByFile) {
+    for (const [charId, keys] of dungeonQuestMap) dungeonQuestsByCharId.set(charId, keys)
   }
 
   const ridingMapsByFile = await Promise.all(ridingFiles.map((file) => extractRidingStatus(file)))
@@ -70,14 +62,14 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
     for (const [charId, status] of ridingMap) ridingByCharId.set(charId, status)
   }
 
-  const allianceRankMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractAllianceRankStatus(file)))
+  const allianceRankMapsByFile = await Promise.all(wsidcFiles.map((file) => extractAllianceRankStatus(file)))
   const allianceRankByCharId = new Map<string, AllianceRankStatus>()
   for (const allianceRankMap of allianceRankMapsByFile) {
     for (const [charId, status] of allianceRankMap) allianceRankByCharId.set(charId, status)
   }
 
-  // Same file as Alliance Rank, but account+realm scoped rather than per-character.
-  const championPointsMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractChampionPoints(file)))
+  // Same file as the character list, but account+realm scoped rather than per-character.
+  const championPointsMapsByFile = await Promise.all(wsidcFiles.map((file) => extractChampionPoints(file)))
   const championPointsByAccount = new Map<string, Map<string, number>>()
   for (const championPointsMap of championPointsMapsByFile) {
     for (const [accountName, realmToPoints] of championPointsMap) {
@@ -91,14 +83,14 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
   }
 
   // Same file, per-character carried currency (see wealthExtractor.ts).
-  const wealthMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractCharacterWealth(file)))
+  const wealthMapsByFile = await Promise.all(wsidcFiles.map((file) => extractCharacterWealth(file)))
   const wealthByCharId = new Map<string, WealthAmounts>()
   for (const wealthMap of wealthMapsByFile) {
     for (const [charId, wealth] of wealthMap) wealthByCharId.set(charId, wealth)
   }
 
   // Same file, account+realm scoped shared bank total (see wealthExtractor.ts).
-  const bankWealthMapsByFile = await Promise.all(allianceRankFiles.map((file) => extractBankWealth(file)))
+  const bankWealthMapsByFile = await Promise.all(wsidcFiles.map((file) => extractBankWealth(file)))
   const bankWealthByAccount = new Map<string, Map<string, WealthAmounts>>()
   for (const bankWealthMap of bankWealthMapsByFile) {
     for (const [accountName, realmToWealth] of bankWealthMap) {
@@ -114,15 +106,13 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
   const accounts: Account[] = []
 
   for (const rawAccount of rawAccounts.values()) {
-    const charNameToServer = serversByAccount.get(rawAccount.accountName) ?? new Map<string, string>()
-
     const characters: Account['characters'] = rawAccount.characters.map((character) => {
       const riding = ridingByCharId.get(character.charId) ?? NO_RIDING_DATA
       return {
         charId: character.charId,
         charName: character.charName,
-        server: charNameToServer.get(character.charName) ?? UNKNOWN_SERVER,
-        completedDungeonKeys: character.completedDungeonKeys,
+        server: character.server,
+        completedDungeonKeys: dungeonQuestsByCharId.get(character.charId) ?? [],
         ridingMaxed: riding.ridingMaxed,
         readyToTrainRiding: riding.readyToTrainRiding,
         allianceRank: allianceRankByCharId.get(character.charId) ?? null,

@@ -1,13 +1,17 @@
 import type { PledgeDungeon } from './types'
 
 /**
- * USPF's `GD` (Group Dungeon) table, one entry per dungeon. Each dungeon has a one-time
- * intro quest; USPF marks it done via GetCompletedQuestInfo(questId), which is
- * per-character. Completing that quest grants the skill point and is the signal this app
- * recommends around.
+ * One entry per Undaunted Pledge dungeon. Each dungeon has a one-time intro quest; the
+ * WhatShouldIDoDataCollector companion addon marks it done via
+ * GetCompletedQuestInfo(questId) ~= "" (see its data/DungeonQuests.lua, which mirrors
+ * this same key/questId list as WSIDC.PLEDGE_DUNGEONS), which is per-character.
+ * Completing that quest grants the skill point and is the signal this app recommends
+ * around.
  *
- * Dungeon names come from matching USPF's zone-index `id` against LibZone's
- * zoneIndex->name table. Quest ids were checked against UESP quest pages.
+ * This list (and its keys/questIds) originated from USPF's own `GD` (Group Dungeon)
+ * table before this app switched to its own companion addon. Dungeon names were
+ * resolved by matching USPF's zone-index `id` against LibZone's zoneIndex->name table,
+ * and quest ids were cross-checked against UESP quest pages.
  */
 export const PLEDGE_DUNGEONS: PledgeDungeon[] = [
   // Base game
