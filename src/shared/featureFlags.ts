@@ -27,7 +27,9 @@ export const FEATURE_FLAGS = {
     { code: 'en', enabled: true },
     { code: 'fr', enabled: true },
     { code: 'de', enabled: true },
-    { code: 'es', enabled: true }
+    { code: 'es', enabled: true },
+    { code: 'pl', enabled: true },
+    { code: 'ru', enabled: true }
   ] as { code: string; enabled: boolean }[]
 } as const
 

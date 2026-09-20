@@ -3,17 +3,21 @@ import { en } from './locales/en'
 import { fr } from './locales/fr'
 import { de } from './locales/de'
 import { es } from './locales/es'
+import { pl } from './locales/pl'
+import { ru } from './locales/ru'
 
-// One entry per supported language. Adding a new one (Polish, Russian, US English) is
-// just another locale file + an entry here, plus a FEATURE_FLAGS.languageSupport entry
-// in featureFlags.ts - no other plumbing changes. Every language's translation content
+// One entry per supported language. Adding a new one (US English) is just another
+// locale file + an entry here, plus a FEATURE_FLAGS.languageSupport entry in
+// featureFlags.ts - no other plumbing changes. Every language's translation content
 // ships in the bundle regardless of its flag; languageSupport only controls what's
 // offered below.
 export const RESOURCES = {
   en: { translation: en },
   fr: { translation: fr },
   de: { translation: de },
-  es: { translation: es }
+  es: { translation: es },
+  pl: { translation: pl },
+  ru: { translation: ru }
 }
 
 export type SupportedLanguage = keyof typeof RESOURCES
@@ -22,7 +26,9 @@ const ALL_LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   en: 'English',
   fr: 'Français',
   de: 'Deutsch',
-  es: 'Español'
+  es: 'Español',
+  pl: 'Polski',
+  ru: 'Русский'
 }
 
 function isEnabledCode(code: string): boolean {
