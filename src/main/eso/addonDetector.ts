@@ -2,7 +2,7 @@ import type { AddonStatus } from '@shared/types'
 import { findSavedVariablesFiles } from './savedVarsLocator'
 
 // The SavedVariables files this app reads.
-export const ADDON_SAVED_VARS = ['DailyCraftStatus.lua', 'WhatShouldIDoDataCollector.lua'] as const
+export const ADDON_SAVED_VARS = ['WhatShouldIDoDataCollector.lua'] as const
 
 // Reports which addon files exist under the configured Documents folder. An addon
 // only writes its file once you've logged in with it enabled, so a present file

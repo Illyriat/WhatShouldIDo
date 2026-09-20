@@ -25,17 +25,15 @@ describe('detectAddons', () => {
     const documentsDir = await makeDocumentsDir(['WhatShouldIDoDataCollector.lua'])
 
     expect(await detectAddons(documentsDir)).toEqual({
-      'DailyCraftStatus.lua': false,
       'WhatShouldIDoDataCollector.lua': true
     })
   })
 
-  it('reports every addon missing when there is no ESO folder', async () => {
+  it('reports the addon missing when there is no ESO folder', async () => {
     const documentsDir = await mkdtemp(join(tmpdir(), 'wsid-addons-'))
     tmpDirs.push(documentsDir)
 
     expect(await detectAddons(documentsDir)).toEqual({
-      'DailyCraftStatus.lua': false,
       'WhatShouldIDoDataCollector.lua': false
     })
   })
@@ -45,9 +43,9 @@ describe('detectAddons', () => {
     tmpDirs.push(documentsDir)
     const ptsDir = join(documentsDir, 'Elder Scrolls Online', 'pts', 'SavedVariables')
     await mkdir(ptsDir, { recursive: true })
-    await writeFile(join(ptsDir, 'DailyCraftStatus.lua'), 'DailyCraftStatusVars={}', 'utf-8')
+    await writeFile(join(ptsDir, 'WhatShouldIDoDataCollector.lua'), 'WhatShouldIDoDataCollectorVars={}', 'utf-8')
 
     const status = await detectAddons(documentsDir)
-    expect(status['DailyCraftStatus.lua']).toBe(true)
+    expect(status['WhatShouldIDoDataCollector.lua']).toBe(true)
   })
 })

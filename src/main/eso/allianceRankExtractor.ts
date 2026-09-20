@@ -19,13 +19,12 @@ const NON_CHAR_KEYS = new Set(['version'])
 
 /**
  * Reads each character's Alliance Rank / AP progress from WhatShouldIDoDataCollector.lua (a
- * purpose-built companion addon - see the WhatShouldIDoDataCollector repo). Layout mirrors
- * DailyCraftStatus: `["Default"]["@Account"]["$AccountWide"]["<Realm> Megaserver"][charId]`,
- * keyed directly by charId with no character-name list, so callers join onto the known
- * character list by charId (same as ridingExtractor). Alliance rank data lives under its
- * own `.allianceRank` key on each character entry, since the addon is a generic
- * per-character data collector meant to grow more features (siblings of `.allianceRank`)
- * over time without renaming or re-keying.
+ * purpose-built companion addon - see the WhatShouldIDoDataCollector repo). Layout:
+ * `["Default"]["@Account"]["$AccountWide"]["<Realm> Megaserver"][charId]`, keyed directly
+ * by charId (see characterExtractor.ts for the character-name/server join). Alliance rank
+ * data lives under its own `.allianceRank` key on each character entry, since the addon is
+ * a generic per-character data collector with more features (siblings of `.allianceRank`,
+ * e.g. `.wealth`, `.completedDungeonQuests`, `.ridingStats`) living on the same entry.
  *
  * The addon reads `rank`/`currentAP`/`apForMaxRank` live from the game's own AvA rank API
  * (GetUnitAvARank, GetUnitAvARankPoints, GetNumPointsNeededForAvARank) rather than us

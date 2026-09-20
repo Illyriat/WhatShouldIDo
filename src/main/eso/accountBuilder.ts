@@ -28,12 +28,12 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
 }
 
 /**
- * Builds the Account[] the app renders. Reads WhatShouldIDoDataCollector.lua (the
- * character list with server labels, per-character dungeon-quest completion, Alliance
- * Rank, Champion Points, Wealth) and DailyCraftStatus.lua (riding-training status) and
- * joins them by charId. WhatShouldIDoDataCollector is a purpose-built companion addon
- * (github.com/Illyriat/WhatShouldIDoDataCollector) that replaced USPF + SkillLines as
- * the character/dungeon-quest data source - see its own data/DungeonQuests.lua.
+ * Builds the Account[] the app renders. Reads everything from WhatShouldIDoDataCollector.lua
+ * (the character list with server labels, per-character dungeon-quest completion,
+ * riding-training status, Alliance Rank, Champion Points, Wealth) and joins it by
+ * charId. WhatShouldIDoDataCollector is a purpose-built companion addon
+ * (github.com/Illyriat/WhatShouldIDoDataCollector) - the app's sole ESO addon
+ * dependency, having replaced USPF, Skill Lines and DailyCraftStatus in turn.
  *
  * Dungeon-quest and riding data are per-character in ESO, so there's no cross-character
  * unioning - a character's own flags are correct once it has logged in with the addon.
@@ -42,10 +42,7 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
  * than on each character.
  */
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
-  const [wsidcFiles, ridingFiles] = await Promise.all([
-    findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride),
-    findSavedVariablesFiles('DailyCraftStatus.lua', documentsOverride)
-  ])
+  const wsidcFiles = await findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride)
 
   const rawAccountLists = await Promise.all(wsidcFiles.map((file) => extractCharacters(file)))
   const rawAccounts = mergeRawAccounts(rawAccountLists)
@@ -56,7 +53,7 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
     for (const [charId, keys] of dungeonQuestMap) dungeonQuestsByCharId.set(charId, keys)
   }
 
-  const ridingMapsByFile = await Promise.all(ridingFiles.map((file) => extractRidingStatus(file)))
+  const ridingMapsByFile = await Promise.all(wsidcFiles.map((file) => extractRidingStatus(file)))
   const ridingByCharId = new Map<string, RidingStatus>()
   for (const ridingMap of ridingMapsByFile) {
     for (const [charId, status] of ridingMap) ridingByCharId.set(charId, status)
