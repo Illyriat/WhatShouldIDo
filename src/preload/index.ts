@@ -12,6 +12,7 @@ const api = {
     ipcRenderer.invoke(IPC_CHANNELS.setDocumentsPathOverride, path),
   setDisabledFeatures: (flags: string[]): Promise<AppSettings> =>
     ipcRenderer.invoke(IPC_CHANNELS.setDisabledFeatures, flags),
+  setLanguage: (language: string): Promise<AppSettings> => ipcRenderer.invoke(IPC_CHANNELS.setLanguage, language),
   pickDocumentsFolder: (): Promise<string | null> => ipcRenderer.invoke(IPC_CHANNELS.pickDocumentsFolder),
   checkForUpdates: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.checkForUpdates),
   quitAndInstallUpdate: (): Promise<void> => ipcRenderer.invoke(IPC_CHANNELS.quitAndInstallUpdate),
