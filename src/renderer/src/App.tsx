@@ -13,6 +13,7 @@ import { useAccountSelection } from './hooks/useAccountSelection'
 import { useTheme } from './hooks/useTheme'
 import { useAppUpdater } from './hooks/useAppUpdater'
 import { useFeaturePreferences } from './hooks/useFeaturePreferences'
+import { useLanguage } from './hooks/useLanguage'
 
 function App(): React.JSX.Element {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -21,6 +22,7 @@ function App(): React.JSX.Element {
   const theme = useTheme()
   const updater = useAppUpdater()
   const features = useFeaturePreferences()
+  const language = useLanguage()
 
   return (
     <div className="layout">
@@ -49,7 +51,13 @@ function App(): React.JSX.Element {
           <AchievementsPage accountSelection={accountSelection} features={features} />
         )}
         {activePage === 'settings' && (
-          <SettingsPage theme={theme} accountSelection={accountSelection} updater={updater} features={features} />
+          <SettingsPage
+            theme={theme}
+            accountSelection={accountSelection}
+            updater={updater}
+            features={features}
+            language={language}
+          />
         )}
       </div>
     </div>

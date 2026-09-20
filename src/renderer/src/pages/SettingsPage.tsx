@@ -1,95 +1,98 @@
 import { useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { AddonStatus, AppSettings, UpdateStatus } from '@shared/types'
 import { FEATURE_FLAGS, type FeatureFlag } from '@shared/featureFlags'
+import { SUPPORTED_LANGUAGES } from '@shared/i18n'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { AppUpdater } from '../hooks/useAppUpdater'
+import type { LanguageControl } from '../hooks/useLanguage'
 import { USER_TOGGLEABLE_FEATURES, type FeaturePreferences } from '../hooks/useFeaturePreferences'
+import { tKey } from '../i18nDynamicKey'
 
 interface Props {
   theme: ThemeControl
   accountSelection: AccountSelection
   updater: AppUpdater
   features: FeaturePreferences
+  language: LanguageControl
 }
 
-function updateStatusLabel(status: UpdateStatus): string | null {
+function updateStatusLabel(t: TFunction, status: UpdateStatus): string | null {
   switch (status.state) {
     case 'idle':
       return null
     case 'checking':
-      return 'Checking for updates…'
+      return t('settings.updateChecking')
     case 'available':
-      return `Update v${status.version} found - downloading…`
+      return t('settings.updateAvailable', { version: status.version })
     case 'not-available':
-      return "You're up to date."
+      return t('settings.updateNotAvailable')
     case 'downloading':
-      return `Downloading update… ${status.percent}%`
+      return t('settings.updateDownloading', { percent: status.percent })
     case 'downloaded':
-      return `Version ${status.version} downloaded - restart to install.`
+      return t('settings.updateDownloaded', { version: status.version })
     case 'error':
       return status.message
   }
 }
 
 const ADDONS: {
-  name: string
+  nameKey: string
   url: string
   // SavedVariables file this addon writes. Used to detect whether it's installed.
   file: string
   required: boolean
-  description: string
+  descriptionKey: string
   // Feature flags that consume this addon's data. When every one of these is toggled
   // off (see src/shared/featureFlags.ts), the addon is pointless and its row is hidden.
   relevantFlags: FeatureFlag[]
 }[] = [
   {
-    name: 'Skill Lines',
+    nameKey: 'settings.addonsList.skillLines.name',
     url: 'https://www.esoui.com/downloads/info4041-SkillLines.html',
     file: 'SkillLines.lua',
     required: true,
-    description:
-      'Tags each character with the megaserver it lives on (NA / EU). The app relies on this to tell your characters apart and to make the Account and Server switchers work.',
+    descriptionKey: 'settings.addonsList.skillLines.description',
     relevantFlags: ['pledges', 'ridingTraining', 'dungeonChecklist', 'allianceRank', 'musicBoxes']
   },
   {
-    name: "Urich's Skill Point Finder (USPF)",
+    nameKey: 'settings.addonsList.uspf.name',
     url: 'https://www.esoui.com/downloads/info1863-UrichsSkillPointFinder.html',
     file: 'USPF.lua',
     required: true,
-    description:
-      'Records which dungeon quests each character has finished. Powers the daily Undaunted Pledge recommendations and the Dungeon Check List. Without it those pages have no data. THis is the core feature of WhatShouldIDo.',
+    descriptionKey: 'settings.addonsList.uspf.description',
     relevantFlags: ['pledges', 'dungeonChecklist']
   },
   {
-    name: 'Daily Craft Status',
+    nameKey: 'settings.addonsList.dailyCraftStatus.name',
     url: 'https://www.esoui.com/downloads/info2510-DailyCraftStatus.html',
     file: 'DailyCraftStatus.lua',
     required: false,
-    description:
-      'Tracks each character’s riding-training cooldown and Capacity / Stamina / Speed levels. Powers the Riding Training board on the Home page.',
+    descriptionKey: 'settings.addonsList.dailyCraftStatus.description',
     relevantFlags: ['ridingTraining']
   },
   {
-    name: 'What Should I Do - Data Collector',
+    nameKey: 'settings.addonsList.dataCollector.name',
     url: 'https://github.com/Illyriat/WhatShouldIDoDataCollector',
     file: 'WhatShouldIDoDataCollector.lua',
     required: false,
-    description:
-      'A purpose-built companion addon that records each character’s Alliance War rank and Alliance Points progress (powers the Alliance Rank page), each account’s Champion Points per realm (shown on the Home page banner), and Gold / Alliance Points / Tel Var Stones / Writ Vouchers - both each character’s carried amount and the shared account-wide bank total per realm (powers the Wealth Tracker on the Home page).',
+    descriptionKey: 'settings.addonsList.dataCollector.description',
     relevantFlags: ['allianceRank', 'welcomeBanner', 'wealthTracker']
   }
 ]
 
-const THEME_OPTIONS: { value: ThemePreference; label: string; description: string; swatch: [string, string] }[] = [
-  { value: 'system', label: 'System', description: 'Follows your OS light/dark setting', swatch: ['#16181d', '#f5f6f8'] },
-  { value: 'dark', label: 'Dark', description: 'The default - orange & teal', swatch: ['#16181d', '#1e2129'] },
-  { value: 'light', label: 'Light', description: 'Same accents, light background', swatch: ['#f5f6f8', '#ffffff'] },
-  { value: 'ember', label: 'Ember', description: 'Warm, high-contrast dark', swatch: ['#1a1210', '#241a16'] },
-  { value: 'frost', label: 'Frost', description: 'Cool blue dark theme', swatch: ['#0f1620', '#16202c'] }
+const THEME_OPTIONS: { value: ThemePreference; labelKey: string; descriptionKey: string; swatch: [string, string] }[] = [
+  { value: 'system', labelKey: 'settings.themeSystemLabel', descriptionKey: 'settings.themeSystemDesc', swatch: ['#16181d', '#f5f6f8'] },
+  { value: 'dark', labelKey: 'settings.themeDarkLabel', descriptionKey: 'settings.themeDarkDesc', swatch: ['#16181d', '#1e2129'] },
+  { value: 'light', labelKey: 'settings.themeLightLabel', descriptionKey: 'settings.themeLightDesc', swatch: ['#f5f6f8', '#ffffff'] },
+  { value: 'ember', labelKey: 'settings.themeEmberLabel', descriptionKey: 'settings.themeEmberDesc', swatch: ['#1a1210', '#241a16'] },
+  { value: 'frost', labelKey: 'settings.themeFrostLabel', descriptionKey: 'settings.themeFrostDesc', swatch: ['#0f1620', '#16202c'] }
 ]
 
-function SettingsPage({ theme, accountSelection, updater, features }: Props): React.JSX.Element {
+function SettingsPage({ theme, accountSelection, updater, features, language }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const [settings, setSettings] = useState<AppSettings | null>(null)
   const [addonStatus, setAddonStatus] = useState<AddonStatus | null>(null)
   // Which of the collapsible box-list sections (Features, Addons) are collapsed. Empty
@@ -127,11 +130,12 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
   )
 
   const tocSections = [
-    { id: 'data-folder', label: 'ESO Data Folder', visible: true },
-    { id: 'features', label: 'Features', visible: visibleToggleableFeatures.length > 0 },
-    { id: 'addons', label: 'Addons', visible: visibleAddons.length > 0 },
-    { id: 'theme', label: 'Theme', visible: true },
-    { id: 'about', label: 'About', visible: true }
+    { id: 'data-folder', labelKey: 'settings.dataFolderNav', visible: true },
+    { id: 'features', labelKey: 'settings.featuresNav', visible: visibleToggleableFeatures.length > 0 },
+    { id: 'addons', labelKey: 'settings.addonsNav', visible: visibleAddons.length > 0 },
+    { id: 'language', labelKey: 'settings.languageNav', visible: features.isEnabled('languageSupport') },
+    { id: 'theme', labelKey: 'settings.themeNav', visible: true },
+    { id: 'about', labelKey: 'settings.aboutNav', visible: true }
   ].filter((s) => s.visible)
 
   useEffect(() => {
@@ -177,21 +181,21 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
     const charCount = accountSelection.state.accounts.reduce((sum, a) => sum + a.characters.length, 0)
     foundStatus =
       accountCount === 0
-        ? 'No accounts found in this folder - double check it contains an "Elder Scrolls Online" folder with your addon data.'
-        : `Found ${accountCount} account${accountCount === 1 ? '' : 's'}, ${charCount} character${charCount === 1 ? '' : 's'}.`
+        ? t('settings.noAccountsFound')
+        : `${t('settings.foundAccounts', { count: accountCount })} ${t('settings.foundCharacters', { count: charCount })}`
   } else if (accountSelection.state.status === 'error') {
-    foundStatus = `Couldn't read this folder: ${accountSelection.state.message}`
+    foundStatus = t('settings.couldntReadFolder', { message: accountSelection.state.message })
   }
 
   return (
     <div className="page">
-      <h2 className="settings-title">Settings</h2>
+      <h2 className="settings-title">{t('settings.pageTitle')}</h2>
 
       <div className="settings-layout">
-        <nav className="settings-toc" aria-label="Jump to settings section">
+        <nav className="settings-toc" aria-label={t('settings.jumpToSection')}>
           {tocSections.map((s) => (
             <button key={s.id} type="button" className="settings-toc__item" onClick={() => jumpToSection(s.id)}>
-              {s.label}
+              {tKey(t, s.labelKey)}
             </button>
           ))}
         </nav>
@@ -199,22 +203,19 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
         <div className="settings-sections">
           <section id="settings-data-folder" className="board-section">
             <div className="pledges-panel__title-row">
-              <h3 className="settings-section-title">ESO Data Folder</h3>
+              <h3 className="settings-section-title">{t('settings.dataFolderTitle')}</h3>
             </div>
 
-            <p className="muted">
-              This app reads your ESO SavedVariables from your Documents folder. If Windows/OneDrive has redirected
-              Documents elsewhere, point it at the right one here.
-            </p>
+            <p className="muted">{t('settings.dataFolderBody')}</p>
 
             <div className="settings-folder-row">
               <code className="settings-folder-path">{effectivePath}</code>
               <button className="refresh-button" onClick={handleBrowse}>
-                Browse…
+                {t('settings.browse')}
               </button>
               {settings?.documentsPathOverride && (
                 <button className="refresh-button" onClick={handleReset}>
-                  Reset to default
+                  {t('settings.resetToDefault')}
                 </button>
               )}
             </div>
@@ -234,16 +235,13 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
                   <span className={`settings-section-caret${collapsedSections.has('features') ? '' : ' is-open'}`}>
                     ▸
                   </span>
-                  <h3 className="settings-section-title">Features</h3>
+                  <h3 className="settings-section-title">{t('settings.featuresTitle')}</h3>
                 </button>
               </div>
 
               {!collapsedSections.has('features') && (
                 <>
-                  <p className="muted">
-                    Turn off anything you don't use to declutter the sidebar. This only hides the page - your data
-                    isn't touched, and you can turn it back on anytime.
-                  </p>
+                  <p className="muted">{t('settings.featuresBody')}</p>
 
                   <ul className="feature-toggle-list">
                     {visibleToggleableFeatures.map((item) => (
@@ -254,9 +252,9 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
                             checked={features.isEnabled(item.flag)}
                             onChange={(e) => features.setUserEnabled(item.flag, e.target.checked)}
                           />
-                          <span className="feature-toggle-row__name">{item.label}</span>
+                          <span className="feature-toggle-row__name">{tKey(t, item.labelKey)}</span>
                         </label>
-                        <p className="feature-toggle-row__desc">{item.description}</p>
+                        <p className="feature-toggle-row__desc">{tKey(t, item.descriptionKey)}</p>
                       </li>
                     ))}
                   </ul>
@@ -277,19 +275,17 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
                   <span className={`settings-section-caret${collapsedSections.has('addons') ? '' : ' is-open'}`}>
                     ▸
                   </span>
-                  <h3 className="settings-section-title">Addons</h3>
+                  <h3 className="settings-section-title">{t('settings.addonsTitle')}</h3>
                 </button>
               </div>
 
               {!collapsedSections.has('addons') && (
                 <>
                   <p className="muted">
-                    This app reads data that ESO addons write to disk. Install them from{' '}
-                    <a href="https://www.esoui.com/" target="_blank" rel="noreferrer">
-                      ESOUI
-                    </a>{' '}
-                    (or Minion), enable them in-game, then log into each character once with them active so they
-                    have data to write.
+                    <Trans
+                      i18nKey="settings.addonsBody"
+                      components={{ esoui: <a href="https://www.esoui.com/" target="_blank" rel="noreferrer" /> }}
+                    />
                   </p>
 
                   <ul className="addon-list">
@@ -306,27 +302,27 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
                         <li key={addon.url} className="addon-row">
                           <div className="addon-row__head">
                             <a className="addon-row__name" href={addon.url} target="_blank" rel="noreferrer">
-                              {addon.name}
+                              {tKey(t, addon.nameKey)}
                             </a>
                             <span
                               className={`addon-badge ${badgeState}`}
                               title={
                                 addonStatus == null
-                                  ? 'Checking…'
+                                  ? t('settings.checking')
                                   : detected
-                                    ? `Detected (${addon.file} found)`
-                                    : `Not detected (no ${addon.file} on disk)`
+                                    ? t('settings.detected', { file: addon.file })
+                                    : t('settings.notDetected', { file: addon.file })
                               }
                             >
-                              {addon.required ? 'Required' : 'Optional'}
+                              {addon.required ? t('settings.required') : t('settings.optional')}
                             </span>
                             {addonStatus != null && (
                               <span className="addon-row__detect muted">
-                                {detected ? '✓ detected' : 'not detected'}
+                                {detected ? t('settings.detectedShort') : t('settings.notDetectedShort')}
                               </span>
                             )}
                           </div>
-                          <p className="addon-row__desc">{addon.description}</p>
+                          <p className="addon-row__desc">{tKey(t, addon.descriptionKey)}</p>
                         </li>
                       )
                     })}
@@ -336,9 +332,31 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
             </section>
           )}
 
+          {features.isEnabled('languageSupport') && (
+            <section id="settings-language" className="board-section">
+              <div className="pledges-panel__title-row">
+                <h3 className="settings-section-title">{t('settings.languageTitle')}</h3>
+              </div>
+
+              <p className="muted">{t('settings.languageBody')}</p>
+
+              <div className="theme-options">
+                {SUPPORTED_LANGUAGES.map((option) => (
+                  <button
+                    key={option.code}
+                    className={`theme-option ${language.language === option.code ? 'theme-option--active' : ''}`}
+                    onClick={() => language.setLanguage(option.code)}
+                  >
+                    <span className="theme-option__label">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section id="settings-theme" className="board-section">
             <div className="pledges-panel__title-row">
-              <h3 className="settings-section-title">Theme</h3>
+              <h3 className="settings-section-title">{t('settings.themeTitle')}</h3>
             </div>
 
             <div className="theme-options">
@@ -352,8 +370,8 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
                     <span style={{ background: option.swatch[0] }} />
                     <span style={{ background: option.swatch[1] }} />
                   </span>
-                  <span className="theme-option__label">{option.label}</span>
-                  <span className="theme-option__description">{option.description}</span>
+                  <span className="theme-option__label">{tKey(t, option.labelKey)}</span>
+                  <span className="theme-option__description">{tKey(t, option.descriptionKey)}</span>
                 </button>
               ))}
             </div>
@@ -361,40 +379,39 @@ function SettingsPage({ theme, accountSelection, updater, features }: Props): Re
 
           <section id="settings-about" className="board-section">
             <div className="pledges-panel__title-row">
-              <h3 className="settings-section-title">About</h3>
+              <h3 className="settings-section-title">{t('settings.aboutTitle')}</h3>
             </div>
 
             <dl className="about-list">
               <div className="about-row">
-                <dt>Version</dt>
+                <dt>{t('settings.version')}</dt>
                 <dd>{__APP_VERSION__}</dd>
               </div>
               <div className="about-row">
-                <dt>Build</dt>
+                <dt>{t('settings.build')}</dt>
                 <dd>{__BUILD_NUMBER__}</dd>
               </div>
             </dl>
 
             <div className="settings-folder-row">
               <button className="refresh-button" onClick={updater.checkForUpdates}>
-                Check for Updates
+                {t('settings.checkForUpdates')}
               </button>
               {updater.status.state === 'downloaded' && (
                 <button className="refresh-button" onClick={updater.quitAndInstallUpdate}>
-                  Restart &amp; Install
+                  {t('settings.restartAndInstall')}
                 </button>
               )}
-              {updateStatusLabel(updater.status) && (
-                <span className="muted">{updateStatusLabel(updater.status)}</span>
+              {updateStatusLabel(t, updater.status) && (
+                <span className="muted">{updateStatusLabel(t, updater.status)}</span>
               )}
             </div>
 
             <p className="muted">
-              Made by Illyriat. If this app is useful to you, you can{' '}
-              <a className="about-donate" href="https://james-robson.dev/" target="_blank" rel="noreferrer">
-                support the project
-              </a>
-              .
+              <Trans
+                i18nKey="settings.madeBy"
+                components={{ support: <a className="about-donate" href="https://james-robson.dev/" target="_blank" rel="noreferrer" /> }}
+              />
             </p>
           </section>
         </div>
