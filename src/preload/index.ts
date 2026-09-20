@@ -21,6 +21,13 @@ const api = {
     const listener = (_event: IpcRendererEvent, status: UpdateStatus): void => callback(status)
     ipcRenderer.on(IPC_CHANNELS.updateStatus, listener)
     return () => ipcRenderer.removeListener(IPC_CHANNELS.updateStatus, listener)
+  },
+  // Subscribes to "a watched SavedVariables file changed on disk" pushes from main
+  // (src/main/autoRefresh.ts); call the returned fn to unsubscribe.
+  onSavedVariablesChanged: (callback: () => void): (() => void) => {
+    const listener = (): void => callback()
+    ipcRenderer.on(IPC_CHANNELS.savedVariablesChanged, listener)
+    return () => ipcRenderer.removeListener(IPC_CHANNELS.savedVariablesChanged, listener)
   }
 }
 

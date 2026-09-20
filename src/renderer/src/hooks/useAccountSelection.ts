@@ -56,6 +56,11 @@ export function useAccountSelection(): AccountSelection {
 
   const refresh = useCallback(() => setRefreshToken((t) => t + 1), [])
 
+  // Auto-refresh when the main process detects a watched SavedVariables file changed
+  // on disk (src/main/autoRefresh.ts) - same effect as clicking Refresh, just without
+  // having to remember to click it after every /reloadui or logout.
+  useEffect(() => window.api.onSavedVariablesChanged(refresh), [refresh])
+
   const availableAccounts = useMemo(() => {
     if (state.status !== 'ready') return []
     return state.accounts.map((a) => a.accountName).sort()
