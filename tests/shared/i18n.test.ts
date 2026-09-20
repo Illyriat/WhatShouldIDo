@@ -24,7 +24,9 @@ describe('isSupportedLanguage', () => {
   it('is true only for languages with a locale file, regardless of the flag', () => {
     expect(isSupportedLanguage('en')).toBe(true)
     expect(isSupportedLanguage('fr')).toBe(true)
-    expect(isSupportedLanguage('de')).toBe(false)
+    expect(isSupportedLanguage('de')).toBe(true)
+    expect(isSupportedLanguage('es')).toBe(true)
+    expect(isSupportedLanguage('pl')).toBe(false)
   })
 })
 
@@ -36,6 +38,6 @@ describe('isLanguageEnabled', () => {
   })
 
   it('is false for a code with no languageSupport entry at all', () => {
-    expect(isLanguageEnabled('de')).toBe(false)
+    expect(isLanguageEnabled('pl')).toBe(false)
   })
 })

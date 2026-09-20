@@ -25,7 +25,9 @@ export const FEATURE_FLAGS = {
   achievements: true,
   languageSupport: [
     { code: 'en', enabled: true },
-    { code: 'fr', enabled: true }
+    { code: 'fr', enabled: true },
+    { code: 'de', enabled: true },
+    { code: 'es', enabled: true }
   ] as { code: string; enabled: boolean }[]
 } as const
 
