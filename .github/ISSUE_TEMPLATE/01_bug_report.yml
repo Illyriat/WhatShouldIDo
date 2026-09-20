@@ -76,10 +76,9 @@ body:
   - type: dropdown
     id: addons
     attributes:
-      label: Required addons installed and enabled?
+      label: Required addon installed and enabled?
       options:
-        - "Yes - Skill Lines and USPF both installed and enabled"
-        - "Partially - one of them"
+        - "Yes - WhatShouldIDoDataCollector installed and enabled"
         - "No"
         - "Not sure"
     validations:
