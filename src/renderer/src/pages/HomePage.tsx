@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import type { RecommendationsResult } from '@shared/types'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
@@ -21,6 +22,7 @@ interface Props {
 }
 
 function HomePage({ accountSelection, features }: Props): React.JSX.Element {
+  const { t, i18n } = useTranslation()
   const {
     state,
     selectedAccount,
@@ -76,7 +78,7 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
   if (state.status === 'loading' || recState.status === 'loading') {
     return (
       <div className="page page--centered">
-        <p>Loading your ESO characters…</p>
+        <p>{t('common.loadingCharacters')}</p>
       </div>
     )
   }
@@ -86,12 +88,9 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>Couldn't load pledge data</h1>
+          <h1>{t('home.couldntLoadTitle')}</h1>
           <p>{message}</p>
-          <p className="empty-state__hint">
-            Make sure the USPF addon is installed and enabled in ESO, and that you've logged into the game at
-            least once with it active.
-          </p>
+          <p className="empty-state__hint">{t('home.couldntLoadHint')}</p>
         </div>
       </div>
     )
@@ -101,10 +100,9 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>No characters found</h1>
+          <h1>{t('common.noCharactersFoundTitle')}</h1>
           <p>
-            Install and enable the <strong>USPF</strong> addon in ESO, then log into at least one character so it
-            can record your progress.
+            <Trans i18nKey="common.noCharactersFoundBody" components={{ bold: <strong /> }} />
           </p>
         </div>
       </div>
@@ -126,23 +124,21 @@ function HomePage({ accountSelection, features }: Props): React.JSX.Element {
     <div className="page">
       {features.isEnabled('welcomeBanner') && selectedAccount && (
         <div className="home-welcome-banner">
-          <span className="home-welcome-banner__greeting">Welcome,</span>
+          <span className="home-welcome-banner__greeting">{t('home.greeting')}</span>
           <div className="home-welcome-banner__identity">
             <h1>{selectedAccount}!</h1>
             {championPoints !== undefined && (
-              <span className="home-welcome-banner__cp-badge">{championPoints.toLocaleString()} CP</span>
+              <span className="home-welcome-banner__cp-badge">
+                {new Intl.NumberFormat(i18n.language).format(championPoints)} CP
+              </span>
             )}
           </div>
         </div>
       )}
 
       <div className="page__header">
-        <button
-          className="refresh-button"
-          onClick={refresh}
-          title="Re-read SavedVariables from disk (ESO only writes them on logout / /reloadui)"
-        >
-          ⟳ Refresh
+        <button className="refresh-button" onClick={refresh} title={t('common.refreshTitle')}>
+          ⟳ {t('common.refresh')}
         </button>
         <div className="app__switchers">
           <AccountSwitcher accounts={state.accounts} selected={selectedAccount ?? ''} onChange={setSelectedAccount} />
