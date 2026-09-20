@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import AccountSwitcher from '../components/AccountSwitcher'
 import ServerSwitcher from '../components/ServerSwitcher'
 import DungeonTable from '../components/DungeonTable'
@@ -12,6 +13,7 @@ interface Props {
 }
 
 function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const {
     state,
     selectedAccount,
@@ -26,7 +28,7 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
   if (state.status === 'loading') {
     return (
       <div className="page page--centered">
-        <p>Loading your ESO characters…</p>
+        <p>{t('common.loadingCharacters')}</p>
       </div>
     )
   }
@@ -35,7 +37,7 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>Couldn't load dungeon data</h1>
+          <h1>{t('dungeons.couldntLoadTitle')}</h1>
           <p>{state.message}</p>
         </div>
       </div>
@@ -46,10 +48,9 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
     return (
       <div className="page page--centered">
         <div className="empty-state">
-          <h1>No characters found</h1>
+          <h1>{t('common.noCharactersFoundTitle')}</h1>
           <p>
-            Install and enable the <strong>USPF</strong> addon in ESO, then log into at least one character so it
-            can record your progress.
+            <Trans i18nKey="common.noCharactersFoundBody" components={{ bold: <strong /> }} />
           </p>
         </div>
       </div>
@@ -59,12 +60,8 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
   return (
     <div className="page page--wide">
       <div className="page__header">
-        <button
-          className="refresh-button"
-          onClick={refresh}
-          title="Re-read SavedVariables from disk (ESO only writes them on logout / /reloadui)"
-        >
-          ⟳ Refresh
+        <button className="refresh-button" onClick={refresh} title={t('common.refreshTitle')}>
+          ⟳ {t('common.refresh')}
         </button>
         <div className="app__switchers">
           <AccountSwitcher accounts={state.accounts} selected={selectedAccount ?? ''} onChange={setSelectedAccount} />
@@ -72,8 +69,8 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
         </div>
       </div>
 
-      <DungeonTable title="Base Game" dungeons={BASE_DUNGEONS} characters={selectedCharacters} />
-      <DungeonTable title="DLC" dungeons={DLC_DUNGEONS} characters={selectedCharacters} />
+      <DungeonTable title={t('dungeons.baseGame')} dungeons={BASE_DUNGEONS} characters={selectedCharacters} />
+      <DungeonTable title={t('dungeons.dlc')} dungeons={DLC_DUNGEONS} characters={selectedCharacters} />
     </div>
   )
 }

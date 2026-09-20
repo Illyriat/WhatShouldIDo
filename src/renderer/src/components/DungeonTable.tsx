@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Character, PledgeDungeon } from '@shared/types'
 
 interface Props {
@@ -7,18 +8,19 @@ interface Props {
 }
 
 function DungeonTable({ title, dungeons, characters }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <section className="dungeon-table-section">
       <h3>{title}</h3>
 
       {characters.length === 0 ? (
-        <p className="muted">No characters to show.</p>
+        <p className="muted">{t('dungeons.noCharacters')}</p>
       ) : (
         <div className="dungeon-table-scroll">
           <table className="dungeon-table">
             <thead>
               <tr>
-                <th className="dungeon-table__char-col">Character</th>
+                <th className="dungeon-table__char-col">{t('common.character')}</th>
                 {dungeons.map((dungeon) => (
                   <th key={dungeon.key}>
                     <span>{dungeon.dungeonName}</span>
