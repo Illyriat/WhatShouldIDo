@@ -2,7 +2,8 @@
   "include": [
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
-    "src/shared/**/*"
+    "src/shared/**/*",
+    "tests/renderer/**/*"
   ],
   "compilerOptions": {
     "composite": true,
