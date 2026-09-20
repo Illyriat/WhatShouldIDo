@@ -22,11 +22,14 @@ interface Props {
   features: FeaturePreferences
 }
 
-type NavItem =
+export type NavItem =
   | { page: Page; labelKey: string; flag?: FeatureFlag }
   | { group: string; labelKey: string; children: { page: Page; labelKey: string; flag?: FeatureFlag }[] }
 
-const ALL_NAV_ITEMS: NavItem[] = [
+// Exported so tests can verify every labelKey resolves against en.ts - tKey() bypasses
+// t()'s compile-time key checking for exactly this kind of data-driven key, so nothing
+// else catches a typo'd or renamed key here.
+export const ALL_NAV_ITEMS: NavItem[] = [
   { page: 'home', labelKey: 'sidebar.home' },
   { page: 'dungeons', labelKey: 'sidebar.dungeonChecklist', flag: 'dungeonChecklist' },
   { page: 'alliancerank', labelKey: 'sidebar.allianceRank', flag: 'allianceRank' },

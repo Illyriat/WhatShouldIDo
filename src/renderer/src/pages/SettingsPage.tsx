@@ -38,7 +38,10 @@ function updateStatusLabel(t: TFunction, status: UpdateStatus): string | null {
   }
 }
 
-const ADDONS: {
+// Exported (along with THEME_OPTIONS below) so tests can verify every nameKey/labelKey/
+// descriptionKey resolves against en.ts - tKey() bypasses t()'s compile-time key checking
+// for exactly this kind of data-driven key, so nothing else catches a typo'd or renamed key.
+export const ADDONS: {
   nameKey: string
   url: string
   // SavedVariables file this addon writes. Used to detect whether it's installed.
@@ -83,7 +86,7 @@ const ADDONS: {
   }
 ]
 
-const THEME_OPTIONS: { value: ThemePreference; labelKey: string; descriptionKey: string; swatch: [string, string] }[] = [
+export const THEME_OPTIONS: { value: ThemePreference; labelKey: string; descriptionKey: string; swatch: [string, string] }[] = [
   { value: 'system', labelKey: 'settings.themeSystemLabel', descriptionKey: 'settings.themeSystemDesc', swatch: ['#16181d', '#f5f6f8'] },
   { value: 'dark', labelKey: 'settings.themeDarkLabel', descriptionKey: 'settings.themeDarkDesc', swatch: ['#16181d', '#1e2129'] },
   { value: 'light', labelKey: 'settings.themeLightLabel', descriptionKey: 'settings.themeLightDesc', swatch: ['#f5f6f8', '#ffffff'] },
