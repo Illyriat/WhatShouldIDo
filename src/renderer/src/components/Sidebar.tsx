@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { tKey } from '../i18nDynamicKey'
 import type { FeatureFlag } from '@shared/featureFlags'
+import { SUPPORT_URL } from '@shared/links'
 import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 export type Page =
@@ -175,7 +176,7 @@ function Sidebar({ collapsed, onToggleCollapsed, activePage, onNavigate, feature
 
         <a
           className="sidebar__donate"
-          href="https://james-robson.dev/"
+          href={SUPPORT_URL}
           target="_blank"
           rel="noreferrer"
           title={t('sidebar.supportProject')}
