@@ -4,7 +4,13 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Added
+- The **What Should I Do - Data Collector** addon now ships inside the app. Settings -> Addons has an **Install** button that copies it into your ESO AddOns folder (every profile it finds: live, EU, PTS), so there's no separate download or manual copying. On each launch the app also updates an already-installed Data Collector to the version bundled with it - it never downgrades a newer install and never installs into a profile you didn't install to. Restart ESO (or `/reloadui`) after installing or updating
+- Settings -> Addons now lists **LibUndauntedPledges** (the third-party library the Data Collector needs) with a detected/missing/too-old status and a link to ESOUI. It is not bundled - it's someone else's addon, so it's still a separate download
+
 ### Changed
+- Settings -> Addons status now reflects the installed addon version and whether an update is available, instead of only whether the addon had written its SavedVariables file yet
+
 - Character list, server labels and dungeon quest completion (Pledges + Dungeon Check List) now come from the **What Should I Do - Data Collector** companion addon (v1.3.0+) instead of USPF and Skill Lines - those two addons are no longer required or read at all. Existing users need to install the updated Data Collector addon and log into each character once with it active before upgrading.
 - Riding training status now also comes from the **What Should I Do - Data Collector** addon (v1.4.0+) instead of DailyCraftStatus, which is no longer required or read at all. WhatShouldIDo now depends on a single addon.
 - Today's + upcoming Undaunted Pledges are now computed by the **What Should I Do - Data Collector** addon (v1.5.0+, via the [LibUndauntedPledges](https://www.esoui.com/downloads/info3946-LibUndauntedPledges.html) library) instead of this app scraping a website - no more network fetch, cache file, or blocking risk, and the rotation is now resolved per realm (NA and EU can differ on the same calendar day, which the old single global scrape couldn't represent). Requires updating the Data Collector addon and installing LibUndauntedPledges alongside it.

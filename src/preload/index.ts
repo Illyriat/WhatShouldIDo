@@ -1,6 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { IpcRendererEvent } from 'electron'
-import type { Account, AddonStatus, AppSettings, RecommendationsResult, UpdateStatus } from '@shared/types'
+import type {
+  Account,
+  AddonInstallStatus,
+  AddonStatus,
+  AppSettings,
+  RecommendationsResult,
+  UpdateStatus
+} from '@shared/types'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 
 const api = {
@@ -8,6 +15,9 @@ const api = {
   getRecommendations: (): Promise<RecommendationsResult> => ipcRenderer.invoke(IPC_CHANNELS.getRecommendations),
   getAppSettings: (): Promise<AppSettings> => ipcRenderer.invoke(IPC_CHANNELS.getAppSettings),
   getAddonStatus: (): Promise<AddonStatus> => ipcRenderer.invoke(IPC_CHANNELS.getAddonStatus),
+  getAddonInstallStatus: (): Promise<AddonInstallStatus> => ipcRenderer.invoke(IPC_CHANNELS.getAddonInstallStatus),
+  installDataCollectorAddon: (): Promise<AddonInstallStatus> =>
+    ipcRenderer.invoke(IPC_CHANNELS.installDataCollectorAddon),
   setDocumentsPathOverride: (path: string | null): Promise<AppSettings> =>
     ipcRenderer.invoke(IPC_CHANNELS.setDocumentsPathOverride, path),
   setDisabledFeatures: (flags: string[]): Promise<AppSettings> =>

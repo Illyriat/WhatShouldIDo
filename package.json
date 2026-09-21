@@ -14,11 +14,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux",
-    "publish": "npm run build && electron-builder --publish always"
+    "check:addon": "node scripts/check-bundled-addon.mjs",
+    "build:unpack": "npm run check:addon && npm run build && electron-builder --dir",
+    "build:win": "npm run check:addon && npm run build && electron-builder --win",
+    "build:mac": "npm run check:addon && npm run build && electron-builder --mac",
+    "build:linux": "npm run check:addon && npm run build && electron-builder --linux",
+    "publish": "npm run check:addon && npm run build && electron-builder --publish always"
   },
   "dependencies": {
     "electron-updater": "^6.8.9",

@@ -251,14 +251,24 @@ export const en = {
     featuresTitle: 'Features',
     featuresBody: "Turn off anything you don't use to declutter the sidebar. This only hides the page - your data isn't touched, and you can turn it back on anytime.",
     addonsTitle: 'Addons',
-    addonsBody: 'This app reads data that ESO addons write to disk. Install them from <esoui>ESOUI</esoui> (or Minion), enable them in-game, then log into each character once with them active so they have data to write.',
+    addonsBody: 'This app reads data that ESO addons write to disk. The Data Collector comes with this app - install it below. Any other addon is a separate download from <esoui>ESOUI</esoui> (or Minion). Enable them in-game, then log into each character once with them active so they have data to write.',
     required: 'Required',
     optional: 'Optional',
     checking: 'Checking…',
-    detected: 'Detected ({{file}} found)',
-    notDetected: 'Not detected (no {{file}} on disk)',
-    detectedShort: '✓ detected',
-    notDetectedShort: 'not detected',
+    notInstalledShort: 'not installed',
+    installedShort: '✓ v{{version}} installed',
+    updateAvailableShort: 'v{{installed}} installed · v{{bundled}} available',
+    outdatedShort: 'v{{version}} · too old',
+    addonInstall: 'Install',
+    addonUpdate: 'Update',
+    addonInstalling: 'Installing…',
+    addonInstallFailed: "Couldn't install the addon: {{message}}",
+    addonNoGameFolder: "No ESO folder was found yet. Check the data folder above, or launch the game once so it creates its folders.",
+    addonBundleMissing: "This build of the app doesn't include the addon.",
+    addonRestartNote: 'Restart ESO (or type /reloadui in-game) so it loads the addon, then log into each character once.',
+    addonNoDataNote: "Installed, but it hasn't recorded anything yet. Enable it in the game's Add-Ons menu and log into each character once.",
+    libMissingNote: 'The Data Collector will not load without this library. It is a separate download - get it from ESOUI using the link above.',
+    libOutdatedNote: 'This version is older than the Data Collector needs. Update it from ESOUI using the link above.',
     languageTitle: 'Language',
     languageBody: "Changes what this app's own text is shown in. ESO's own game data (dungeon names, reagents, etc.) always stays in English.",
     themeTitle: 'Theme',
@@ -337,6 +347,10 @@ export const en = {
       dataCollector: {
         name: 'What Should I Do - Data Collector',
         description: "A purpose-built companion addon that records each character's name and server, which dungeon quests each character has finished (powers the daily Undaunted Pledge recommendations and the Dungeon Check List - this is the core feature of WhatShouldIDo), each character's riding-training cooldown and Capacity / Stamina / Speed levels (powers the Riding Training board on the Home page), each character's Alliance War rank and Alliance Points progress (powers the Alliance Rank page), each account's Champion Points per realm (shown on the Home page banner), and Gold / Alliance Points / Tel Var Stones / Writ Vouchers - both each character's carried amount and the shared account-wide bank total per realm (powers the Wealth Tracker on the Home page). This is the only addon WhatShouldIDo needs - without it the app has no data at all."
+      },
+      libUndauntedPledges: {
+        name: 'LibUndauntedPledges',
+        description: "A small, widely-used third-party library (not part of this app) that the Data Collector uses to work out today's and the upcoming Undaunted Pledge rotation. ESO will not load the Data Collector unless this library is installed too."
       }
     }
   },

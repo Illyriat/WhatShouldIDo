@@ -136,6 +136,38 @@ export type UpdateStatus =
 // (e.g. "WhatShouldIDoDataCollector.lua"). true = the addon has written data at least once.
 export type AddonStatus = Record<string, boolean>
 
+// Where the Data Collector addon that ships inside this app stands across the user's
+// ESO profiles (live / liveeu / pts). "up-to-date" also covers an install that's newer
+// than the bundled copy - the app never downgrades.
+export type DataCollectorState =
+  | 'no-game-folder'
+  | 'bundle-missing'
+  | 'not-installed'
+  | 'update-available'
+  | 'up-to-date'
+
+export interface DataCollectorInstallStatus {
+  state: DataCollectorState
+  // Version of the addon inside this build of the app (null if the build lacks it).
+  bundledVersion: string | null
+  // Oldest installed version across profiles that have the addon, null if none do.
+  installedVersion: string | null
+}
+
+// LibUndauntedPledges is a third-party dependency the app does NOT install - it can only
+// be detected so Settings can point the user at ESOUI.
+export type LibraryState = 'no-game-folder' | 'missing' | 'outdated' | 'installed'
+
+export interface LibraryInstallStatus {
+  state: LibraryState
+  version: string | null
+}
+
+export interface AddonInstallStatus {
+  dataCollector: DataCollectorInstallStatus
+  library: LibraryInstallStatus
+}
+
 export interface AppSettings {
   // Override for the Documents folder holding ESO's SavedVariables. Undefined = OS
   // default (needed when OneDrive has redirected Documents).

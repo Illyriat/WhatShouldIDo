@@ -5,6 +5,8 @@ export const IPC_CHANNELS = {
   getRecommendations: 'get-recommendations',
   getAppSettings: 'get-app-settings',
   getAddonStatus: 'get-addon-status',
+  getAddonInstallStatus: 'get-addon-install-status',
+  installDataCollectorAddon: 'install-data-collector-addon',
   setDocumentsPathOverride: 'set-documents-path-override',
   setDisabledFeatures: 'set-disabled-features',
   setLanguage: 'set-language',

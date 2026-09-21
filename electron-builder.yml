@@ -8,6 +8,11 @@ files:
   - package.json
 extraResources:
   - resources/**
+  # The Data Collector ESO addon, copied into the player's AddOns folder by
+  # src/main/eso/addonInstaller.ts. Comes from the git submodule (see .gitmodules); only
+  # the inner addon folder is shipped, not that repo's README/LICENSE/.github.
+  - from: vendor/WhatShouldIDoDataCollector/WhatShouldIDoDataCollector
+    to: addons/WhatShouldIDoDataCollector
 win:
   target: nsis
   icon: resources/icon.png

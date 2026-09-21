@@ -27,3 +27,6 @@ Desktop.ini
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Local-only notes (e.g. RELEASE_GUIDE.local.md) - never commit
+*.local.md

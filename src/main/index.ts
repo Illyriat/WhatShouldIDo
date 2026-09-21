@@ -4,6 +4,7 @@ import { registerPledgesIpcHandlers } from './ipc/pledgesApi'
 import { getAppSettings, registerSettingsIpcHandlers } from './ipc/settingsApi'
 import { checkForUpdates, registerUpdateIpcHandlers, setUpdateTargetWindow } from './updater'
 import { restartAutoRefreshWatcher, setAutoRefreshTargetWindow } from './autoRefresh'
+import { updateInstalledDataCollector } from './addonBundle'
 
 function createWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -43,6 +44,7 @@ app.whenReady().then(() => {
   setUpdateTargetWindow(window)
   setAutoRefreshTargetWindow(window)
   checkForUpdates()
+  updateInstalledDataCollector()
   getAppSettings().then((settings) => restartAutoRefreshWatcher(settings.documentsPathOverride))
 
   app.on('activate', () => {
