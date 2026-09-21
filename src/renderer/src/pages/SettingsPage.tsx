@@ -4,6 +4,7 @@ import type { TFunction } from 'i18next'
 import type { AddonInstallStatus, AddonStatus, AppSettings, UpdateStatus } from '@shared/types'
 import { FEATURE_FLAGS, isFeatureFlagOn, type FeatureFlag } from '@shared/featureFlags'
 import { SUPPORTED_LANGUAGES } from '@shared/i18n'
+import { SUPPORT_URL } from '@shared/links'
 import type { ThemeControl, ThemePreference } from '../hooks/useTheme'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import type { AppUpdater } from '../hooks/useAppUpdater'
@@ -520,7 +521,7 @@ function SettingsPage({ theme, accountSelection, updater, features, language }: 
             <p className="muted">
               <Trans
                 i18nKey="settings.madeBy"
-                components={{ support: <a className="about-donate" href="https://james-robson.dev/" target="_blank" rel="noreferrer" /> }}
+                components={{ support: <a className="about-donate" href={SUPPORT_URL} target="_blank" rel="noreferrer" /> }}
               />
             </p>
           </section>
