@@ -32,6 +32,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The Data Collector addon is bundled into the installer from a private repo
+          # (a git submodule, see .gitmodules). The default GITHUB_TOKEN can only read this
+          # repo, so ADDON_REPO_TOKEN is a fine-grained PAT with read-only Contents access
+          # to the addon repo. It expires - renew it if this step starts failing on auth.
+          submodules: true
+          token: ${{ secrets.ADDON_REPO_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -39,6 +46,9 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Verify the bundled addon was checked out
+        run: npm run check:addon
 
       - name: Build and publish
         run: npm run publish

@@ -270,14 +270,29 @@ export const es: typeof en = {
       'Desactiva lo que no uses para simplificar la barra lateral. Esto solo oculta la página - tus datos no se ven afectados, y puedes reactivarla en cualquier momento.',
     addonsTitle: 'Addons',
     addonsBody:
-      'Esta aplicación lee datos que los addons de ESO escriben en el disco. Instálalos desde <esoui>ESOUI</esoui> (o Minion), actívalos en el juego y luego inicia sesión con cada personaje una vez con ellos activos para que tengan datos que escribir.',
+      'Esta aplicación lee datos que los addons de ESO escriben en el disco. El Data Collector viene incluido con esta aplicación: instálalo más abajo. Cualquier otro addon es una descarga aparte desde <esoui>ESOUI</esoui> (o Minion). Actívalos en el juego y luego inicia sesión con cada personaje una vez con ellos activos para que tengan datos que escribir.',
     required: 'Obligatorio',
     optional: 'Opcional',
     checking: 'Comprobando…',
-    detected: 'Detectado ({{file}} encontrado)',
-    notDetected: 'No detectado (no hay {{file}} en el disco)',
-    detectedShort: '✓ detectado',
-    notDetectedShort: 'no detectado',
+    notInstalledShort: 'no instalado',
+    installedShort: '✓ v{{version}} instalado',
+    updateAvailableShort: 'v{{installed}} instalado · v{{bundled}} disponible',
+    outdatedShort: 'v{{version}} · demasiado antiguo',
+    addonInstall: 'Instalar',
+    addonUpdate: 'Actualizar',
+    addonInstalling: 'Instalando…',
+    addonInstallFailed: 'No se pudo instalar el addon: {{message}}',
+    addonNoGameFolder:
+      'Todavía no se ha encontrado ninguna carpeta de ESO. Revisa la carpeta de datos de arriba o abre el juego una vez para que cree sus carpetas.',
+    addonBundleMissing: 'Esta versión de la aplicación no incluye el addon.',
+    addonRestartNote:
+      'Reinicia ESO (o escribe /reloadui en el juego) para que cargue el addon y luego inicia sesión con cada personaje una vez.',
+    addonNoDataNote:
+      'Instalado, pero todavía no ha registrado nada. Actívalo en el menú de addons del juego e inicia sesión con cada personaje una vez.',
+    libMissingNote:
+      'El Data Collector no se cargará sin esta biblioteca. Es una descarga aparte: consíguela en ESOUI con el enlace de arriba.',
+    libOutdatedNote:
+      'Esta versión es más antigua de lo que necesita el Data Collector. Actualízala desde ESOUI con el enlace de arriba.',
     languageTitle: 'Idioma',
     languageBody:
       'Cambia el idioma en el que se muestra el texto de esta aplicación. Los datos propios del juego ESO (nombres de mazmorras, ingredientes, etc.) siempre permanecen en inglés.',
@@ -360,6 +375,11 @@ export const es: typeof en = {
         name: 'What Should I Do - Data Collector',
         description:
           'Un addon complementario diseñado a medida que registra el nombre y el servidor de cada personaje, qué misiones de mazmorra ha completado cada personaje (alimenta las recomendaciones diarias de Juramentos de los Intrépidos y la Lista de mazmorras - esta es la función principal de WhatShouldIDo), el tiempo de reutilización del entrenamiento de montura y los niveles de Capacidad / Aguante / Velocidad de cada personaje (alimenta el panel de entrenamiento de montura en la página de Inicio), el rango de Guerra de Alianza y el progreso de Puntos de Alianza de cada personaje (alimenta la página Rango de Alianza), los Puntos de Campeón por reino de cada cuenta (mostrados en el banner de la página de Inicio), y el Oro / Puntos de Alianza / Piedras de Tel Var / Vales de encargo - tanto la cantidad que lleva cada personaje como el total compartido del banco de la cuenta por reino (alimenta el Seguimiento de riqueza en la página de Inicio). Este es el único addon que WhatShouldIDo necesita - sin él, la aplicación no tiene ningún dato.'
+      },
+      libUndauntedPledges: {
+        name: 'LibUndauntedPledges',
+        description:
+          'Una pequeña biblioteca de terceros muy utilizada (no forma parte de esta aplicación) que el Data Collector usa para calcular la rotación de Juramentos de los Intrépidos de hoy y de los próximos días. ESO no cargará el Data Collector a menos que esta biblioteca también esté instalada.'
       }
     }
   },

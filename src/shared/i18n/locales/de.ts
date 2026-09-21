@@ -270,14 +270,29 @@ export const de: typeof en = {
       'Deaktiviere alles, was du nicht nutzt, um die Seitenleiste aufzuräumen. Dies blendet nur die Seite aus - deine Daten bleiben unberührt, und du kannst sie jederzeit wieder aktivieren.',
     addonsTitle: 'Addons',
     addonsBody:
-      'Diese App liest Daten, die ESO-Addons auf die Festplatte schreiben. Installiere sie über <esoui>ESOUI</esoui> (oder Minion), aktiviere sie im Spiel und melde dich dann einmal mit jedem Charakter an, während sie aktiv sind, damit sie Daten schreiben können.',
+      'Diese App liest Daten, die ESO-Addons auf die Festplatte schreiben. Der Data Collector wird mit dieser App mitgeliefert - installiere ihn unten. Jedes andere Addon ist ein separater Download von <esoui>ESOUI</esoui> (oder Minion). Aktiviere sie im Spiel und melde dich dann einmal mit jedem Charakter an, während sie aktiv sind, damit sie Daten schreiben können.',
     required: 'Erforderlich',
     optional: 'Optional',
     checking: 'Wird geprüft…',
-    detected: 'Erkannt ({{file}} gefunden)',
-    notDetected: 'Nicht erkannt (keine {{file}} auf der Festplatte)',
-    detectedShort: '✓ erkannt',
-    notDetectedShort: 'nicht erkannt',
+    notInstalledShort: 'nicht installiert',
+    installedShort: '✓ v{{version}} installiert',
+    updateAvailableShort: 'v{{installed}} installiert · v{{bundled}} verfügbar',
+    outdatedShort: 'v{{version}} · zu alt',
+    addonInstall: 'Installieren',
+    addonUpdate: 'Aktualisieren',
+    addonInstalling: 'Wird installiert…',
+    addonInstallFailed: 'Das Addon konnte nicht installiert werden: {{message}}',
+    addonNoGameFolder:
+      'Es wurde noch kein ESO-Ordner gefunden. Prüfe den Datenordner oben oder starte das Spiel einmal, damit es seine Ordner anlegt.',
+    addonBundleMissing: 'Diese Version der App enthält das Addon nicht.',
+    addonRestartNote:
+      'Starte ESO neu (oder gib im Spiel /reloadui ein), damit das Addon geladen wird, und melde dich dann einmal mit jedem Charakter an.',
+    addonNoDataNote:
+      'Installiert, hat aber noch nichts aufgezeichnet. Aktiviere es im Addon-Menü des Spiels und melde dich einmal mit jedem Charakter an.',
+    libMissingNote:
+      'Der Data Collector wird ohne diese Bibliothek nicht geladen. Sie ist ein separater Download - hol sie dir über den Link oben von ESOUI.',
+    libOutdatedNote:
+      'Diese Version ist älter, als der Data Collector benötigt. Aktualisiere sie über den Link oben von ESOUI.',
     languageTitle: 'Sprache',
     languageBody:
       'Ändert, in welcher Sprache der Text dieser App angezeigt wird. Die eigenen Spieldaten von ESO (Dungeon-Namen, Zutaten usw.) bleiben immer auf Englisch.',
@@ -360,6 +375,11 @@ export const de: typeof en = {
         name: 'What Should I Do - Data Collector',
         description:
           'Ein eigens entwickeltes Begleit-Addon, das Name und Server jedes Charakters aufzeichnet, welche Dungeon-Quests jeder Charakter abgeschlossen hat (treibt die täglichen Empfehlungen für Unbeugsame Gelöbnisse und die Dungeon-Checkliste an - dies ist die Kernfunktion von WhatShouldIDo), die Abklingzeit des Reittrainings sowie die Kapazitäts-, Ausdauer- und Geschwindigkeitsstufen jedes Charakters (treibt das Reittraining-Board auf der Startseite an), den Allianzkriegsrang und den Allianzpunkte-Fortschritt jedes Charakters (treibt die Seite Allianzrang an), die Champion-Punkte jedes Kontos pro Realm (angezeigt auf dem Banner der Startseite) sowie Gold / Allianzpunkte / Tel-Var-Steine / Auftragsgutscheine - sowohl den von jedem Charakter getragenen Betrag als auch das gemeinsame kontoweite Bankguthaben pro Realm (treibt die Vermögensübersicht auf der Startseite an). Dies ist das einzige Addon, das WhatShouldIDo benötigt - ohne es hat die App überhaupt keine Daten.'
+      },
+      libUndauntedPledges: {
+        name: 'LibUndauntedPledges',
+        description:
+          'Eine kleine, weit verbreitete Bibliothek eines Drittanbieters (nicht Teil dieser App), mit der der Data Collector die heutige und die kommende Rotation der Unbeugsamen Gelöbnisse berechnet. ESO lädt den Data Collector nur, wenn diese Bibliothek ebenfalls installiert ist.'
       }
     }
   },

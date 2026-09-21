@@ -271,14 +271,29 @@ export const fr: typeof en = {
       "Désactivez ce que vous n'utilisez pas pour désencombrer la barre latérale. Cela masque uniquement la page - vos données ne sont pas touchées, et vous pouvez la réactiver à tout moment.",
     addonsTitle: 'Addons',
     addonsBody:
-      "Cette application lit les données que les addons ESO écrivent sur le disque. Installez-les depuis <esoui>ESOUI</esoui> (ou Minion), activez-les en jeu, puis connectez-vous avec chaque personnage une fois avec eux actifs pour qu'ils aient des données à écrire.",
+      "Cette application lit les données que les addons ESO écrivent sur le disque. Le Data Collector est fourni avec cette application : installez-le ci-dessous. Tout autre addon est un téléchargement séparé depuis <esoui>ESOUI</esoui> (ou Minion). Activez-les en jeu, puis connectez-vous avec chaque personnage une fois avec eux actifs pour qu'ils aient des données à écrire.",
     required: 'Requis',
     optional: 'Optionnel',
     checking: 'Vérification…',
-    detected: 'Détecté ({{file}} trouvé)',
-    notDetected: 'Non détecté (pas de {{file}} sur le disque)',
-    detectedShort: '✓ détecté',
-    notDetectedShort: 'non détecté',
+    notInstalledShort: 'non installé',
+    installedShort: '✓ v{{version}} installé',
+    updateAvailableShort: 'v{{installed}} installé · v{{bundled}} disponible',
+    outdatedShort: 'v{{version}} · trop ancien',
+    addonInstall: 'Installer',
+    addonUpdate: 'Mettre à jour',
+    addonInstalling: 'Installation…',
+    addonInstallFailed: "Impossible d'installer l'addon : {{message}}",
+    addonNoGameFolder:
+      "Aucun dossier ESO trouvé pour l'instant. Vérifiez le dossier de données ci-dessus, ou lancez le jeu une fois pour qu'il crée ses dossiers.",
+    addonBundleMissing: "Cette version de l'application n'inclut pas l'addon.",
+    addonRestartNote:
+      "Redémarrez ESO (ou tapez /reloadui en jeu) pour qu'il charge l'addon, puis connectez-vous avec chaque personnage une fois.",
+    addonNoDataNote:
+      "Installé, mais il n'a encore rien enregistré. Activez-le dans le menu Add-ons du jeu et connectez-vous avec chaque personnage une fois.",
+    libMissingNote:
+      "Le Data Collector ne se chargera pas sans cette bibliothèque. C'est un téléchargement séparé : récupérez-la sur ESOUI via le lien ci-dessus.",
+    libOutdatedNote:
+      'Cette version est plus ancienne que celle dont le Data Collector a besoin. Mettez-la à jour depuis ESOUI via le lien ci-dessus.',
     languageTitle: 'Langue',
     languageBody:
       "Modifie la langue dans laquelle le texte de l'application s'affiche. Les données propres au jeu ESO (noms de donjons, ingrédients, etc.) restent toujours en anglais.",
@@ -361,6 +376,11 @@ export const fr: typeof en = {
         name: 'What Should I Do - Data Collector',
         description:
           "Un addon compagnon dédié qui enregistre le nom et le serveur de chaque personnage, les quêtes de donjon terminées par chaque personnage (alimente les recommandations quotidiennes de Vœux Intrépides et la Liste des donjons - c'est la fonctionnalité principale de WhatShouldIDo), le temps de recharge d'entraînement de monture et les niveaux de Capacité / Endurance / Vitesse de chaque personnage (alimente le tableau d'entraînement de monture sur la page Accueil), le rang de guerre d'Alliance et la progression en Points d'Alliance de chaque personnage (alimente la page Rang d'Alliance), les Points de Championnat par royaume de chaque compte (affichés sur la bannière de la page Accueil), et l'Or / les Points d'Alliance / les Pierres de Tel Var / les Bons de commande - à la fois le montant transporté par chaque personnage et le total de la banque commune du compte par royaume (alimente le Suivi de richesse sur la page Accueil). C'est le seul addon dont WhatShouldIDo a besoin - sans lui, l'application n'a aucune donnée."
+      },
+      libUndauntedPledges: {
+        name: 'LibUndauntedPledges',
+        description:
+          "Une petite bibliothèque tierce très utilisée (elle ne fait pas partie de cette application) que le Data Collector emploie pour calculer la rotation des Vœux Intrépides du jour et à venir. ESO ne chargera pas le Data Collector si cette bibliothèque n'est pas installée aussi."
       }
     }
   },

@@ -1,0 +1,3 @@
+[submodule "vendor/WhatShouldIDoDataCollector"]
+	path = vendor/WhatShouldIDoDataCollector
+	url = https://github.com/Illyriat/WhatShouldIDo---Data-Collector.git

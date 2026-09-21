@@ -1,10 +1,12 @@
 import { dialog, ipcMain } from 'electron'
 import { homedir } from 'os'
 import { join } from 'path'
-import type { AddonStatus, AppSettings } from '@shared/types'
+import type { AddonInstallStatus, AddonStatus, AppSettings } from '@shared/types'
 import { IPC_CHANNELS } from '@shared/ipcChannels'
 import { readPersistedSettings, writePersistedSettings } from '../settingsStore'
 import { detectAddons } from '../eso/addonDetector'
+import { getAddonInstallStatus, installDataCollector } from '../eso/addonInstaller'
+import { bundledDataCollectorDir } from '../addonBundle'
 import { restartAutoRefreshWatcher } from '../autoRefresh'
 
 function defaultDocumentsPath(): string {
@@ -24,6 +26,19 @@ export async function getAppSettings(): Promise<AppSettings> {
 export async function getAddonStatus(): Promise<AddonStatus> {
   const stored = await readPersistedSettings()
   return detectAddons(stored.documentsPathOverride)
+}
+
+export async function getInstallStatus(): Promise<AddonInstallStatus> {
+  const stored = await readPersistedSettings()
+  return getAddonInstallStatus(bundledDataCollectorDir(), stored.documentsPathOverride)
+}
+
+// The Settings "Install"/"Update" button. Rejects (surfaced in the UI) if a folder can't
+// be written, rather than reporting a success that didn't happen.
+export async function installBundledDataCollector(): Promise<AddonInstallStatus> {
+  const stored = await readPersistedSettings()
+  await installDataCollector(bundledDataCollectorDir(), 'install', stored.documentsPathOverride)
+  return getInstallStatus()
 }
 
 export async function setDocumentsPathOverride(path: string | null): Promise<AppSettings> {
@@ -58,6 +73,8 @@ export async function pickDocumentsFolder(): Promise<string | null> {
 export function registerSettingsIpcHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.getAppSettings, () => getAppSettings())
   ipcMain.handle(IPC_CHANNELS.getAddonStatus, () => getAddonStatus())
+  ipcMain.handle(IPC_CHANNELS.getAddonInstallStatus, () => getInstallStatus())
+  ipcMain.handle(IPC_CHANNELS.installDataCollectorAddon, () => installBundledDataCollector())
   ipcMain.handle(IPC_CHANNELS.setDocumentsPathOverride, (_event, path: string | null) =>
     setDocumentsPathOverride(path)
   )

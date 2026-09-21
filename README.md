@@ -10,8 +10,8 @@
 
 These always grab the newest release directly - no need to dig through the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) (see [CHANGELOG.md](./CHANGELOG.md) for what's in each version). None of these builds are code-signed yet, so expect a "Windows protected your PC" (click **More info → Run anyway**) or macOS Gatekeeper warning (right-click the app → **Open**) on first launch - that's expected, not a sign anything's broken. The macOS build is Apple Silicon (M-series) only for now; there's no Intel Mac build yet. Prefer a `.deb`? Grab it from the [latest release](https://github.com/Illyriat/WhatShouldIDo/releases/latest) instead.
 
-    * For this app to work you first need the required addons installed in ESO (see below).
-        ** Log into each character at least once with them active so they have data to read.
+    * For this app to work the required addons need to be installed in ESO (see below). The Data Collector comes with this app - install it from Settings -> Addons - but LibUndauntedPledges is a separate download.
+        ** Restart ESO (or type /reloadui) after installing, then log into each character at least once with them active so they have data to read.
         ** ESO only writes SavedVariables to disk on logout or /reloadui - do one of those before checking the app for the latest state.
 
 Something not showing up, or not sure why? Check the **[Troubleshooting wiki page](https://github.com/Illyriat/WhatShouldIDo/wiki/Troubleshooting)** before opening an issue - it covers the common causes (missing data, addon setup, OneDrive-redirected Documents, update checks, etc.).
@@ -98,19 +98,37 @@ Every page above has an Account and Server switcher, so multi-account and NA/EU 
 
 ## Required Addons
 
-Install and enable both, then log into each character once with them active:
+Install and enable both, then log into each character once with them active. The Data Collector ships inside this app, so there's nothing to download for it - open **Settings -> Addons** and click **Install**. LibUndauntedPledges is a third-party library and has to be downloaded from ESOUI yourself; Settings shows whether it's detected and links to it.
 
 | Addon | Used for |
 |---|---|
-| [What Should I Do - Data Collector](https://github.com/Illyriat/WhatShouldIDoDataCollector) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), today's + upcoming Undaunted Pledge rotation, riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's own companion addon. |
+| What Should I Do - Data Collector (bundled with this app) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), today's + upcoming Undaunted Pledge rotation, riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's own companion addon. |
 | [LibUndauntedPledges](https://www.esoui.com/downloads/info3946-LibUndauntedPledges.html) | A small, widely-used library the Data Collector addon depends on to compute the Undaunted Pledge rotation locally (a deterministic, client-visible formula), instead of this app scraping a website for it. |
+
+### How the bundled Data Collector is installed and kept up to date
+
+The installer carries a copy of the Data Collector (`resources/addons/WhatShouldIDoDataCollector/` inside the installed app). `src/main/eso/addonInstaller.ts` copies it into `Documents\Elder Scrolls Online\<profile>\AddOns\` for every game profile it finds (`live`, `liveeu`, `pts`, ...):
+
+- **Settings -> Addons -> Install** puts it in every profile that doesn't have it. That click is the only way it's ever added to a profile - the app never installs it silently.
+- **On every launch** the app updates a profile that already has the addon to the bundled version, so an app update also updates the addon. It never downgrades - an install that's the same version or newer (e.g. a newer build from GitHub) is left alone - and it only ever touches its own `WhatShouldIDoDataCollector` folder.
+- ESO only loads addons at startup, so a fresh install or update takes effect after restarting the game or typing `/reloadui`.
+- **LibUndauntedPledges is never bundled or installed** - it's someone else's addon. The app only detects it (`AddOns\LibUndauntedPledges`, `AddOnVersion` >= 102020, matching the Data Collector's `## DependsOn`) and links to ESOUI when it's missing or too old.
+
+An addon change only reaches app users through an app release, since the addon travels inside the installer - see "Releasing a new addon version" below.
 
 ## Running it
 
+The Data Collector addon is bundled from a **private git submodule** (`vendor/WhatShouldIDoDataCollector`, see `.gitmodules`), so clone with submodules:
+
 ```
+git clone --recurse-submodules https://github.com/Illyriat/WhatShouldIDo.git
 npm install
 npm run dev
 ```
+
+If you already cloned without `--recurse-submodules`, run `git submodule update --init`. You need read access to the addon repo for that; without it the app still runs, but Settings reports the addon as missing from the build and `npm run build:*` refuses to run (`npm run check:addon`).
+
+Heads-up when running `npm run dev` against your own ESO install: on launch the app updates an *already-installed* Data Collector in your real `Documents\Elder Scrolls Online` folders if it's older than the bundled one, replacing that folder's contents. It leaves an equal or newer version alone.
 
 ## Tests
 
@@ -162,6 +180,22 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 5. Confirm afterwards: a `v0.1.2` entry on the [Releases page](https://github.com/Illyriat/WhatShouldIDo/releases) marked **Latest**, carrying the installers plus `latest.yml` / `latest-mac.yml` / `latest-linux.yml` (those `.yml` files are what auto-update reads). If instead the assets landed back on the previous release, step 1 wasn't committed on the tagged commit - see "Fixing a botched tag" below.
 
 **How soon users get it:** once the release is live, the app only checks for updates *at startup* (`src/main/index.ts` calls `checkForUpdates()` once on launch - there's no periodic poll). So a running user gets the update the next time they open the app: it downloads in the background (`autoDownload` is on) and they're prompted to restart. The "Check for Updates" button in Settings forces the check immediately.
+
+#### Releasing a new addon version
+
+The addon is developed in its own repo; this app just pins a commit of it. To ship an addon change:
+
+1. Test it in-game, then commit and push it in the addon repo (the pin must point at a commit that's on GitHub, or CI can't fetch it). Tagging the release there (`git tag v1.6.0 && git push origin v1.6.0`) makes the pin easy to read.
+2. Move the pin, and commit it here:
+   ```
+   git -C vendor/WhatShouldIDoDataCollector fetch --tags
+   git -C vendor/WhatShouldIDoDataCollector checkout v1.6.0    # or a commit hash
+   git add vendor/WhatShouldIDoDataCollector
+   git commit -m "Bundle Data Collector v1.6.0"
+   ```
+3. Cut an app release as above. Users get the new addon when they update the app and relaunch it - the app doesn't pick up an addon change on its own.
+
+The addon repo is private, so the release workflow authenticates with an `ADDON_REPO_TOKEN` repository secret: a fine-grained personal access token with **read-only Contents** access to just that repo (GitHub -> Settings -> Developer settings -> Fine-grained tokens, then add it under this repo's Settings -> Secrets and variables -> Actions). It expires, so if the release build fails at the checkout step with an auth error, renew the token. The build also runs `npm run check:addon`, which fails loudly instead of shipping an installer with no addon inside.
 
 #### Fixing a botched tag
 

@@ -287,14 +287,29 @@ const plTranslation = {
       'Wyłącz wszystko, czego nie używasz, aby uporządkować pasek boczny. To tylko ukrywa stronę - Twoje dane pozostają nietknięte i możesz włączyć ją ponownie w dowolnym momencie.',
     addonsTitle: 'Dodatki',
     addonsBody:
-      'Ta aplikacja odczytuje dane zapisywane na dysku przez dodatki ESO. Zainstaluj je z <esoui>ESOUI</esoui> (lub Minion), włącz je w grze, a następnie zaloguj się na każdą postać przynajmniej raz z aktywnymi dodatkami, aby mogły zapisać dane.',
+      'Ta aplikacja odczytuje dane zapisywane na dysku przez dodatki ESO. Data Collector jest dołączony do tej aplikacji - zainstaluj go poniżej. Każdy inny dodatek to osobne pobranie z <esoui>ESOUI</esoui> (lub Minion). Włącz je w grze, a następnie zaloguj się na każdą postać przynajmniej raz z aktywnymi dodatkami, aby mogły zapisać dane.',
     required: 'Wymagane',
     optional: 'Opcjonalne',
     checking: 'Sprawdzanie…',
-    detected: 'Wykryto (znaleziono {{file}})',
-    notDetected: 'Nie wykryto (brak {{file}} na dysku)',
-    detectedShort: '✓ wykryto',
-    notDetectedShort: 'nie wykryto',
+    notInstalledShort: 'nie zainstalowano',
+    installedShort: '✓ zainstalowano v{{version}}',
+    updateAvailableShort: 'zainstalowano v{{installed}} · dostępna v{{bundled}}',
+    outdatedShort: 'v{{version}} · zbyt stara',
+    addonInstall: 'Zainstaluj',
+    addonUpdate: 'Zaktualizuj',
+    addonInstalling: 'Instalowanie…',
+    addonInstallFailed: 'Nie udało się zainstalować dodatku: {{message}}',
+    addonNoGameFolder:
+      'Nie znaleziono jeszcze folderu ESO. Sprawdź folder danych powyżej lub uruchom grę raz, aby utworzyła swoje foldery.',
+    addonBundleMissing: 'Ta wersja aplikacji nie zawiera dodatku.',
+    addonRestartNote:
+      'Uruchom ESO ponownie (lub wpisz w grze /reloadui), aby wczytać dodatek, a następnie zaloguj się na każdą postać raz.',
+    addonNoDataNote:
+      'Zainstalowano, ale nic jeszcze nie zapisał. Włącz go w menu dodatków w grze i zaloguj się na każdą postać raz.',
+    libMissingNote:
+      'Data Collector nie wczyta się bez tej biblioteki. To osobne pobranie - pobierz ją z ESOUI za pomocą linku powyżej.',
+    libOutdatedNote:
+      'Ta wersja jest starsza, niż wymaga Data Collector. Zaktualizuj ją z ESOUI za pomocą linku powyżej.',
     languageTitle: 'Język',
     languageBody:
       'Zmienia język, w którym wyświetlany jest tekst tej aplikacji. Własne dane gry ESO (nazwy lochów, składniki itd.) zawsze pozostają w języku angielskim.',
@@ -377,6 +392,11 @@ const plTranslation = {
         name: 'What Should I Do - Data Collector',
         description:
           'Dedykowany dodatek towarzyszący, który zapisuje imię i serwer każdej postaci, które zadania lochów ukończyła każda postać (napędza codzienne rekomendacje Nieustraszonych Zobowiązań oraz Listę lochów - to podstawowa funkcja WhatShouldIDo), czas odnowienia treningu jeździeckiego oraz poziomy Pojemności / Wytrzymałości / Szybkości każdej postaci (napędza panel Treningu jeździeckiego na stronie Start), rangę Wojny Sojuszy i postęp Punktów Sojuszu każdej postaci (napędza stronę Ranga Sojuszu), Punkty Championa każdego konta na realm (widoczne na banerze strony Start) oraz Złoto / Punkty Sojuszu / Kamienie Tel Var / Bony za nakazy - zarówno kwotę niesioną przez każdą postać, jak i wspólne saldo banku dla całego konta na realm (napędza Śledzenie Majątku na stronie Start). To jedyny dodatek, którego potrzebuje WhatShouldIDo - bez niego aplikacja nie ma żadnych danych.'
+      },
+      libUndauntedPledges: {
+        name: 'LibUndauntedPledges',
+        description:
+          'Mała, powszechnie używana biblioteka firm trzecich (niebędąca częścią tej aplikacji), za pomocą której Data Collector oblicza dzisiejszą i nadchodzącą rotację Nieustraszonych Zobowiązań. ESO nie wczyta Data Collectora, jeśli ta biblioteka nie jest również zainstalowana.'
       }
     }
   },
