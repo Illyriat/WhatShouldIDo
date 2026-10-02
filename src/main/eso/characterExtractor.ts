@@ -1,13 +1,4 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
+import { asPlainObject, isCharId, readDefaultProfile } from './collectorSavedVars'
 
 export interface RawCharacter {
   charId: string
@@ -19,9 +10,6 @@ export interface RawAccount {
   accountName: string
   characters: RawCharacter[]
 }
-
-// Realm-bucket keys under $AccountWide that aren't character ids.
-const NON_CHAR_KEYS = new Set(['version'])
 
 /**
  * Reads each account's character list (charId, charName, server) from
@@ -36,8 +24,7 @@ const NON_CHAR_KEYS = new Set(['version'])
 export async function extractCharacters(filePath: string): Promise<RawAccount[]> {
   const accounts: RawAccount[] = []
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return accounts
 
   for (const [accountName, accountValue] of Object.entries(defaultProfile)) {
@@ -54,7 +41,7 @@ export async function extractCharacters(filePath: string): Promise<RawAccount[]>
       if (!realmObject) continue
 
       for (const [charId, charValue] of Object.entries(realmObject)) {
-        if (NON_CHAR_KEYS.has(charId) || !/^\d+$/.test(charId)) continue
+        if (!isCharId(charId)) continue
         const charObject = asPlainObject(charValue)
         const charName = charObject?.['name']
         if (typeof charName !== 'string') continue

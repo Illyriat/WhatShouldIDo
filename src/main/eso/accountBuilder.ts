@@ -1,4 +1,4 @@
-import type { Account, AllianceRankStatus, WealthAmounts } from '@shared/types'
+import type { Account } from '@shared/types'
 import { findSavedVariablesFiles } from './savedVarsLocator'
 import { extractCharacters, type RawAccount } from './characterExtractor'
 import { extractCompletedDungeonQuests } from './dungeonQuestsExtractor'
@@ -27,6 +27,33 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
   return merged
 }
 
+// Folds each file's map into one. A key present in more than one file (the same
+// character seen from two ESO profiles) takes the later file's value.
+function mergeMaps<V>(maps: Map<string, V>[]): Map<string, V> {
+  const merged = new Map<string, V>()
+  for (const map of maps) {
+    for (const [key, value] of map) merged.set(key, value)
+  }
+  return merged
+}
+
+// Same, for account -> realm -> value maps: realms are merged per account rather than
+// one file's account entry replacing another's.
+function mergeNestedMaps<V>(maps: Map<string, Map<string, V>>[]): Map<string, Map<string, V>> {
+  const merged = new Map<string, Map<string, V>>()
+  for (const map of maps) {
+    for (const [outerKey, inner] of map) {
+      const existing = merged.get(outerKey)
+      if (!existing) {
+        merged.set(outerKey, new Map(inner))
+        continue
+      }
+      for (const [innerKey, value] of inner) existing.set(innerKey, value)
+    }
+  }
+  return merged
+}
+
 /**
  * Builds the Account[] the app renders. Reads everything from WhatShouldIDoDataCollector.lua
  * (the character list with server labels, per-character dungeon-quest completion,
@@ -44,61 +71,30 @@ function mergeRawAccounts(rawAccountLists: RawAccount[][]): Map<string, RawAccou
 export async function buildAccounts(documentsOverride?: string): Promise<Account[]> {
   const wsidcFiles = await findSavedVariablesFiles('WhatShouldIDoDataCollector.lua', documentsOverride)
 
-  const rawAccountLists = await Promise.all(wsidcFiles.map((file) => extractCharacters(file)))
+  const fromEachFile = <T>(extract: (file: string) => Promise<T>): Promise<T[]> =>
+    Promise.all(wsidcFiles.map((file) => extract(file)))
+
+  // All of these read the same file (one shared parse - see luaSavedVarsParser.ts) and
+  // differ only in scope: per-character data is keyed by charId, while Champion Points
+  // and the shared bank are account+realm scoped (account -> realm -> value).
+  const [rawAccountLists, dungeonQuestMaps, ridingMaps, allianceRankMaps, wealthMaps, championPointsMaps, bankWealthMaps] =
+    await Promise.all([
+      fromEachFile(extractCharacters),
+      fromEachFile(extractCompletedDungeonQuests),
+      fromEachFile(extractRidingStatus),
+      fromEachFile(extractAllianceRankStatus),
+      fromEachFile(extractCharacterWealth),
+      fromEachFile(extractChampionPoints),
+      fromEachFile(extractBankWealth)
+    ])
+
   const rawAccounts = mergeRawAccounts(rawAccountLists)
-
-  const dungeonQuestMapsByFile = await Promise.all(wsidcFiles.map((file) => extractCompletedDungeonQuests(file)))
-  const dungeonQuestsByCharId = new Map<string, string[]>()
-  for (const dungeonQuestMap of dungeonQuestMapsByFile) {
-    for (const [charId, keys] of dungeonQuestMap) dungeonQuestsByCharId.set(charId, keys)
-  }
-
-  const ridingMapsByFile = await Promise.all(wsidcFiles.map((file) => extractRidingStatus(file)))
-  const ridingByCharId = new Map<string, RidingStatus>()
-  for (const ridingMap of ridingMapsByFile) {
-    for (const [charId, status] of ridingMap) ridingByCharId.set(charId, status)
-  }
-
-  const allianceRankMapsByFile = await Promise.all(wsidcFiles.map((file) => extractAllianceRankStatus(file)))
-  const allianceRankByCharId = new Map<string, AllianceRankStatus>()
-  for (const allianceRankMap of allianceRankMapsByFile) {
-    for (const [charId, status] of allianceRankMap) allianceRankByCharId.set(charId, status)
-  }
-
-  // Same file as the character list, but account+realm scoped rather than per-character.
-  const championPointsMapsByFile = await Promise.all(wsidcFiles.map((file) => extractChampionPoints(file)))
-  const championPointsByAccount = new Map<string, Map<string, number>>()
-  for (const championPointsMap of championPointsMapsByFile) {
-    for (const [accountName, realmToPoints] of championPointsMap) {
-      const existing = championPointsByAccount.get(accountName)
-      if (!existing) {
-        championPointsByAccount.set(accountName, new Map(realmToPoints))
-        continue
-      }
-      for (const [realm, points] of realmToPoints) existing.set(realm, points)
-    }
-  }
-
-  // Same file, per-character carried currency (see wealthExtractor.ts).
-  const wealthMapsByFile = await Promise.all(wsidcFiles.map((file) => extractCharacterWealth(file)))
-  const wealthByCharId = new Map<string, WealthAmounts>()
-  for (const wealthMap of wealthMapsByFile) {
-    for (const [charId, wealth] of wealthMap) wealthByCharId.set(charId, wealth)
-  }
-
-  // Same file, account+realm scoped shared bank total (see wealthExtractor.ts).
-  const bankWealthMapsByFile = await Promise.all(wsidcFiles.map((file) => extractBankWealth(file)))
-  const bankWealthByAccount = new Map<string, Map<string, WealthAmounts>>()
-  for (const bankWealthMap of bankWealthMapsByFile) {
-    for (const [accountName, realmToWealth] of bankWealthMap) {
-      const existing = bankWealthByAccount.get(accountName)
-      if (!existing) {
-        bankWealthByAccount.set(accountName, new Map(realmToWealth))
-        continue
-      }
-      for (const [realm, wealth] of realmToWealth) existing.set(realm, wealth)
-    }
-  }
+  const dungeonQuestsByCharId = mergeMaps(dungeonQuestMaps)
+  const ridingByCharId = mergeMaps(ridingMaps)
+  const allianceRankByCharId = mergeMaps(allianceRankMaps)
+  const wealthByCharId = mergeMaps(wealthMaps)
+  const championPointsByAccount = mergeNestedMaps(championPointsMaps)
+  const bankWealthByAccount = mergeNestedMaps(bankWealthMaps)
 
   const accounts: Account[] = []
 

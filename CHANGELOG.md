@@ -4,6 +4,20 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+- Upgraded Electron 33 to 44 (Chromium 152, Node 24)
+- Upgraded the build toolchain: electron-vite 2 to 5 and Vite 5 to 7, with `@vitejs/plugin-react` 5 to match. Vite is now a direct devDependency, and the deprecated `externalizeDepsPlugin` is gone from `electron.vite.config.ts` (electron-vite 5 externalizes dependencies by default)
+- Updated React to 19.3, react-i18next to 17.0.15 and `@types/node` to 24
+- Refreshing is faster: the addon's SavedVariables file is now read once per refresh instead of up to three times, and the Wealth board no longer rebuilds its number formatter for every cell
+- Internal tidy-up of the SavedVariables readers - the helpers each one had its own copy of now live in `src/main/eso/collectorSavedVars.ts`, and the account builder's repeated merge blocks are two shared helpers. No change in behaviour
+
+### Fixed
+- Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon
+
+### Security
+- Cleared every known dependency vulnerability (`npm audit`: 8 down to 0). Electron 33 was end-of-life with around 35 open advisories; the rest were in brace-expansion, fast-uri, undici, extract-zip and esbuild
+- Links now only open in your browser if they are `https` - anything else is refused instead of being handed to the operating system
+
 ## [0.3.1] - 2026-09-21
 
 ### Changed

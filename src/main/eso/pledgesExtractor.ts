@@ -1,19 +1,6 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
+import { asNumber, asPlainObject, readDefaultProfile, type PlainObject } from './collectorSavedVars'
 import { findPledgeDungeonByZoneId, PLEDGE_MASTERS } from '@shared/pledgeDungeons'
 import type { TodaysPledge, UpcomingPledgeDay } from '@shared/types'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
-
-function asNumber(value: unknown): number | null {
-  return typeof value === 'number' ? value : null
-}
 
 interface PledgeSlot {
   zoneId: number
@@ -71,8 +58,7 @@ const NON_REALM_KEYS = new Set(['version'])
 export async function extractPledgesByRealm(filePath: string): Promise<Map<string, RealmPledgesData>> {
   const result = new Map<string, RealmPledgesData>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const accountValue of Object.values(defaultProfile)) {

@@ -77,6 +77,26 @@ describe('parseSavedVariables', () => {
       expect(await parseSavedVariables(filePath, 'T')).toEqual({ n: 2 })
     })
 
+    it('shares one parse between callers that overlap on a cold cache', async () => {
+      const filePath = await fixture.write('Fixture.lua', `T={["n"]=1}`)
+      const [first, second] = await Promise.all([parseSavedVariables(filePath, 'T'), parseSavedVariables(filePath, 'T')])
+
+      // Same object, not just equal ones - two separate parses would each build their own.
+      expect(first).toBe(second)
+    })
+
+    it('does not cache a failed parse', async () => {
+      const filePath = await fixture.write('Fixture.lua', `this is not valid lua {{{`)
+      const originalStat = await stat(filePath)
+      await expect(parseSavedVariables(filePath, 'T')).rejects.toThrow()
+
+      // Same mtime as the failed attempt, so only a retry (not the cache) can succeed.
+      await writeFile(filePath, `T={["n"]=1}`, 'utf-8')
+      await utimes(filePath, originalStat.atime, originalStat.mtime)
+
+      await expect(parseSavedVariables(filePath, 'T')).resolves.toEqual({ n: 1 })
+    })
+
     it('caches independently per global name for the same file', async () => {
       const filePath = await fixture.write('Fixture.lua', `A={["x"]=1} B={["x"]=2}`)
       expect(await parseSavedVariables(filePath, 'A')).toEqual({ x: 1 })
