@@ -22,10 +22,6 @@ function currencyRows(t: TFunction): { key: keyof WealthAmounts; label: string; 
   ]
 }
 
-function fmt(n: number | undefined, locale: string): string {
-  return n === undefined ? '—' : new Intl.NumberFormat(locale).format(n)
-}
-
 // Realm total = the shared bank balance plus whatever each character on that realm is
 // personally carrying. undefined (rendered as "—") only when neither source has any data
 // yet for this currency.
@@ -48,6 +44,8 @@ function WealthBoard({ bankWealth, characters, server }: Props): React.JSX.Eleme
   const { t, i18n } = useTranslation()
   const [showBreakdown, setShowBreakdown] = useState(false)
   const currencies = currencyRows(t)
+  const numberFormat = new Intl.NumberFormat(i18n.language)
+  const fmt = (n: number | undefined): string => (n === undefined ? '—' : numberFormat.format(n))
 
   return (
     <section className="board-section wealth-board">
@@ -60,7 +58,7 @@ function WealthBoard({ bankWealth, characters, server }: Props): React.JSX.Eleme
         {currencies.map((c) => (
           <li key={c.key} className="wealth-bank-list__row">
             <span className="wealth-bank-list__label">{c.label}</span>
-            <span className="wealth-bank-list__value">{fmt(total(bankWealth, characters, c.key), i18n.language)}</span>
+            <span className="wealth-bank-list__value">{fmt(total(bankWealth, characters, c.key))}</span>
           </li>
         ))}
       </ul>
@@ -85,7 +83,7 @@ function WealthBoard({ bankWealth, characters, server }: Props): React.JSX.Eleme
                   <span className="wealth-bank-list__label" title={t('wealth.bankTitle', { label: c.label })}>
                     {c.label}
                   </span>
-                  <span className="wealth-bank-list__value">{fmt(bankWealth?.[c.key], i18n.language)}</span>
+                  <span className="wealth-bank-list__value">{fmt(bankWealth?.[c.key])}</span>
                 </li>
               ))}
             </ul>
@@ -112,7 +110,7 @@ function WealthBoard({ bankWealth, characters, server }: Props): React.JSX.Eleme
                       <tr key={c.charId}>
                         <td className="wealth-table__char">{c.charName}</td>
                         {currencies.map((cur) => (
-                          <td key={cur.key}>{c.wealth ? fmt(c.wealth[cur.key], i18n.language) : '—'}</td>
+                          <td key={cur.key}>{fmt(c.wealth?.[cur.key])}</td>
                         ))}
                       </tr>
                     ))}
