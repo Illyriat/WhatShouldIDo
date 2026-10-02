@@ -1,5 +1,4 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-import { asNumber, asPlainObject, type PlainObject } from './collectorSavedVars'
+import { asNumber, asPlainObject, readDefaultProfile } from './collectorSavedVars'
 
 // Realm-bucket keys under $AccountWide that aren't realm/server names.
 const NON_REALM_KEYS = new Set(['version'])
@@ -16,8 +15,7 @@ const NON_REALM_KEYS = new Set(['version'])
 export async function extractChampionPoints(filePath: string): Promise<Map<string, Map<string, number>>> {
   const result = new Map<string, Map<string, number>>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const [accountName, accountValue] of Object.entries(defaultProfile)) {

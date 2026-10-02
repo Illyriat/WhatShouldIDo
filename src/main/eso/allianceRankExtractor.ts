@@ -1,9 +1,5 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-import { asNumber, asPlainObject, type PlainObject } from './collectorSavedVars'
+import { asNumber, asPlainObject, isCharId, readDefaultProfile } from './collectorSavedVars'
 import type { AllianceRankStatus } from '@shared/types'
-
-// Realm-bucket keys under $AccountWide that aren't character ids.
-const NON_CHAR_KEYS = new Set(['version'])
 
 /**
  * Reads each character's Alliance Rank / AP progress from WhatShouldIDoDataCollector.lua (a
@@ -21,8 +17,7 @@ const NON_CHAR_KEYS = new Set(['version'])
 export async function extractAllianceRankStatus(filePath: string): Promise<Map<string, AllianceRankStatus>> {
   const result = new Map<string, AllianceRankStatus>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const accountValue of Object.values(defaultProfile)) {
@@ -35,7 +30,7 @@ export async function extractAllianceRankStatus(filePath: string): Promise<Map<s
       if (!realmObject) continue
 
       for (const [charId, charValue] of Object.entries(realmObject)) {
-        if (NON_CHAR_KEYS.has(charId) || !/^\d+$/.test(charId)) continue
+        if (!isCharId(charId)) continue
         const charObject = asPlainObject(charValue)
         const allianceRank = asPlainObject(charObject?.['allianceRank'])
         if (!allianceRank) continue

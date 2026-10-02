@@ -1,5 +1,4 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-import { asNumber, asPlainObject, type PlainObject } from './collectorSavedVars'
+import { asNumber, asPlainObject, isCharId, readDefaultProfile } from './collectorSavedVars'
 import type { WealthAmounts } from '@shared/types'
 
 function asWealthAmounts(value: unknown): WealthAmounts | null {
@@ -15,8 +14,6 @@ function asWealthAmounts(value: unknown): WealthAmounts | null {
   return { gold, alliancePoints, telVarStones, writVouchers }
 }
 
-// Realm-bucket keys under $AccountWide that aren't character ids.
-const NON_CHAR_KEYS = new Set(['version'])
 // Realm-bucket keys under $AccountWide that aren't realm/server names.
 const NON_REALM_KEYS = new Set(['version'])
 
@@ -29,8 +26,7 @@ const NON_REALM_KEYS = new Set(['version'])
 export async function extractCharacterWealth(filePath: string): Promise<Map<string, WealthAmounts>> {
   const result = new Map<string, WealthAmounts>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const accountValue of Object.values(defaultProfile)) {
@@ -43,7 +39,7 @@ export async function extractCharacterWealth(filePath: string): Promise<Map<stri
       if (!realmObject) continue
 
       for (const [charId, charValue] of Object.entries(realmObject)) {
-        if (NON_CHAR_KEYS.has(charId) || !/^\d+$/.test(charId)) continue
+        if (!isCharId(charId)) continue
         const charObject = asPlainObject(charValue)
         const wealth = asWealthAmounts(charObject?.['wealth'])
         if (!wealth) continue
@@ -65,8 +61,7 @@ export async function extractCharacterWealth(filePath: string): Promise<Map<stri
 export async function extractBankWealth(filePath: string): Promise<Map<string, Map<string, WealthAmounts>>> {
   const result = new Map<string, Map<string, WealthAmounts>>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const [accountName, accountValue] of Object.entries(defaultProfile)) {

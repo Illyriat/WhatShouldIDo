@@ -1,5 +1,4 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-import { asPlainObject, type PlainObject } from './collectorSavedVars'
+import { asPlainObject, isCharId, readDefaultProfile } from './collectorSavedVars'
 
 function extractCompletedKeys(value: unknown): string[] {
   const obj = asPlainObject(value)
@@ -8,9 +7,6 @@ function extractCompletedKeys(value: unknown): string[] {
     .filter(([, v]) => v === 1)
     .map(([key]) => key)
 }
-
-// Realm-bucket keys under $AccountWide that aren't character ids.
-const NON_CHAR_KEYS = new Set(['version'])
 
 /**
  * Reads each character's completed Undaunted Pledge dungeon quest keys from
@@ -23,8 +19,7 @@ const NON_CHAR_KEYS = new Set(['version'])
 export async function extractCompletedDungeonQuests(filePath: string): Promise<Map<string, string[]>> {
   const result = new Map<string, string[]>()
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const accountValue of Object.values(defaultProfile)) {
@@ -37,7 +32,7 @@ export async function extractCompletedDungeonQuests(filePath: string): Promise<M
       if (!realmObject) continue
 
       for (const [charId, charValue] of Object.entries(realmObject)) {
-        if (NON_CHAR_KEYS.has(charId) || !/^\d+$/.test(charId)) continue
+        if (!isCharId(charId)) continue
         const charObject = asPlainObject(charValue)
         result.set(charId, extractCompletedKeys(charObject?.['completedDungeonQuests']))
       }
