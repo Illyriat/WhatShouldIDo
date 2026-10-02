@@ -1,17 +1,5 @@
 import { parseSavedVariables } from './luaSavedVarsParser'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
-
-function asNumber(value: unknown): number | null {
-  return typeof value === 'number' ? value : null
-}
+import { asNumber, asPlainObject, type PlainObject } from './collectorSavedVars'
 
 // Realm-bucket keys under $AccountWide that aren't realm/server names.
 const NON_REALM_KEYS = new Set(['version'])

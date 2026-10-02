@@ -1,13 +1,5 @@
 import { parseSavedVariables } from './luaSavedVarsParser'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
+import { asPlainObject, type PlainObject } from './collectorSavedVars'
 
 export interface RawCharacter {
   charId: string

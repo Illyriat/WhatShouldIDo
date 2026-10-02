@@ -1,18 +1,6 @@
 import { parseSavedVariables } from './luaSavedVarsParser'
+import { asNumber, asPlainObject, type PlainObject } from './collectorSavedVars'
 import type { AllianceRankStatus } from '@shared/types'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
-
-function asNumber(value: unknown): number | null {
-  return typeof value === 'number' ? value : null
-}
 
 // Realm-bucket keys under $AccountWide that aren't character ids.
 const NON_CHAR_KEYS = new Set(['version'])
