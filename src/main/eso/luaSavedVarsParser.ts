@@ -70,7 +70,9 @@ function luaExpressionToJs(node: luaparse.Expression): unknown {
 
 interface CacheEntry {
   mtimeMs: number
-  value: LuaTable | null
+  // The parse itself rather than its result, so callers that arrive while a parse is
+  // still running share it instead of each starting their own.
+  value: Promise<LuaTable | null>
 }
 
 // One buildAccounts() call reads the same one or two SavedVariables files through
@@ -102,8 +104,12 @@ export async function parseSavedVariables(filePath: string, globalName: string):
   const cached = cache.get(key)
   if (cached && cached.mtimeMs === mtimeMs) return cached.value
 
-  const value = await parseSavedVariablesUncached(filePath, globalName)
+  const value = parseSavedVariablesUncached(filePath, globalName)
   cache.set(key, { mtimeMs, value })
+  // A failed read/parse isn't worth remembering - drop it so the next call retries.
+  value.catch(() => {
+    if (cache.get(key)?.value === value) cache.delete(key)
+  })
   return value
 }
 
