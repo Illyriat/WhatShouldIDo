@@ -36,7 +36,7 @@ function total(bankWealth: WealthAmounts | undefined, characters: Character[], k
 }
 
 // Today's Pledges/Riding Training/Alliance Rank all source their data per-character or
-// per-realm the same way (see [[project_eso_saved_variables_data_model]]); this board
+// per-realm the same way (see src/main/eso/accountBuilder.ts); this board
 // mirrors that but for currency - a shared bank total (account+realm scoped, like
 // Champion Points) plus each character's own carried amount. The realm total is the
 // headline; the bank/by-character split is detail tucked behind a toggle.

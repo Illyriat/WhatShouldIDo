@@ -52,7 +52,7 @@ export interface Character {
   ridingMaxed: boolean
   // Not maxed and today's training cooldown has elapsed.
   readyToTrainRiding: boolean
-  // null when the AllianceRankTracker addon has no data yet for this character.
+  // null when the WhatShouldIDoDataCollector addon has no data yet for this character.
   allianceRank: AllianceRankStatus | null
   // Currency this character is personally carrying. null when the
   // WhatShouldIDoDataCollector addon has no data yet for this character.

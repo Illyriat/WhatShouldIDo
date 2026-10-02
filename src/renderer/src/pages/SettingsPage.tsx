@@ -39,9 +39,6 @@ function updateStatusLabel(t: TFunction, status: UpdateStatus): string | null {
   }
 }
 
-// Exported (along with THEME_OPTIONS below) so tests can verify every nameKey/labelKey/
-// descriptionKey resolves against en.ts - tKey() bypasses t()'s compile-time key checking
-// for exactly this kind of data-driven key, so nothing else catches a typo'd or renamed key.
 // The Data Collector is a hard dependency on LibUndauntedPledges (ESO won't load it
 // without it), so both rows matter to exactly the same features.
 const DATA_COLLECTOR_FLAGS: FeatureFlag[] = [
@@ -54,6 +51,9 @@ const DATA_COLLECTOR_FLAGS: FeatureFlag[] = [
   'musicBoxes'
 ]
 
+// Exported (along with THEME_OPTIONS below) so tests can verify every nameKey/labelKey/
+// descriptionKey resolves against en.ts - tKey() bypasses t()'s compile-time key checking
+// for exactly this kind of data-driven key, so nothing else catches a typo'd or renamed key.
 export const ADDONS: {
   id: 'dataCollector' | 'libUndauntedPledges'
   nameKey: string
