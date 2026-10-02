@@ -1,10 +1,6 @@
 import type { en } from "./en";
 
 /**
- * German translation - drafted by an AI assistant, needs review by a native German
- * speaker before shipping with the `languageSupport` flag on. Typed as `typeof en` so
- * a missing or extra key fails the build instead of silently falling back to English.
- *
  * Game-data content (dungeon names, alchemy reagents/effects, enchanting runes, music
  * box names/descriptions) intentionally stays in English - see en.ts's header comment.
  */
