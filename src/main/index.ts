@@ -5,6 +5,7 @@ import { getAppSettings, registerSettingsIpcHandlers } from './ipc/settingsApi'
 import { checkForUpdates, registerUpdateIpcHandlers, setUpdateTargetWindow } from './updater'
 import { restartAutoRefreshWatcher, setAutoRefreshTargetWindow } from './autoRefresh'
 import { updateInstalledDataCollector } from './addonBundle'
+import { isSafeExternalUrl } from './externalLinks'
 
 function createWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -22,7 +23,7 @@ function createWindow(): BrowserWindow {
   window.on('ready-to-show', () => window.show())
 
   window.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    if (isSafeExternalUrl(details.url)) shell.openExternal(details.url)
     return { action: 'deny' }
   })
 

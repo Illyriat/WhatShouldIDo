@@ -1,21 +1,9 @@
-import { parseSavedVariables } from './luaSavedVarsParser'
-
-type PlainObject = Record<string, unknown>
-
-function asPlainObject(value: unknown): PlainObject | null {
-  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-    return value as PlainObject
-  }
-  return null
-}
+import { asPlainObject, isCharId, readDefaultProfile, type PlainObject } from './collectorSavedVars'
 
 export interface RidingStatus {
   ridingMaxed: boolean
   readyToTrainRiding: boolean
 }
-
-// Realm-bucket keys under $AccountWide that aren't character ids.
-const NON_CHAR_KEYS = new Set(['version'])
 
 function computeStatus(ridingStats: PlainObject, nowSeconds: number): RidingStatus {
   const capacity = ridingStats['capacity']
@@ -49,8 +37,7 @@ export async function extractRidingStatus(
   const result = new Map<string, RidingStatus>()
   const nowSeconds = Math.floor(now.getTime() / 1000)
 
-  const parsed = await parseSavedVariables(filePath, 'WhatShouldIDoDataCollectorVars')
-  const defaultProfile = asPlainObject(parsed) && asPlainObject((parsed as PlainObject)['Default'])
+  const defaultProfile = await readDefaultProfile(filePath)
   if (!defaultProfile) return result
 
   for (const accountValue of Object.values(defaultProfile)) {
@@ -63,7 +50,7 @@ export async function extractRidingStatus(
       if (!realmObject) continue
 
       for (const [charId, charValue] of Object.entries(realmObject)) {
-        if (NON_CHAR_KEYS.has(charId) || !/^\d+$/.test(charId)) continue
+        if (!isCharId(charId)) continue
         const charObject = asPlainObject(charValue)
         const ridingStats = asPlainObject(charObject?.['ridingStats'])
         if (!ridingStats) continue

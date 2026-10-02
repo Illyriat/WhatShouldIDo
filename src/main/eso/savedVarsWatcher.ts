@@ -1,8 +1,7 @@
 import { watch, type FSWatcher } from 'fs'
-import { readdir } from 'fs/promises'
-import { homedir } from 'os'
 import { join } from 'path'
 import { ADDON_SAVED_VARS } from './addonDetector'
+import { listEsoProfileDirs } from './savedVarsLocator'
 
 const DEFAULT_DEBOUNCE_MS = 750
 
@@ -50,21 +49,9 @@ export function watchSavedVariables(
   }
 
   async function setup(): Promise<void> {
-    const documentsDir = documentsOverride ?? join(homedir(), 'Documents')
-    const esoDir = join(documentsDir, 'Elder Scrolls Online')
-
-    let profiles: string[]
-    try {
-      profiles = (await readdir(esoDir, { withFileTypes: true }))
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name)
-    } catch {
-      return
-    }
-
-    for (const profile of profiles) {
+    for (const profileDir of await listEsoProfileDirs(documentsOverride)) {
       if (disposed) return
-      const savedVarsDir = join(esoDir, profile, 'SavedVariables')
+      const savedVarsDir = join(profileDir, 'SavedVariables')
       try {
         const watcher = watch(savedVarsDir, (_eventType, filename) => {
           if (typeof filename === 'string' && watchedFileNames.includes(filename)) scheduleOnChange()
