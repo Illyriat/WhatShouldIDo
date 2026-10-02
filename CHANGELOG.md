@@ -12,7 +12,8 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Internal tidy-up of the SavedVariables readers - the helpers each one had its own copy of now live in `src/main/eso/collectorSavedVars.ts`, and the account builder's repeated merge blocks are two shared helpers. No change in behaviour
 
 ### Fixed
-- Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon
+- Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon.
+- German translations checked by a German speaker and corrected were needed.
 
 ### Security
 - Cleared every known dependency vulnerability (`npm audit`: 8 down to 0). Electron 33 was end-of-life with around 35 open advisories; the rest were in brace-expansion, fast-uri, undici, extract-zip and esbuild
