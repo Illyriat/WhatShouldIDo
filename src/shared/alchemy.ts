@@ -4,7 +4,7 @@
  *
  * Reagent and solvent tables come from eso-hub's Alchemy overview
  * (https://eso-hub.com/en/alchemy-reagents-and-solvents), checked against UESP's
- * Online:Alchemy_Effects. Current for the 2025 set: 34 reagents, 32 effects.
+ * Online:Alchemy. Current for Update 51 (2026): 38 reagents, 34 effects.
  *
  * Rule: mix a solvent with 2-3 reagents. Any trait shared by two or more reagents
  * becomes an effect on the result. Water solvents make potions (effects hit you),
@@ -47,7 +47,12 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
   { id: 'restore-magicka', name: 'Restore Magicka', kind: 'positive', description: 'Restores a burst of Magicka.' },
   { id: 'restore-stamina', name: 'Restore Stamina', kind: 'positive', description: 'Restores a burst of Stamina.' },
   { id: 'lingering-health', name: 'Lingering Health', kind: 'positive', description: 'Restores Health over time.' },
-  { id: 'ravage-health', name: 'Ravage Health', kind: 'negative', description: 'Deals a burst of damage / drains Health.' },
+  {
+    id: 'ravage-health',
+    name: 'Ravage Health',
+    kind: 'negative',
+    description: 'Deals a burst of damage / drains Health.'
+  },
   { id: 'ravage-magicka', name: 'Ravage Magicka', kind: 'negative', description: 'Drains Magicka.' },
   { id: 'ravage-stamina', name: 'Ravage Stamina', kind: 'negative', description: 'Drains Stamina.' },
   {
@@ -57,17 +62,18 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
     description: 'Deals poison damage over time.'
   },
   {
-    id: 'increase-weapon-power',
-    name: 'Increase Weapon Power',
+    id: 'increase-power',
+    name: 'Increase Power',
     kind: 'positive',
-    description: 'Major Brutality - increases Weapon Damage.'
+    description: 'Major Brutality - increases Weapon and Spell Damage.'
   },
   {
-    id: 'increase-spell-power',
-    name: 'Increase Spell Power',
+    id: 'critical',
+    name: 'Critical',
     kind: 'positive',
-    description: 'Major Sorcery - increases Spell Damage.'
+    description: 'Major Savagery - increases Weapon and Spell Critical rating.'
   },
+  { id: 'force', name: 'Force', kind: 'positive', description: 'Increases Critical Damage done.' },
   {
     id: 'increase-armor',
     name: 'Increase Armor',
@@ -80,21 +86,16 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
     kind: 'positive',
     description: 'Major Ward - increases Spell Resistance.'
   },
-  {
-    id: 'weapon-critical',
-    name: 'Weapon Critical',
-    kind: 'positive',
-    description: 'Major Savagery - increases Weapon Critical rating.'
-  },
-  {
-    id: 'spell-critical',
-    name: 'Spell Critical',
-    kind: 'positive',
-    description: 'Major Prophecy - increases Spell Critical rating.'
-  },
   { id: 'speed', name: 'Speed', kind: 'positive', description: 'Major Expedition - increases movement speed.' },
   { id: 'protection', name: 'Protection', kind: 'positive', description: 'Minor Protection - reduces damage taken.' },
+  {
+    id: 'damage-shield',
+    name: 'Damage Shield',
+    kind: 'positive',
+    description: 'Grants a damage shield that absorbs damage.'
+  },
   { id: 'vitality', name: 'Vitality', kind: 'positive', description: 'Increases healing received.' },
+  { id: 'mending', name: 'Mending', kind: 'positive', description: 'Major Mending - increases healing done.' },
   { id: 'heroism', name: 'Heroism', kind: 'positive', description: 'Minor Heroism - generates Ultimate over time.' },
   {
     id: 'unstoppable',
@@ -103,7 +104,12 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
     description: 'Grants immunity to knockback and disabling effects.'
   },
   { id: 'invisible', name: 'Invisible', kind: 'positive', description: 'Grants invisibility.' },
-  { id: 'detection', name: 'Detection', kind: 'positive', description: 'Reveals nearby stealthed and invisible enemies.' },
+  {
+    id: 'detection',
+    name: 'Detection',
+    kind: 'positive',
+    description: 'Reveals nearby stealthed and invisible enemies.'
+  },
   {
     id: 'breach',
     name: 'Breach',
@@ -111,26 +117,20 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
     description: 'Minor Breach - reduces Physical and Spell Resistance.'
   },
   { id: 'fracture', name: 'Fracture', kind: 'negative', description: 'Minor Fracture - reduces Physical Resistance.' },
-  { id: 'maim', name: 'Maim', kind: 'negative', description: 'Minor Maim - reduces damage done.' },
   {
     id: 'cowardice',
     name: 'Cowardice',
     kind: 'negative',
     description: 'Minor Cowardice - reduces Weapon and Spell Damage.'
   },
-  { id: 'enervation', name: 'Enervation', kind: 'negative', description: 'Minor Enervation - reduces Critical Damage.' },
   {
-    id: 'uncertainty',
-    name: 'Uncertainty',
+    id: 'enervation',
+    name: 'Enervation',
     kind: 'negative',
-    description: 'Reduces Critical Strike chance.'
+    description: 'Minor Enervation - reduces Critical Damage.'
   },
-  {
-    id: 'timidity',
-    name: 'Timidity',
-    kind: 'negative',
-    description: 'Drains Ultimate while in combat.'
-  },
+  { id: 'uncertainty', name: 'Uncertainty', kind: 'negative', description: 'Reduces Critical Strike chance.' },
+  { id: 'timidity', name: 'Timidity', kind: 'negative', description: 'Drains Ultimate while in combat.' },
   {
     id: 'vulnerability',
     name: 'Vulnerability',
@@ -143,6 +143,8 @@ export const ALCHEMY_EFFECTS: AlchemyEffect[] = [
     kind: 'negative',
     description: 'Minor Defile - reduces healing received and Health Recovery.'
   },
+  { id: 'heal-absorption', name: 'Heal Absorption', kind: 'negative', description: 'Absorbs incoming healing.' },
+  { id: 'vexation', name: 'Vexation', kind: 'negative', description: 'Reduces healing done.' },
   { id: 'hindrance', name: 'Hindrance', kind: 'negative', description: 'Minor Hindrance - reduces movement speed.' },
   { id: 'entrapment', name: 'Entrapment', kind: 'negative', description: 'Immobilizes the target.' }
 ]
@@ -152,29 +154,21 @@ export const REAGENTS: Reagent[] = [
   {
     id: 'blessed-thistle',
     name: 'Blessed Thistle',
-    traits: ['ravage-health', 'restore-stamina', 'increase-weapon-power', 'speed']
+    traits: ['restore-stamina', 'increase-power', 'speed', 'heal-absorption']
   },
   {
     id: 'blue-entoloma',
     name: 'Blue Entoloma',
-    traits: ['restore-health', 'ravage-magicka', 'cowardice', 'invisible']
+    traits: ['restore-health', 'ravage-magicka', 'invisible', 'heal-absorption']
   },
-  { id: 'bugloss', name: 'Bugloss', traits: ['restore-health', 'restore-magicka', 'increase-spell-resist', 'cowardice'] },
+  { id: 'bugloss', name: 'Bugloss', traits: ['restore-health', 'restore-magicka', 'increase-spell-resist', 'mending'] },
   {
     id: 'butterfly-wing',
     name: 'Butterfly Wing',
-    traits: ['restore-health', 'uncertainty', 'lingering-health', 'vitality']
+    traits: ['restore-health', 'lingering-health', 'vitality', 'damage-shield']
   },
-  {
-    id: 'chaurus-egg',
-    name: 'Chaurus Egg',
-    traits: ['ravage-magicka', 'restore-stamina', 'detection', 'timidity']
-  },
-  {
-    id: 'clam-gall',
-    name: 'Clam Gall',
-    traits: ['increase-spell-resist', 'hindrance', 'vulnerability', 'defile']
-  },
+  { id: 'chaurus-egg', name: 'Chaurus Egg', traits: ['ravage-magicka', 'detection', 'timidity', 'vexation'] },
+  { id: 'clam-gall', name: 'Clam Gall', traits: ['increase-spell-resist', 'hindrance', 'vulnerability', 'defile'] },
   {
     id: 'columbine',
     name: 'Columbine',
@@ -183,21 +177,27 @@ export const REAGENTS: Reagent[] = [
   {
     id: 'corn-flower',
     name: 'Corn Flower',
-    traits: ['ravage-health', 'restore-magicka', 'increase-spell-power', 'detection']
+    traits: ['ravage-health', 'restore-magicka', 'increase-power', 'detection']
   },
   {
     id: 'crimson-nirnroot',
     name: 'Crimson Nirnroot',
-    traits: ['restore-health', 'spell-critical', 'gradual-ravage-health', 'timidity']
+    traits: ['restore-health', 'gradual-ravage-health', 'timidity', 'force']
   },
-  { id: 'dragon-rheum', name: 'Dragon Rheum', traits: ['restore-magicka', 'enervation', 'speed', 'heroism'] },
+  {
+    id: 'cultivated-cryptpods',
+    name: 'Cultivated Cryptpods',
+    traits: ['increase-power', 'heroism', 'damage-shield', 'mending']
+  },
+  {
+    id: 'daedra-blood-maggots',
+    name: 'Daedra-Blood Maggots',
+    traits: ['cowardice', 'entrapment', 'defile', 'heal-absorption']
+  },
+  { id: 'dragon-rheum', name: 'Dragon Rheum', traits: ['restore-magicka', 'uncertainty', 'speed', 'heroism'] },
   { id: 'dragons-bile', name: "Dragon's Bile", traits: ['invisible', 'vulnerability', 'vitality', 'heroism'] },
   { id: 'dragons-blood', name: "Dragon's Blood", traits: ['restore-stamina', 'lingering-health', 'defile', 'heroism'] },
-  {
-    id: 'dragonthorn',
-    name: 'Dragonthorn',
-    traits: ['restore-stamina', 'fracture', 'increase-weapon-power', 'weapon-critical']
-  },
+  { id: 'dragonthorn', name: 'Dragonthorn', traits: ['restore-stamina', 'fracture', 'increase-power', 'critical'] },
   {
     id: 'emetic-russula',
     name: 'Emetic Russula',
@@ -208,47 +208,40 @@ export const REAGENTS: Reagent[] = [
     name: 'Fleshfly Larva',
     traits: ['ravage-stamina', 'vulnerability', 'gradual-ravage-health', 'vitality']
   },
-  { id: 'imp-stool', name: 'Imp Stool', traits: ['ravage-stamina', 'increase-armor', 'maim', 'enervation'] },
   {
-    id: 'ladys-smock',
-    name: "Lady's Smock",
-    traits: ['restore-magicka', 'breach', 'increase-spell-power', 'spell-critical']
+    id: 'fossilized-verminous-bones',
+    name: 'Fossilized Verminous Bones',
+    traits: ['restore-stamina', 'detection', 'heroism', 'force']
   },
+  { id: 'imp-stool', name: 'Imp Stool', traits: ['ravage-stamina', 'increase-armor', 'cowardice', 'enervation'] },
+  { id: 'ladys-smock', name: "Lady's Smock", traits: ['restore-magicka', 'breach', 'critical', 'force'] },
   {
     id: 'luminous-russula',
     name: 'Luminous Russula',
-    traits: ['restore-health', 'ravage-stamina', 'maim', 'hindrance']
+    traits: ['restore-health', 'ravage-stamina', 'cowardice', 'hindrance']
   },
   {
     id: 'mountain-flower',
     name: 'Mountain Flower',
-    traits: ['restore-health', 'restore-stamina', 'increase-armor', 'maim']
+    traits: ['restore-health', 'restore-stamina', 'increase-armor', 'cowardice']
   },
   {
     id: 'mudcrab-chitin',
     name: 'Mudcrab Chitin',
     traits: ['increase-spell-resist', 'increase-armor', 'protection', 'defile']
   },
-  { id: 'namiras-rot', name: "Namira's Rot", traits: ['spell-critical', 'unstoppable', 'invisible', 'speed'] },
+  { id: 'namiras-rot', name: "Namira's Rot", traits: ['unstoppable', 'invisible', 'speed', 'enervation'] },
   { id: 'nightshade', name: 'Nightshade', traits: ['ravage-health', 'protection', 'gradual-ravage-health', 'defile'] },
-  { id: 'nirnroot', name: 'Nirnroot', traits: ['ravage-health', 'uncertainty', 'enervation', 'invisible'] },
+  { id: 'nirnroot', name: 'Nirnroot', traits: ['ravage-health', 'uncertainty', 'invisible', 'heal-absorption'] },
   {
     id: 'powdered-mother-of-pearl',
     name: 'Powdered Mother of Pearl',
-    traits: ['speed', 'protection', 'lingering-health', 'vitality']
+    traits: ['speed', 'protection', 'vitality', 'mending']
   },
-  {
-    id: 'scrib-jelly',
-    name: 'Scrib Jelly',
-    traits: ['ravage-magicka', 'speed', 'vulnerability', 'lingering-health']
-  },
-  { id: 'spider-egg', name: 'Spider Egg', traits: ['invisible', 'hindrance', 'lingering-health', 'defile'] },
-  {
-    id: 'stinkhorn',
-    name: 'Stinkhorn',
-    traits: ['ravage-health', 'ravage-stamina', 'fracture', 'increase-weapon-power']
-  },
-  { id: 'torchbug-thorax', name: 'Torchbug Thorax', traits: ['fracture', 'enervation', 'detection', 'vitality'] },
+  { id: 'scrib-jelly', name: 'Scrib Jelly', traits: ['speed', 'vulnerability', 'lingering-health', 'vexation'] },
+  { id: 'spider-egg', name: 'Spider Egg', traits: ['invisible', 'hindrance', 'defile', 'damage-shield'] },
+  { id: 'stinkhorn', name: 'Stinkhorn', traits: ['ravage-health', 'ravage-stamina', 'fracture', 'force'] },
+  { id: 'torchbug-thorax', name: 'Torchbug Thorax', traits: ['fracture', 'uncertainty', 'detection', 'mending'] },
   {
     id: 'vile-coagulant',
     name: 'Vile Coagulant',
@@ -257,19 +250,24 @@ export const REAGENTS: Reagent[] = [
   {
     id: 'violet-coprinus',
     name: 'Violet Coprinus',
-    traits: ['ravage-health', 'ravage-magicka', 'breach', 'increase-spell-power']
+    traits: ['ravage-health', 'ravage-magicka', 'breach', 'increase-power']
   },
   {
     id: 'water-hyacinth',
     name: 'Water Hyacinth',
-    traits: ['restore-health', 'spell-critical', 'weapon-critical', 'entrapment']
+    traits: ['restore-health', 'critical', 'entrapment', 'damage-shield']
   },
   {
     id: 'white-cap',
     name: 'White Cap',
-    traits: ['ravage-magicka', 'increase-spell-resist', 'cowardice', 'detection']
+    traits: ['ravage-magicka', 'increase-spell-resist', 'detection', 'enervation']
   },
-  { id: 'wormwood', name: 'Wormwood', traits: ['weapon-critical', 'unstoppable', 'detection', 'hindrance'] }
+  {
+    id: 'winters-grave-tongue',
+    name: "Winter's Grave Tongue",
+    traits: ['breach', 'defile', 'heal-absorption', 'vexation']
+  },
+  { id: 'wormwood', name: 'Wormwood', traits: ['critical', 'unstoppable', 'detection', 'hindrance'] }
 ]
 
 export const SOLVENTS: Solvent[] = [

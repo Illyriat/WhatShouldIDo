@@ -10,6 +10,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - A new PvP dropdown in the sidebar holds Alliance Rank and Campaign Tiers
 
 ### Changed
+- Alchemy updated for Update 51's rework: 38 reagents (new: Cultivated Cryptpods, Daedra-Blood Maggots, Fossilized Verminous Bones, Winter's Grave Tongue) and 34 effects. Weapon/Spell Power are now **Increase Power**, Weapon/Spell Critical are now **Critical**, Maim is gone, and **Force**, **Mending**, **Vexation**, **Damage Shield** and **Heal Absorption** are new. Many existing reagents changed traits, so old recipes may give different results. Data from eso-hub, checked pair by pair against UESP
 - The Dungeon Check List is now a sidebar dropdown with four sub-pages (Base Game, DLC, Solo Dungeons, Arenas) instead of one long page, so it doesn't turn into an endless scroll as more content is added
 - Upgraded Electron 33 to 44 (Chromium 152, Node 24)
 - Upgraded the build toolchain: electron-vite 2 to 5 and Vite 5 to 7, with `@vitejs/plugin-react` 5 to match. Vite is now a direct devDependency, and the deprecated `externalizeDepsPlugin` is gone from `electron.vite.config.ts` (electron-vite 5 externalizes dependencies by default)
