@@ -22,7 +22,7 @@
     "publish": "npm run check:addon && npm run build && electron-builder --publish always"
   },
   "dependencies": {
-    "electron-updater": "^6.8.9",
+    "electron-updater": "^6.8.11",
     "i18next": "^26.4.2",
     "luaparse": "^0.3.1",
     "react-i18next": "^17.0.15"
@@ -33,13 +33,13 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.2.0",
-    "electron": "^44.5.1",
-    "electron-builder": "^26.15.3",
+    "electron": "^44.10.2",
+    "electron-builder": "^26.18.0",
     "electron-vite": "^5.0.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "^5.7.2",
-    "vite": "^7.3.6",
-    "vitest": "^4.1.11"
+    "vite": "^7.3.8",
+    "vitest": "^4.1.12"
   }
 }
