@@ -32,6 +32,11 @@ export const USER_TOGGLEABLE_FEATURES: {
     labelKey: 'settings.features.allianceRank.label',
     descriptionKey: 'settings.features.allianceRank.description'
   },
+  {
+    flag: 'campaignTiers',
+    labelKey: 'settings.features.campaignTiers.label',
+    descriptionKey: 'settings.features.campaignTiers.description'
+  },
   { flag: 'alchemy', labelKey: 'settings.features.alchemy.label', descriptionKey: 'settings.features.alchemy.description' },
   { flag: 'enchanting', labelKey: 'settings.features.enchanting.label', descriptionKey: 'settings.features.enchanting.description' },
   {

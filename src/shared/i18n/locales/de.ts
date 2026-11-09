@@ -27,6 +27,8 @@ export const de: typeof en = {
     home: "Start",
     dungeonChecklist: "Dungeon-Checkliste",
     allianceRank: "Allianzrang",
+    pvp: "PvP",
+    campaignTiers: "Kampagnenstufen",
     crafting: "Handwerk",
     alchemy: "Alchemie",
     enchanting: "Verzaubern",
@@ -106,6 +108,15 @@ export const de: typeof en = {
     apToRank50: "{{remaining}} AP bis Rang 50",
     noDataYet:
       "Noch keine Daten - melde dich mit aktivem Addon <bold>WhatShouldIDoDataCollector</bold> an.",
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: "Charakterdaten konnten nicht geladen werden",
+    campaign: "Kampagne",
+    rewardTier: "Belohnungsstufe",
+    progress: "Fortschritt zur nächsten Stufe",
+    ended: "Kampagne beendet - zum Aktualisieren einloggen",
+    noDataYet: "Noch keine Daten - melde dich mit aktivem Addon <bold>WhatShouldIDoDataCollector</bold> an.",
   },
 
   alchemy: {
@@ -384,6 +395,10 @@ export const de: typeof en = {
         label: "Allianzrang",
         description:
           "Die Seite Allianzrang und ihre Medaille „Veteranen des Allianzkriegs“ auf der Seite Erfolge.",
+      },
+      campaignTiers: {
+        label: "Kampagnenstufen",
+        description: "Die Seite Kampagnenstufen: Belohnungsstufe und Fortschritt jedes Charakters in seiner Heimatkampagne im Allianzkrieg.",
       },
       alchemy: {
         label: "Alchemie",

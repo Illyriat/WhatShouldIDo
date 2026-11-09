@@ -28,6 +28,8 @@ export const en = {
     home: 'Home',
     dungeonChecklist: 'Dungeon Check List',
     allianceRank: 'Alliance Rank',
+    pvp: 'PvP',
+    campaignTiers: 'Campaign Tiers',
     crafting: 'Crafting',
     alchemy: 'Alchemy',
     enchanting: 'Enchanting',
@@ -102,6 +104,15 @@ export const en = {
     circleAriaLabel: 'Rank {{rank}}, {{outerPct}}% of the way to rank 50, {{innerPct}}% through the current rank',
     apOfTotal: '{{current}} / {{max}} AP',
     apToRank50: '{{remaining}} AP to Rank 50',
+    noDataYet: 'No data yet - log in with the <bold>WhatShouldIDoDataCollector</bold> addon active.'
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: "Couldn't load character data",
+    campaign: 'Campaign',
+    rewardTier: 'Reward Tier',
+    progress: 'Progress to next tier',
+    ended: 'Campaign ended - log in to update',
     noDataYet: 'No data yet - log in with the <bold>WhatShouldIDoDataCollector</bold> addon active.'
   },
 
@@ -319,6 +330,10 @@ export const en = {
       allianceRank: {
         label: 'Alliance Rank',
         description: 'The Alliance Rank page, and its Alliance War Veterans medal on the Achievements page.'
+      },
+      campaignTiers: {
+        label: 'Campaign Tiers',
+        description: "The Campaign Tiers page: each character's reward tier and progress in their home Alliance War campaign."
       },
       alchemy: {
         label: 'Alchemy',

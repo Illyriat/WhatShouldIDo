@@ -34,6 +34,8 @@ async function writeFixtureDocuments(): Promise<string> {
       `["currentRankStartAP"]=6072000,["currentRankEndAP"]=6918400},` +
       `["wealth"]={["gold"]=15000,["alliancePoints"]=800,["telVarStones"]=50,["writVouchers"]=10},` +
       `["completedDungeonQuests"]={["BC1"]=1},` +
+      `["campaignTier"]={["campaignId"]=95,["campaignName"]="Gray Host",["sequenceId"]=7,["tier"]=2,` +
+      `["progress"]=1500,["nextTierTotal"]=4000,["endsAt"]=1800000000,["recordedAt"]=1700000000},` +
       `["ridingStats"]={["capacity"]=60,["capacityMax"]=60,["stamina"]=60,["staminaMax"]=60,["speed"]=60,["speedMax"]=60}},` +
       `["1002"]={["name"]="Bob",["completedDungeonQuests"]={}}` +
       `},` +
@@ -75,7 +77,15 @@ describe('buildAccounts', () => {
           currentRankStartAP: 6072000,
           currentRankEndAP: 6918400
         },
-        wealth: { gold: 15000, alliancePoints: 800, telVarStones: 50, writVouchers: 10 }
+        wealth: { gold: 15000, alliancePoints: 800, telVarStones: 50, writVouchers: 10 },
+        campaignTier: {
+          campaignId: 95,
+          campaignName: 'Gray Host',
+          tier: 2,
+          progress: 1500,
+          nextTierTotal: 4000,
+          endsAt: 1800000000
+        }
       },
       {
         charId: '1002',
@@ -85,7 +95,8 @@ describe('buildAccounts', () => {
         ridingMaxed: false,
         readyToTrainRiding: false, // no .ridingStats in the fixture for Bob
         allianceRank: null,
-        wealth: null
+        wealth: null,
+        campaignTier: null
       },
       {
         charId: '2001',
@@ -95,7 +106,8 @@ describe('buildAccounts', () => {
         ridingMaxed: false,
         readyToTrainRiding: false,
         allianceRank: null,
-        wealth: null
+        wealth: null,
+        campaignTier: null
       }
     ])
   })

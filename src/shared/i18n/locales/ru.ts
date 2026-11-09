@@ -41,6 +41,8 @@ const ruTranslation = {
     home: 'Главная',
     dungeonChecklist: 'Список подземелий',
     allianceRank: 'Ранг Альянса',
+    pvp: 'PvP',
+    campaignTiers: 'Уровни кампании',
     crafting: 'Крафт',
     alchemy: 'Алхимия',
     enchanting: 'Зачарование',
@@ -117,6 +119,15 @@ const ruTranslation = {
     circleAriaLabel: 'Ранг {{rank}}, {{outerPct}}% пути до 50 ранга, {{innerPct}}% текущего ранга',
     apOfTotal: '{{current}} / {{max}} ОА',
     apToRank50: '{{remaining}} ОА до 50 ранга',
+    noDataYet: 'Данных пока нет - войдите в игру с активным аддоном <bold>WhatShouldIDoDataCollector</bold>.'
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: 'Не удалось загрузить данные персонажа',
+    campaign: 'Кампания',
+    rewardTier: 'Уровень награды',
+    progress: 'Прогресс до следующего уровня',
+    ended: 'Кампания завершена - войдите в игру, чтобы обновить',
     noDataYet: 'Данных пока нет - войдите в игру с активным аддоном <bold>WhatShouldIDoDataCollector</bold>.'
   },
 
@@ -357,6 +368,10 @@ const ruTranslation = {
       allianceRank: {
         label: 'Ранг Альянса',
         description: 'Страница Ранг Альянса и медаль «Ветераны Войны Альянсов» на странице Достижения.'
+      },
+      campaignTiers: {
+        label: 'Уровни кампании',
+        description: 'Страница Уровни кампании: уровень награды и прогресс каждого персонажа в его домашней кампании Войны Альянсов.'
       },
       alchemy: {
         label: 'Алхимия',

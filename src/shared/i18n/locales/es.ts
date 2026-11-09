@@ -30,6 +30,8 @@ export const es: typeof en = {
     home: 'Inicio',
     dungeonChecklist: 'Lista de mazmorras',
     allianceRank: 'Rango de Alianza',
+    pvp: 'JcJ',
+    campaignTiers: 'Niveles de campaña',
     crafting: 'Artesanía',
     alchemy: 'Alquimia',
     enchanting: 'Encantamiento',
@@ -105,6 +107,15 @@ export const es: typeof en = {
     circleAriaLabel: 'Rango {{rank}}, {{outerPct}}% del camino al rango 50, {{innerPct}}% del rango actual',
     apOfTotal: '{{current}} / {{max}} PA',
     apToRank50: '{{remaining}} PA para el rango 50',
+    noDataYet: 'Aún no hay datos - inicia sesión con el addon <bold>WhatShouldIDoDataCollector</bold> activo.'
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: 'No se pudieron cargar los datos del personaje',
+    campaign: 'Campaña',
+    rewardTier: 'Nivel de recompensa',
+    progress: 'Progreso al siguiente nivel',
+    ended: 'Campaña terminada - inicia sesión para actualizar',
     noDataYet: 'Aún no hay datos - inicia sesión con el addon <bold>WhatShouldIDoDataCollector</bold> activo.'
   },
 
@@ -344,6 +355,10 @@ export const es: typeof en = {
       allianceRank: {
         label: 'Rango de Alianza',
         description: 'La página Rango de Alianza y su medalla Veteranos de la Guerra de Alianza en la página Logros.'
+      },
+      campaignTiers: {
+        label: 'Niveles de campaña',
+        description: 'La página Niveles de campaña: el nivel de recompensa y el progreso de cada personaje en su campaña principal de la Guerra de Alianza.'
       },
       alchemy: {
         label: 'Alquimia',

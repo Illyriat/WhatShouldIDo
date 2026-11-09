@@ -6,6 +6,8 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ### Added
 - Dungeon Check List: two new sections for skill points earned outside the Undaunted Pledge dungeons, tracked per character. **Solo Dungeons** covers the Update 51 solo versions of Moon Hunter Keep and March of Sacrifices, whose quests are separate from the group versions', so each character can earn both points. **Arenas** covers Maelstrom Arena (normal or veteran) and the Infinite Archive; the other arenas don't grant a skill point. Needs the Data Collector addon v1.6.0, and each character has to log in once with it before their ticks show
+- Campaign Tiers page: a table of each character's home Alliance War campaign, reward tier and progress toward the next tier, straight from the game. Once a campaign's end time passes, its rows show "campaign ended" until that character logs in again. Needs the Data Collector addon v1.7.0
+- A new PvP dropdown in the sidebar holds Alliance Rank and Campaign Tiers
 
 ### Changed
 - The Dungeon Check List is now a sidebar dropdown with four sub-pages (Base Game, DLC, Solo Dungeons, Arenas) instead of one long page, so it doesn't turn into an endless scroll as more content is added

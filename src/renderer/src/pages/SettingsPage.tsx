@@ -46,6 +46,7 @@ const DATA_COLLECTOR_FLAGS: FeatureFlag[] = [
   'dungeonChecklist',
   'ridingTraining',
   'allianceRank',
+  'campaignTiers',
   'welcomeBanner',
   'wealthTracker',
   'musicBoxes'

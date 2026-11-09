@@ -6,6 +6,7 @@ import { extractRidingStatus, type RidingStatus } from './ridingExtractor'
 import { extractAllianceRankStatus } from './allianceRankExtractor'
 import { extractChampionPoints } from './championPointsExtractor'
 import { extractCharacterWealth, extractBankWealth } from './wealthExtractor'
+import { extractCampaignTiers } from './campaignTierExtractor'
 
 const NO_RIDING_DATA: RidingStatus = { ridingMaxed: false, readyToTrainRiding: false }
 
@@ -77,7 +78,7 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
   // All of these read the same file (one shared parse - see luaSavedVarsParser.ts) and
   // differ only in scope: per-character data is keyed by charId, while Champion Points
   // and the shared bank are account+realm scoped (account -> realm -> value).
-  const [rawAccountLists, dungeonQuestMaps, ridingMaps, allianceRankMaps, wealthMaps, championPointsMaps, bankWealthMaps] =
+  const [rawAccountLists, dungeonQuestMaps, ridingMaps, allianceRankMaps, wealthMaps, championPointsMaps, bankWealthMaps, campaignTierMaps] =
     await Promise.all([
       fromEachFile(extractCharacters),
       fromEachFile(extractCompletedDungeonQuests),
@@ -85,7 +86,8 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
       fromEachFile(extractAllianceRankStatus),
       fromEachFile(extractCharacterWealth),
       fromEachFile(extractChampionPoints),
-      fromEachFile(extractBankWealth)
+      fromEachFile(extractBankWealth),
+      fromEachFile(extractCampaignTiers)
     ])
 
   const rawAccounts = mergeRawAccounts(rawAccountLists)
@@ -95,6 +97,7 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
   const wealthByCharId = mergeMaps(wealthMaps)
   const championPointsByAccount = mergeNestedMaps(championPointsMaps)
   const bankWealthByAccount = mergeNestedMaps(bankWealthMaps)
+  const campaignTierByCharId = mergeMaps(campaignTierMaps)
 
   const accounts: Account[] = []
 
@@ -109,7 +112,8 @@ export async function buildAccounts(documentsOverride?: string): Promise<Account
         ridingMaxed: riding.ridingMaxed,
         readyToTrainRiding: riding.readyToTrainRiding,
         allianceRank: allianceRankByCharId.get(character.charId) ?? null,
-        wealth: wealthByCharId.get(character.charId) ?? null
+        wealth: wealthByCharId.get(character.charId) ?? null,
+        campaignTier: campaignTierByCharId.get(character.charId) ?? null
       }
     })
 
