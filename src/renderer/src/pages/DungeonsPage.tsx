@@ -6,15 +6,24 @@ import type { AccountSelection } from '../hooks/useAccountSelection'
 import { PLEDGE_DUNGEONS } from '@shared/pledgeDungeons'
 import { ARENAS, SOLO_DUNGEONS } from '@shared/skillPointActivities'
 
-const BASE_DUNGEONS = PLEDGE_DUNGEONS.filter((d) => d.tier === 'base')
-const DLC_DUNGEONS = PLEDGE_DUNGEONS.filter((d) => d.tier === 'dlc')
+export type DungeonSection = 'base' | 'dlc' | 'solo' | 'arenas'
+
+// One sidebar sub-page per section, so the page doesn't grow into one long scroll.
+const SECTIONS = {
+  base: { titleKey: 'dungeons.baseGame', dungeons: PLEDGE_DUNGEONS.filter((d) => d.tier === 'base') },
+  dlc: { titleKey: 'dungeons.dlc', dungeons: PLEDGE_DUNGEONS.filter((d) => d.tier === 'dlc') },
+  solo: { titleKey: 'dungeons.soloDungeons', dungeons: SOLO_DUNGEONS },
+  arenas: { titleKey: 'dungeons.arenas', dungeons: ARENAS }
+} as const
 
 interface Props {
   accountSelection: AccountSelection
+  section: DungeonSection
 }
 
-function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
+function DungeonsPage({ accountSelection, section }: Props): React.JSX.Element {
   const { t } = useTranslation()
+  const { titleKey, dungeons } = SECTIONS[section]
   const {
     state,
     selectedAccount,
@@ -66,10 +75,7 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
         </div>
       </div>
 
-      <DungeonTable title={t('dungeons.baseGame')} dungeons={BASE_DUNGEONS} characters={selectedCharacters} />
-      <DungeonTable title={t('dungeons.dlc')} dungeons={DLC_DUNGEONS} characters={selectedCharacters} />
-      <DungeonTable title={t('dungeons.soloDungeons')} dungeons={SOLO_DUNGEONS} characters={selectedCharacters} />
-      <DungeonTable title={t('dungeons.arenas')} dungeons={ARENAS} characters={selectedCharacters} />
+      <DungeonTable title={t(titleKey)} dungeons={dungeons} characters={selectedCharacters} />
     </div>
   )
 }

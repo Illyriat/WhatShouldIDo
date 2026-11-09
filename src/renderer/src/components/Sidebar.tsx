@@ -7,7 +7,10 @@ import type { FeaturePreferences } from '../hooks/useFeaturePreferences'
 
 export type Page =
   | 'home'
-  | 'dungeons'
+  | 'dungeons-base'
+  | 'dungeons-dlc'
+  | 'dungeons-solo'
+  | 'dungeons-arenas'
   | 'alliancerank'
   | 'alchemy'
   | 'enchanting'
@@ -32,7 +35,16 @@ export type NavItem =
 // else catches a typo'd or renamed key here.
 export const ALL_NAV_ITEMS: NavItem[] = [
   { page: 'home', labelKey: 'sidebar.home' },
-  { page: 'dungeons', labelKey: 'sidebar.dungeonChecklist', flag: 'dungeonChecklist' },
+  {
+    group: 'dungeons',
+    labelKey: 'sidebar.dungeonChecklist',
+    children: [
+      { page: 'dungeons-base', labelKey: 'dungeons.baseGame', flag: 'dungeonChecklist' },
+      { page: 'dungeons-dlc', labelKey: 'dungeons.dlc', flag: 'dungeonChecklist' },
+      { page: 'dungeons-solo', labelKey: 'dungeons.soloDungeons', flag: 'dungeonChecklist' },
+      { page: 'dungeons-arenas', labelKey: 'dungeons.arenas', flag: 'dungeonChecklist' }
+    ]
+  },
   { page: 'alliancerank', labelKey: 'sidebar.allianceRank', flag: 'allianceRank' },
   {
     group: 'crafting',
