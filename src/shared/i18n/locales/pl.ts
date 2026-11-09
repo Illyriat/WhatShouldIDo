@@ -104,6 +104,8 @@ const plTranslation = {
     couldntLoadTitle: 'Nie udało się wczytać danych lochów',
     baseGame: 'Podstawowa gra',
     dlc: 'DLC',
+    soloDungeons: 'Lochy solowe',
+    arenas: 'Areny',
     noCharacters: 'Brak postaci do wyświetlenia.'
   },
 
@@ -354,7 +356,7 @@ const plTranslation = {
       },
       dungeonChecklist: {
         label: 'Lista lochów',
-        description: 'Pełna lista ukończenia lochów dla każdej postaci.'
+        description: 'Pełna lista ukończenia lochów dla każdej postaci, w tym lochów solowych i aren, które dają punkt umiejętności.'
       },
       allianceRank: {
         label: 'Ranga Sojuszu',

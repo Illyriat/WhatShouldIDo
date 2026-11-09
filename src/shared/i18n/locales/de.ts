@@ -89,6 +89,8 @@ export const de: typeof en = {
     couldntLoadTitle: "Dungeon-Daten konnten nicht geladen werden",
     baseGame: "Basisspiel",
     dlc: "DLC",
+    soloDungeons: "Solo-Dungeons",
+    arenas: "Arenen",
     noCharacters: "Keine Charaktere zum Anzeigen.",
   },
 
@@ -376,7 +378,7 @@ export const de: typeof en = {
       dungeonChecklist: {
         label: "Dungeon-Checkliste",
         description:
-          "Die vollständige Dungeon-Abschluss-Checkliste pro Charakter.",
+          "Die vollständige Dungeon-Abschluss-Checkliste pro Charakter, einschließlich der Solo-Dungeons und Arenen, die einen Fertigkeitspunkt gewähren.",
       },
       allianceRank: {
         label: "Allianzrang",

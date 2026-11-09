@@ -4,6 +4,9 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Added
+- Dungeon Check List: two new sections for skill points earned outside the Undaunted Pledge dungeons, tracked per character. **Solo Dungeons** covers the Update 51 solo versions of Moon Hunter Keep and March of Sacrifices, whose quests are separate from the group versions', so each character can earn both points. **Arenas** covers Maelstrom Arena (normal or veteran) and the Infinite Archive; the other arenas don't grant a skill point. Needs the Data Collector addon v1.6.0, and each character has to log in once with it before their ticks show
+
 ### Changed
 - Upgraded Electron 33 to 44 (Chromium 152, Node 24)
 - Upgraded the build toolchain: electron-vite 2 to 5 and Vite 5 to 7, with `@vitejs/plugin-react` 5 to match. Vite is now a direct devDependency, and the deprecated `externalizeDepsPlugin` is gone from `electron.vite.config.ts` (electron-vite 5 externalizes dependencies by default)

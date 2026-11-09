@@ -91,6 +91,8 @@ export const es: typeof en = {
     couldntLoadTitle: 'No se pudieron cargar los datos de mazmorras',
     baseGame: 'Juego base',
     dlc: 'DLC',
+    soloDungeons: 'Mazmorras en solitario',
+    arenas: 'Arenas',
     noCharacters: 'No hay personajes que mostrar.'
   },
 
@@ -337,7 +339,7 @@ export const es: typeof en = {
       },
       dungeonChecklist: {
         label: 'Lista de mazmorras',
-        description: 'La lista completa de finalización de mazmorras por personaje.'
+        description: 'La lista completa de finalización de mazmorras por personaje, incluidas las mazmorras en solitario y las arenas que otorgan un punto de habilidad.'
       },
       allianceRank: {
         label: 'Rango de Alianza',

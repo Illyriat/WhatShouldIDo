@@ -4,6 +4,7 @@ import ServerSwitcher from '../components/ServerSwitcher'
 import DungeonTable from '../components/DungeonTable'
 import type { AccountSelection } from '../hooks/useAccountSelection'
 import { PLEDGE_DUNGEONS } from '@shared/pledgeDungeons'
+import { ARENAS, SOLO_DUNGEONS } from '@shared/skillPointActivities'
 
 const BASE_DUNGEONS = PLEDGE_DUNGEONS.filter((d) => d.tier === 'base')
 const DLC_DUNGEONS = PLEDGE_DUNGEONS.filter((d) => d.tier === 'dlc')
@@ -67,6 +68,8 @@ function DungeonsPage({ accountSelection }: Props): React.JSX.Element {
 
       <DungeonTable title={t('dungeons.baseGame')} dungeons={BASE_DUNGEONS} characters={selectedCharacters} />
       <DungeonTable title={t('dungeons.dlc')} dungeons={DLC_DUNGEONS} characters={selectedCharacters} />
+      <DungeonTable title={t('dungeons.soloDungeons')} dungeons={SOLO_DUNGEONS} characters={selectedCharacters} />
+      <DungeonTable title={t('dungeons.arenas')} dungeons={ARENAS} characters={selectedCharacters} />
     </div>
   )
 }

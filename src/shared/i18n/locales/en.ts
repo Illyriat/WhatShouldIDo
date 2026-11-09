@@ -88,6 +88,8 @@ export const en = {
     couldntLoadTitle: "Couldn't load dungeon data",
     baseGame: 'Base Game',
     dlc: 'DLC',
+    soloDungeons: 'Solo Dungeons',
+    arenas: 'Arenas',
     noCharacters: 'No characters to show.'
   },
 
@@ -312,7 +314,7 @@ export const en = {
       },
       dungeonChecklist: {
         label: 'Dungeon Check List',
-        description: 'The full per-character dungeon completion checklist page.'
+        description: 'The full per-character dungeon completion checklist page, including the solo dungeons and arenas that grant a skill point.'
       },
       allianceRank: {
         label: 'Alliance Rank',

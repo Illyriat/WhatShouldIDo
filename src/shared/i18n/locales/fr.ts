@@ -91,6 +91,8 @@ export const fr: typeof en = {
     couldntLoadTitle: 'Impossible de charger les données des donjons',
     baseGame: 'Jeu de base',
     dlc: 'DLC',
+    soloDungeons: 'Donjons en solo',
+    arenas: 'Arènes',
     noCharacters: 'Aucun personnage à afficher.'
   },
 
@@ -338,7 +340,7 @@ export const fr: typeof en = {
       },
       dungeonChecklist: {
         label: 'Liste des donjons',
-        description: 'La liste complète de complétion des donjons par personnage.'
+        description: 'La liste complète de complétion des donjons par personnage, y compris les donjons en solo et les arènes qui donnent un point de compétence.'
       },
       allianceRank: {
         label: "Rang d'Alliance",
