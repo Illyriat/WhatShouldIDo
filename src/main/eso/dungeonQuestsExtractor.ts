@@ -13,7 +13,9 @@ function extractCompletedKeys(value: unknown): string[] {
  * WhatShouldIDoDataCollector.lua's `.completedDungeonQuests` (see the addon's own
  * data/DungeonQuests.lua and its WSIDC.PLEDGE_DUNGEONS table) - keyed the same short
  * way as this app's PLEDGE_DUNGEONS list (src/shared/pledgeDungeons.ts), replacing
- * USPF's `GD` table. Quest completion is genuinely per-character in ESO with no
+ * USPF's `GD` table. Addon v1.6.0+ also records the solo dungeon and arena skill point
+ * quests in the same table (keys in src/shared/skillPointActivities.ts), so those come
+ * through here too. Quest completion is genuinely per-character in ESO with no
  * account-wide or per-server caveat, so no unioning across characters is needed.
  */
 export async function extractCompletedDungeonQuests(filePath: string): Promise<Map<string, string[]>> {
