@@ -17,6 +17,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ### Security
 - Cleared every known dependency vulnerability (`npm audit`: 8 down to 0). Electron 33 was end-of-life with around 35 open advisories; the rest were in brace-expansion, fast-uri, undici, extract-zip and esbuild
+- Patched newly published dependency advisories (`npm audit`: 13 down to 6, no high-severity left): Electron 44.5.1 to 44.10.2 (compromised eMudhra intermediate certificates), Vite 7.3.6 to 7.3.8, Vitest 4.1.11 to 4.1.12, electron-builder 26.15.3 to 26.18.0 and electron-updater 6.8.9 to 6.8.11, plus a lockfile refresh that also clears the undici, fast-uri and source-map-js advisories. The 6 remaining are moderate `minimatch` advisories inside electron-builder's packaging tools - they only run at build time, never ship in the app, and need a breaking upgrade to clear
 - Links now only open in your browser if they are `https` - anything else is refused instead of being handed to the operating system
 
 ## [0.3.1] - 2026-09-21
