@@ -17,8 +17,10 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Updated React to 19.3, react-i18next to 17.0.15 and `@types/node` to 24
 - Refreshing is faster: the addon's SavedVariables file is now read once per refresh instead of up to three times, and the Wealth board no longer rebuilds its number formatter for every cell
 - Internal tidy-up of the SavedVariables readers - the helpers each one had its own copy of now live in `src/main/eso/collectorSavedVars.ts`, and the account builder's repeated merge blocks are two shared helpers. No change in behaviour
+- Refreshed every README screenshot for the new sidebar dropdowns, with new ones for Solo Dungeons, Arenas and Campaign Tiers. Account, server and character names are blacked out, including the server name in the Wealth board's "Total in ... Realm" line
 
 ### Fixed
+- Campaign Tiers table: its header row was as tall as the Dungeon Check List's rotated headers and its cells had no padding, because the dungeon table's own styles overrode the page's
 - Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon.
 - German translations checked by a German speaker and corrected were needed.
 

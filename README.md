@@ -31,16 +31,29 @@ Today's three Undaunted Pledges, resolved against real dungeon names (with a not
 </details>
 
 ### Dungeon Check List
-A full completion checklist of every base-game and DLC dungeon quest, per character, split into two tables so the long DLC list stays readable.
+A per-character checklist of every one-time dungeon quest that grants a skill point. It's a sidebar dropdown with four sub-pages, so no single page turns into an endless scroll:
+
+- **Base Game** and **DLC** - every Undaunted Pledge dungeon's quest.
+- **Solo Dungeons** - the Update 51 solo versions of Moon Hunter Keep and March of Sacrifices. Their quests are separate from the group versions', so each character can earn both skill points.
+- **Arenas** - Maelstrom Arena (normal or veteran) and the Infinite Archive, the arenas that grant a skill point.
+
+Everything is tracked per character from quest completion, not achievements, so it stays accurate even where ESO's achievement is account-wide (as Maelstrom Arena's is).
 
 <details>
-<summary>Screenshot</summary>
+<summary>Screenshots</summary>
 
-![Dungeon Check List](./img/dungeon-checklist.png)
+![Dungeon Check List - Base Game](./img/dungeon-checklist.png)
+
+![Dungeon Check List - Solo Dungeons](./img/dungeon-solo.png)
+
+![Dungeon Check List - Arenas](./img/dungeon-arenas.png)
 
 </details>
 
-### Alliance Rank
+### PvP
+A sidebar dropdown with two pages.
+
+#### Alliance Rank
 Each character's current Alliance War rank as a circular progress ring toward Rank 50, plus exact Alliance Points remaining.
 
 <details>
@@ -50,8 +63,18 @@ Each character's current Alliance War rank as a circular progress ring toward Ra
 
 </details>
 
+#### Campaign Tiers
+A table of each character's home Alliance War campaign, reward tier, and progress toward the next tier, straight from the game. Once a campaign's end time passes, that character's row says the campaign has ended (without anyone needing to log in) until the character logs in again and picks up the new campaign.
+
+<details>
+<summary>Screenshot</summary>
+
+![Campaign Tiers](./img/campaign-tiers.png)
+
+</details>
+
 ### Alchemy
-Pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline.
+Pick a solvent and 2-3 reagents and see exactly which effects the mix produces (and which land on the wrong side) - or work backwards, pick the effects you want and it lists the reagent combinations that make them, best (cleanest) first. Full reagent/effect data with official in-game icons bundled offline, current for Update 51's alchemy rework (38 reagents, 34 effects, including the new Increase Power, Critical, Force, Mending, Vexation, Damage Shield and Heal Absorption).
 
 <details>
 <summary>Screenshot</summary>
@@ -94,7 +117,7 @@ This app's own medals, separate from anything ESO tracks - not gated behind an a
 Settings -> Language switches what this app's own text (labels, buttons, headings, descriptions) is shown in - currently English, French, German, Spanish, Polish and Russian. It's per-device, applies instantly, and persists across restarts. ESO's own game data - dungeon names, alchemy reagents/effects, enchanting runes, music box names/descriptions - always stays in English, regardless of the app's language, since there's no official ESO terminology to match for most of the languages planned after French.
 
 ### Everywhere else
-Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. The sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
+Every page above has an Account and Server switcher, so multi-account and NA/EU players only see the characters relevant to what they've selected. Related pages are grouped into sidebar dropdowns (Dungeon Check List, PvP, Crafting, Collections) that open when you're on one of their pages, and the sidebar can be collapsed down to icons when you don't need it. Settings (bottom-left) covers: a folder picker for your ESO data (with live feedback on how many accounts/characters it found, in case Documents isn't where the app expects), a Features checklist for hiding pages you don't personally use, a language picker, and five themes - System, Dark, Light, Ember and Frost - which apply everywhere and are remembered next time you open the app.
 
 ## Required Addons
 
@@ -102,7 +125,7 @@ Install and enable both, then log into each character once with them active. The
 
 | Addon | Used for |
 |---|---|
-| What Should I Do - Data Collector (bundled with this app) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), today's + upcoming Undaunted Pledge rotation, riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's own companion addon. |
+| What Should I Do - Data Collector (bundled with this app) | Character names and server (NA/EU), per-character dungeon quest completion (Pledges + Dungeon Check List), solo dungeon and arena skill point quests, each character's home campaign reward tier, today's + upcoming Undaunted Pledge rotation, riding training status, Alliance Rank / Alliance Points progress, account Champion Points, and Gold / Alliance Points / Tel Var Stones / Writ Vouchers (per-character carried plus the account-wide bank). This is the app's own companion addon. |
 | [LibUndauntedPledges](https://www.esoui.com/downloads/info3946-LibUndauntedPledges.html) | A small, widely-used library the Data Collector addon depends on to compute the Undaunted Pledge rotation locally (a deterministic, client-visible formula), instead of this app scraping a website for it. |
 
 ### How the bundled Data Collector is installed and kept up to date

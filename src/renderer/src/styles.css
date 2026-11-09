@@ -681,12 +681,13 @@ h1 {
   font-size: 0.9rem;
 }
 
-/* Campaign Tiers reuses the dungeon table frame, but with ordinary horizontal headers. */
-.campaign-tier-table {
+/* Campaign Tiers reuses the dungeon table frame, but with ordinary horizontal headers.
+   Both classes are needed so these beat the .dungeon-table rules further down. */
+.dungeon-table.campaign-tier-table {
   width: 100%;
 }
 
-.campaign-tier-table thead th {
+.dungeon-table.campaign-tier-table thead th {
   height: auto;
   vertical-align: middle;
   padding: 8px 12px;
@@ -694,7 +695,7 @@ h1 {
   color: var(--muted);
 }
 
-.campaign-tier-table td {
+.dungeon-table.campaign-tier-table td {
   padding: 8px 12px;
   white-space: nowrap;
 }
