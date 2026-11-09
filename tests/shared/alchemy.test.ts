@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
+import { existsSync } from 'fs'
+import { join } from 'path'
 import {
+  ALCHEMY_EFFECTS,
+  REAGENTS,
+  SOLVENTS,
   computeAlchemyResult,
   findRecipesForEffects,
   reagentIconUrl,
@@ -109,3 +114,58 @@ describe('icon URL helpers', () => {
   })
 })
 
+// Update 51 (2026) reworked Alchemy: Weapon/Spell Power became Increase Power,
+// Weapon/Spell Critical became Critical, Maim was removed, and Force, Mending, Vexation,
+// Damage Shield and Heal Absorption were added along with four new reagents.
+describe('Update 51 reagent data', () => {
+  const effectIds = new Set(ALCHEMY_EFFECTS.map((e) => e.id))
+
+  it('has 38 reagents and 34 effects', () => {
+    expect(REAGENTS).toHaveLength(38)
+    expect(ALCHEMY_EFFECTS).toHaveLength(34)
+  })
+
+  it('gives every reagent four different, known traits', () => {
+    for (const reagent of REAGENTS) {
+      expect(new Set(reagent.traits).size, reagent.id).toBe(4)
+      for (const trait of reagent.traits) expect(effectIds.has(trait), `${reagent.id}: ${trait}`).toBe(true)
+    }
+  })
+
+  it('puts every effect on at least two reagents, so each one can be crafted', () => {
+    for (const effect of ALCHEMY_EFFECTS) {
+      const count = REAGENTS.filter((r) => r.traits.includes(effect.id)).length
+      expect(count, effect.id).toBeGreaterThanOrEqual(2)
+    }
+  })
+
+  // UESP's Online:Alchemy states the Update 51 total; a wrong trait anywhere changes it.
+  it('gives the 270 two-reagent combinations UESP lists', () => {
+    let pairs = 0
+    for (let i = 0; i < REAGENTS.length; i++) {
+      for (let j = i + 1; j < REAGENTS.length; j++) {
+        if (REAGENTS[i].traits.some((t) => REAGENTS[j].traits.includes(t))) pairs++
+      }
+    }
+    expect(pairs).toBe(270)
+  })
+
+  it('no longer has the traits Update 51 removed or merged', () => {
+    for (const id of ['increase-weapon-power', 'increase-spell-power', 'weapon-critical', 'spell-critical', 'maim']) {
+      expect(effectIds.has(id), id).toBe(false)
+    }
+  })
+
+  it('includes the new reagents with their traits', () => {
+    const traitsOf = (id: string): string[] | undefined => REAGENTS.find((r) => r.id === id)?.traits
+    expect(traitsOf('cultivated-cryptpods')).toEqual(['increase-power', 'heroism', 'damage-shield', 'mending'])
+    expect(traitsOf('winters-grave-tongue')).toEqual(['breach', 'defile', 'heal-absorption', 'vexation'])
+  })
+
+  it('has a bundled icon for every reagent, effect and solvent', () => {
+    const publicDir = join(__dirname, '../../src/renderer/public/alchemy')
+    for (const r of REAGENTS) expect(existsSync(join(publicDir, 'reagents', `${r.id}.png`)), r.id).toBe(true)
+    for (const e of ALCHEMY_EFFECTS) expect(existsSync(join(publicDir, 'effects', `${e.id}.png`)), e.id).toBe(true)
+    for (const s of SOLVENTS) expect(existsSync(join(publicDir, 'solvents', `${s.id}.png`)), s.id).toBe(true)
+  })
+})
