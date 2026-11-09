@@ -3,7 +3,9 @@ import type { Character, PledgeDungeon } from '@shared/types'
 
 interface Props {
   title: string
-  dungeons: PledgeDungeon[]
+  // Pledge dungeons, or the solo dungeon / arena skill point entries - all share the
+  // per-character completedDungeonKeys list.
+  dungeons: Pick<PledgeDungeon, 'key' | 'dungeonName'>[]
   characters: Character[]
 }
 
