@@ -10,7 +10,7 @@ import {
 describe('computeAlchemyResult', () => {
   it('only activates a trait shared by two or more chosen reagents', () => {
     // Beetle Scuttle: breach, increase-armor, protection, vitality
-    // Blessed Thistle: ravage-health, restore-stamina, increase-weapon-power, speed
+    // Blessed Thistle: restore-stamina, increase-power, speed, heal-absorption
     // -> no shared trait at all between just these two
     const result = computeAlchemyResult(['beetle-scuttle', 'blessed-thistle'], 'potion')
     expect(result.effects).toHaveLength(0)
@@ -26,16 +26,16 @@ describe('computeAlchemyResult', () => {
   })
 
   it('a reagent that shares no trait with any other chosen reagent is wasted', () => {
-    // beetle-scuttle, blessed-thistle and blue-entoloma share nothing pairwise -
-    // all three of their traits go nowhere, so all three are wasted.
-    const result = computeAlchemyResult(['beetle-scuttle', 'blessed-thistle', 'blue-entoloma'], 'potion')
+    // beetle-scuttle, blessed-thistle and emetic-russula share nothing pairwise -
+    // all of their traits go nowhere, so all three are wasted.
+    const result = computeAlchemyResult(['beetle-scuttle', 'blessed-thistle', 'emetic-russula'], 'potion')
     expect(result.effects).toHaveLength(0)
-    expect(result.wastedReagentIds.sort()).toEqual(['beetle-scuttle', 'blessed-thistle', 'blue-entoloma'])
+    expect(result.wastedReagentIds.sort()).toEqual(['beetle-scuttle', 'blessed-thistle', 'emetic-russula'])
   })
 
   it('a reagent contributing to one active effect is not wasted, even if its other traits go nowhere', () => {
     // columbine (restore-health, restore-magicka, restore-stamina, unstoppable) and
-    // blessed-thistle (ravage-health, restore-stamina, increase-weapon-power, speed)
+    // blessed-thistle (restore-stamina, increase-power, speed, heal-absorption)
     // share exactly 'restore-stamina' - both contribute, so neither is wasted, even
     // though columbine's other three traits and blessed-thistle's other three go nowhere.
     const result = computeAlchemyResult(['columbine', 'blessed-thistle'], 'potion')
@@ -108,3 +108,4 @@ describe('icon URL helpers', () => {
     expect(solventIconUrl('grease')).toBe('./alchemy/solvents/grease.png')
   })
 })
+
