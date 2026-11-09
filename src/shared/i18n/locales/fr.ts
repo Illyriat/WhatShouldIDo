@@ -30,6 +30,7 @@ export const fr: typeof en = {
     home: 'Accueil',
     dungeonChecklist: 'Liste des donjons',
     allianceRank: "Rang d'Alliance",
+    campaignTiers: 'Paliers de campagne',
     crafting: 'Artisanat',
     alchemy: 'Alchimie',
     enchanting: 'Enchantement',
@@ -107,6 +108,15 @@ export const fr: typeof en = {
     apToRank50: "{{remaining}} PA jusqu'au rang 50",
     noDataYet:
       "Aucune donnée pour le moment - connectez-vous avec l'addon <bold>WhatShouldIDoDataCollector</bold> actif."
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: 'Impossible de charger les données du personnage',
+    campaign: 'Campagne',
+    rewardTier: 'Palier de récompense',
+    progress: 'Progression vers le palier suivant',
+    ended: 'Campagne terminée - connectez-vous pour mettre à jour',
+    noDataYet: "Aucune donnée pour le moment - connectez-vous avec l'addon <bold>WhatShouldIDoDataCollector</bold> actif."
   },
 
   alchemy: {

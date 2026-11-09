@@ -27,6 +27,7 @@ export const de: typeof en = {
     home: "Start",
     dungeonChecklist: "Dungeon-Checkliste",
     allianceRank: "Allianzrang",
+    campaignTiers: "Kampagnenstufen",
     crafting: "Handwerk",
     alchemy: "Alchemie",
     enchanting: "Verzaubern",
@@ -106,6 +107,15 @@ export const de: typeof en = {
     apToRank50: "{{remaining}} AP bis Rang 50",
     noDataYet:
       "Noch keine Daten - melde dich mit aktivem Addon <bold>WhatShouldIDoDataCollector</bold> an.",
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: "Charakterdaten konnten nicht geladen werden",
+    campaign: "Kampagne",
+    rewardTier: "Belohnungsstufe",
+    progress: "Fortschritt zur nächsten Stufe",
+    ended: "Kampagne beendet - zum Aktualisieren einloggen",
+    noDataYet: "Noch keine Daten - melde dich mit aktivem Addon <bold>WhatShouldIDoDataCollector</bold> an.",
   },
 
   alchemy: {

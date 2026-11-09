@@ -28,6 +28,7 @@ export const en = {
     home: 'Home',
     dungeonChecklist: 'Dungeon Check List',
     allianceRank: 'Alliance Rank',
+    campaignTiers: 'Campaign Tiers',
     crafting: 'Crafting',
     alchemy: 'Alchemy',
     enchanting: 'Enchanting',
@@ -102,6 +103,15 @@ export const en = {
     circleAriaLabel: 'Rank {{rank}}, {{outerPct}}% of the way to rank 50, {{innerPct}}% through the current rank',
     apOfTotal: '{{current}} / {{max}} AP',
     apToRank50: '{{remaining}} AP to Rank 50',
+    noDataYet: 'No data yet - log in with the <bold>WhatShouldIDoDataCollector</bold> addon active.'
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: "Couldn't load character data",
+    campaign: 'Campaign',
+    rewardTier: 'Reward Tier',
+    progress: 'Progress to next tier',
+    ended: 'Campaign ended - log in to update',
     noDataYet: 'No data yet - log in with the <bold>WhatShouldIDoDataCollector</bold> addon active.'
   },
 

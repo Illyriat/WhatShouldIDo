@@ -41,6 +41,7 @@ const plTranslation = {
     home: 'Start',
     dungeonChecklist: 'Lista lochów',
     allianceRank: 'Ranga Sojuszu',
+    campaignTiers: 'Progi kampanii',
     crafting: 'Rzemiosło',
     alchemy: 'Alchemia',
     enchanting: 'Zaklinanie',
@@ -118,6 +119,15 @@ const plTranslation = {
     circleAriaLabel: 'Ranga {{rank}}, {{outerPct}}% drogi do rangi 50, {{innerPct}}% obecnej rangi',
     apOfTotal: '{{current}} / {{max}} PS',
     apToRank50: '{{remaining}} PS do Rangi 50',
+    noDataYet: 'Brak danych - zaloguj się z aktywnym dodatkiem <bold>WhatShouldIDoDataCollector</bold>.'
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: 'Nie udało się wczytać danych postaci',
+    campaign: 'Kampania',
+    rewardTier: 'Próg nagrody',
+    progress: 'Postęp do następnego progu',
+    ended: 'Kampania zakończona - zaloguj się, aby zaktualizować',
     noDataYet: 'Brak danych - zaloguj się z aktywnym dodatkiem <bold>WhatShouldIDoDataCollector</bold>.'
   },
 
