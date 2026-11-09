@@ -30,6 +30,7 @@ export const fr: typeof en = {
     home: 'Accueil',
     dungeonChecklist: 'Liste des donjons',
     allianceRank: "Rang d'Alliance",
+    pvp: 'JcJ',
     campaignTiers: 'Paliers de campagne',
     crafting: 'Artisanat',
     alchemy: 'Alchimie',

@@ -28,6 +28,7 @@ export const en = {
     home: 'Home',
     dungeonChecklist: 'Dungeon Check List',
     allianceRank: 'Alliance Rank',
+    pvp: 'PvP',
     campaignTiers: 'Campaign Tiers',
     crafting: 'Crafting',
     alchemy: 'Alchemy',

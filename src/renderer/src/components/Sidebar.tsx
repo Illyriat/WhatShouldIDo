@@ -12,6 +12,7 @@ export type Page =
   | 'dungeons-solo'
   | 'dungeons-arenas'
   | 'alliancerank'
+  | 'campaigntiers'
   | 'alchemy'
   | 'enchanting'
   | 'musicboxes'
@@ -45,7 +46,14 @@ export const ALL_NAV_ITEMS: NavItem[] = [
       { page: 'dungeons-arenas', labelKey: 'dungeons.arenas', flag: 'dungeonChecklist' }
     ]
   },
-  { page: 'alliancerank', labelKey: 'sidebar.allianceRank', flag: 'allianceRank' },
+  {
+    group: 'pvp',
+    labelKey: 'sidebar.pvp',
+    children: [
+      { page: 'alliancerank', labelKey: 'sidebar.allianceRank', flag: 'allianceRank' },
+      { page: 'campaigntiers', labelKey: 'sidebar.campaignTiers', flag: 'campaignTiers' }
+    ]
+  },
   {
     group: 'crafting',
     labelKey: 'sidebar.crafting',

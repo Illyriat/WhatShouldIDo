@@ -27,6 +27,7 @@ export const de: typeof en = {
     home: "Start",
     dungeonChecklist: "Dungeon-Checkliste",
     allianceRank: "Allianzrang",
+    pvp: "PvP",
     campaignTiers: "Kampagnenstufen",
     crafting: "Handwerk",
     alchemy: "Alchemie",

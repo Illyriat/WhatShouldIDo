@@ -30,6 +30,7 @@ export const es: typeof en = {
     home: 'Inicio',
     dungeonChecklist: 'Lista de mazmorras',
     allianceRank: 'Rango de Alianza',
+    pvp: 'JcJ',
     campaignTiers: 'Niveles de campaña',
     crafting: 'Artesanía',
     alchemy: 'Alquimia',

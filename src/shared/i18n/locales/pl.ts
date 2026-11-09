@@ -41,6 +41,7 @@ const plTranslation = {
     home: 'Start',
     dungeonChecklist: 'Lista lochów',
     allianceRank: 'Ranga Sojuszu',
+    pvp: 'PvP',
     campaignTiers: 'Progi kampanii',
     crafting: 'Rzemiosło',
     alchemy: 'Alchemia',

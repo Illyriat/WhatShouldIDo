@@ -41,6 +41,7 @@ const ruTranslation = {
     home: 'Главная',
     dungeonChecklist: 'Список подземелий',
     allianceRank: 'Ранг Альянса',
+    pvp: 'PvP',
     campaignTiers: 'Уровни кампании',
     crafting: 'Крафт',
     alchemy: 'Алхимия',

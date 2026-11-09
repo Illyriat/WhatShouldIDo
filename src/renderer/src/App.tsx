@@ -4,6 +4,7 @@ import UpdateBanner from './components/UpdateBanner'
 import HomePage from './pages/HomePage'
 import DungeonsPage, { type DungeonSection } from './pages/DungeonsPage'
 import AllianceRankPage from './pages/AllianceRankPage'
+import CampaignTiersPage from './pages/CampaignTiersPage'
 import AlchemyPage from './pages/AlchemyPage'
 import EnchantingPage from './pages/EnchantingPage'
 import MusicBoxesPage from './pages/MusicBoxesPage'
@@ -50,6 +51,9 @@ function App(): React.JSX.Element {
         )}
         {activePage === 'alliancerank' && features.isEnabled('allianceRank') && (
           <AllianceRankPage accountSelection={accountSelection} />
+        )}
+        {activePage === 'campaigntiers' && features.isEnabled('campaignTiers') && (
+          <CampaignTiersPage accountSelection={accountSelection} />
         )}
         {activePage === 'alchemy' && features.isEnabled('alchemy') && <AlchemyPage />}
         {activePage === 'enchanting' && features.isEnabled('enchanting') && <EnchantingPage />}
