@@ -17,6 +17,17 @@ describe('extractCompletedDungeonQuests', () => {
     expect(result.get('1001')?.sort()).toEqual(['BC1', 'EH1'])
   })
 
+  it('passes through the solo dungeon and arena keys recorded alongside the pledge dungeons', async () => {
+    const filePath = await fixture.write(
+      'WhatShouldIDoDataCollector.lua',
+      `WhatShouldIDoDataCollectorVars={["Default"]={["@TestAccount"]={["$AccountWide"]={["NA Megaserver"]={` +
+        `["1001"]={["completedDungeonQuests"]={["MHK"]=1,["SOLO_MHK"]=1,["ARENA_MA"]=1}}` +
+        `}}}}}`
+    )
+    const result = await extractCompletedDungeonQuests(filePath)
+    expect(result.get('1001')?.sort()).toEqual(['ARENA_MA', 'MHK', 'SOLO_MHK'])
+  })
+
   it('joins multiple characters across realm buckets', async () => {
     const filePath = await fixture.write(
       'WhatShouldIDoDataCollector.lua',

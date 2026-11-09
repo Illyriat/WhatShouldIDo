@@ -57,6 +57,23 @@ export interface Character {
   // Currency this character is personally carrying. null when the
   // WhatShouldIDoDataCollector addon has no data yet for this character.
   wealth: WealthAmounts | null
+  // Reward tier in this character's home campaign. null when the addon has no data yet,
+  // or the character has no home campaign.
+  campaignTier: CampaignTierStatus | null
+}
+
+// Straight from the game's GetPlayerCampaignRewardTierInfo for the character's home
+// (assigned) campaign, recorded by the WhatShouldIDoDataCollector addon (v1.7.0+).
+export interface CampaignTierStatus {
+  campaignId: number
+  campaignName: string
+  tier: number
+  // Progress toward the next tier, and the amount that tier needs.
+  progress: number
+  nextTierTotal: number
+  // When the campaign ends, in Unix seconds - past this, the stored tier belongs to a
+  // finished campaign. 0 when the game reported no time left.
+  endsAt: number
 }
 
 export interface Account {

@@ -30,6 +30,8 @@ export const fr: typeof en = {
     home: 'Accueil',
     dungeonChecklist: 'Liste des donjons',
     allianceRank: "Rang d'Alliance",
+    pvp: 'JcJ',
+    campaignTiers: 'Paliers de campagne',
     crafting: 'Artisanat',
     alchemy: 'Alchimie',
     enchanting: 'Enchantement',
@@ -91,6 +93,8 @@ export const fr: typeof en = {
     couldntLoadTitle: 'Impossible de charger les données des donjons',
     baseGame: 'Jeu de base',
     dlc: 'DLC',
+    soloDungeons: 'Donjons en solo',
+    arenas: 'Arènes',
     noCharacters: 'Aucun personnage à afficher.'
   },
 
@@ -105,6 +109,15 @@ export const fr: typeof en = {
     apToRank50: "{{remaining}} PA jusqu'au rang 50",
     noDataYet:
       "Aucune donnée pour le moment - connectez-vous avec l'addon <bold>WhatShouldIDoDataCollector</bold> actif."
+  },
+
+  campaignTiers: {
+    couldntLoadTitle: 'Impossible de charger les données du personnage',
+    campaign: 'Campagne',
+    rewardTier: 'Palier de récompense',
+    progress: 'Progression vers le palier suivant',
+    ended: 'Campagne terminée - connectez-vous pour mettre à jour',
+    noDataYet: "Aucune donnée pour le moment - connectez-vous avec l'addon <bold>WhatShouldIDoDataCollector</bold> actif."
   },
 
   alchemy: {
@@ -338,11 +351,15 @@ export const fr: typeof en = {
       },
       dungeonChecklist: {
         label: 'Liste des donjons',
-        description: 'La liste complète de complétion des donjons par personnage.'
+        description: 'La liste complète de complétion des donjons par personnage, y compris les donjons en solo et les arènes qui donnent un point de compétence.'
       },
       allianceRank: {
         label: "Rang d'Alliance",
         description: "La page Rang d'Alliance, et sa médaille Vétérans de la guerre d'Alliance sur la page Succès."
+      },
+      campaignTiers: {
+        label: 'Paliers de campagne',
+        description: "La page Paliers de campagne : le palier de récompense et la progression de chaque personnage dans sa campagne d'attache de la guerre d'Alliance."
       },
       alchemy: {
         label: 'Alchimie',
