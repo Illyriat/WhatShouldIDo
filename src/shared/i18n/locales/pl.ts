@@ -362,6 +362,10 @@ const plTranslation = {
         label: 'Ranga Sojuszu',
         description: 'Strona Ranga Sojuszu oraz medal „Weterani Wojny Sojuszy” na stronie Osiągnięcia.'
       },
+      campaignTiers: {
+        label: 'Progi kampanii',
+        description: 'Strona Progi kampanii: próg nagrody i postęp każdej postaci w jej kampanii macierzystej Wojny Sojuszy.'
+      },
       alchemy: {
         label: 'Alchemia',
         description: 'Strona kalkulatora Alchemii.'

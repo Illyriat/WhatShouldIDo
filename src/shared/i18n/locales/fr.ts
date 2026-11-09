@@ -346,6 +346,10 @@ export const fr: typeof en = {
         label: "Rang d'Alliance",
         description: "La page Rang d'Alliance, et sa médaille Vétérans de la guerre d'Alliance sur la page Succès."
       },
+      campaignTiers: {
+        label: 'Paliers de campagne',
+        description: "La page Paliers de campagne : le palier de récompense et la progression de chaque personnage dans sa campagne d'attache de la guerre d'Alliance."
+      },
       alchemy: {
         label: 'Alchimie',
         description: "La page de calcul d'alchimie."

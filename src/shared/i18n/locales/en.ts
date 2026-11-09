@@ -320,6 +320,10 @@ export const en = {
         label: 'Alliance Rank',
         description: 'The Alliance Rank page, and its Alliance War Veterans medal on the Achievements page.'
       },
+      campaignTiers: {
+        label: 'Campaign Tiers',
+        description: "The Campaign Tiers page: each character's reward tier and progress in their home Alliance War campaign."
+      },
       alchemy: {
         label: 'Alchemy',
         description: 'The Alchemy calculator page.'

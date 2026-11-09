@@ -18,6 +18,7 @@ export const FEATURE_FLAGS = {
   ridingTraining: true,
   dungeonChecklist: true,
   allianceRank: true,
+  campaignTiers: true,
   alchemy: true,
   enchanting: true,
   musicBoxes: true,

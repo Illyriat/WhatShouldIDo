@@ -385,6 +385,10 @@ export const de: typeof en = {
         description:
           "Die Seite Allianzrang und ihre Medaille „Veteranen des Allianzkriegs“ auf der Seite Erfolge.",
       },
+      campaignTiers: {
+        label: "Kampagnenstufen",
+        description: "Die Seite Kampagnenstufen: Belohnungsstufe und Fortschritt jedes Charakters in seiner Heimatkampagne im Allianzkrieg.",
+      },
       alchemy: {
         label: "Alchemie",
         description: "Die Alchemie-Rechner-Seite.",

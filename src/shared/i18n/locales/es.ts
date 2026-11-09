@@ -345,6 +345,10 @@ export const es: typeof en = {
         label: 'Rango de Alianza',
         description: 'La página Rango de Alianza y su medalla Veteranos de la Guerra de Alianza en la página Logros.'
       },
+      campaignTiers: {
+        label: 'Niveles de campaña',
+        description: 'La página Niveles de campaña: el nivel de recompensa y el progreso de cada personaje en su campaña principal de la Guerra de Alianza.'
+      },
       alchemy: {
         label: 'Alquimia',
         description: 'La página de la calculadora de alquimia.'
