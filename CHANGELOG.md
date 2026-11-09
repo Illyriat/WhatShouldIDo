@@ -19,6 +19,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Internal tidy-up of the SavedVariables readers - the helpers each one had its own copy of now live in `src/main/eso/collectorSavedVars.ts`, and the account builder's repeated merge blocks are two shared helpers. No change in behaviour
 
 ### Fixed
+- Campaign Tiers table: its header row was as tall as the Dungeon Check List's rotated headers and its cells had no padding, because the dungeon table's own styles overrode the page's
 - Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon.
 - German translations checked by a German speaker and corrected were needed.
 
@@ -54,7 +55,6 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Sidebar reorganized: Alliance Rank promoted to a top-level item, Alchemy/Enchanting grouped under Crafting, Music Boxes under Collections
 - Settings now hides an addon's row entirely once nothing currently enabled still needs it
 - Settings -> Features descriptions for Alliance Rank, Music Boxes and Wealth Tracker now note their tie-in with the new Achievements page, and the Achievements description lists all three achievements it covers
-- Refreshed every README screenshot in dark theme
 - Number formatting (Gold, Alliance Points, Tel Var Stones, Writ Vouchers, Champion Points) now follows the selected app language's locale instead of the OS default
 
 ### Fixed
