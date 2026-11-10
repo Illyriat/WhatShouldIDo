@@ -4,6 +4,8 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-10
+
 ### Added
 - Dungeon Check List: two new sections for skill points earned outside the Undaunted Pledge dungeons, tracked per character. **Solo Dungeons** covers the Update 51 solo versions of Moon Hunter Keep and March of Sacrifices, whose quests are separate from the group versions', so each character can earn both points. **Arenas** covers Maelstrom Arena (normal or veteran) and the Infinite Archive; the other arenas don't grant a skill point. Needs the Data Collector addon v1.6.0, and each character has to log in once with it before their ticks show
 - Campaign Tiers page: a table of each character's home Alliance War campaign, reward tier and progress toward the next tier, straight from the game. Once a campaign's end time passes, its rows show "campaign ended" until that character logs in again. Needs the Data Collector addon v1.7.0
@@ -100,7 +102,8 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Settings: ESO data folder picker and five themes (System, Dark, Light, Ember, Frost)
 - Auto-updates via electron-updater
 
-[Unreleased]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Illyriat/WhatShouldIDo/compare/v0.1.2...v0.2.0
