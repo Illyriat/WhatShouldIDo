@@ -8,6 +8,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 - Dungeon Check List: two new sections for skill points earned outside the Undaunted Pledge dungeons, tracked per character. **Solo Dungeons** covers the Update 51 solo versions of Moon Hunter Keep and March of Sacrifices, whose quests are separate from the group versions', so each character can earn both points. **Arenas** covers Maelstrom Arena (normal or veteran) and the Infinite Archive; the other arenas don't grant a skill point. Needs the Data Collector addon v1.6.0, and each character has to log in once with it before their ticks show
 - Campaign Tiers page: a table of each character's home Alliance War campaign, reward tier and progress toward the next tier, straight from the game. Once a campaign's end time passes, its rows show "campaign ended" until that character logs in again. Needs the Data Collector addon v1.7.0
 - A new PvP dropdown in the sidebar holds Alliance Rank and Campaign Tiers
+- The app now bundles Data Collector v1.7.0 (was v1.5.0), which records the solo dungeon, arena and campaign tier data the new pages need. An installed copy is updated automatically on launch
 
 ### Changed
 - Alchemy updated for Update 51's rework: 38 reagents (new: Cultivated Cryptpods, Daedra-Blood Maggots, Fossilized Verminous Bones, Winter's Grave Tongue) and 34 effects. Weapon/Spell Power are now **Increase Power**, Weapon/Spell Critical are now **Critical**, Maim is gone, and **Force**, **Mending**, **Vexation**, **Damage Shield** and **Heal Absorption** are new. Many existing reagents changed traits, so old recipes may give different results. Data from eso-hub, checked pair by pair against UESP
@@ -22,7 +23,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ### Fixed
 - Campaign Tiers table: its header row was as tall as the Dungeon Check List's rotated headers and its cells had no padding, because the dungeon table's own styles overrode the page's
 - Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon.
-- German translations checked by a German speaker and corrected were needed.
+- German translations checked by a German speaker and corrected where needed.
 
 ### Security
 - Cleared every known dependency vulnerability (`npm audit`: 8 down to 0). Electron 33 was end-of-life with around 35 open advisories; the rest were in brace-expansion, fast-uri, undici, extract-zip and esbuild

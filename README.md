@@ -208,13 +208,13 @@ npm run build:win     # or build:mac / build:linux, run on that OS
 
 The addon is developed in its own repo; this app just pins a commit of it. To ship an addon change:
 
-1. Test it in-game, then commit and push it in the addon repo (the pin must point at a commit that's on GitHub, or CI can't fetch it). Tagging the release there (`git tag v1.6.0 && git push origin v1.6.0`) makes the pin easy to read.
+1. Test it in-game, then commit and push it in the addon repo (the pin must point at a commit that's on GitHub, or CI can't fetch it). Once it's merged to the addon's `main`, wait for its CI to finish - it commits a README badge bump - then pull and tag that latest commit (`git tag v1.7.0 && git push origin v1.7.0`). The tag push runs the addon's tests again, and makes the pin easy to read.
 2. Move the pin, and commit it here:
    ```
    git -C vendor/WhatShouldIDoDataCollector fetch --tags
-   git -C vendor/WhatShouldIDoDataCollector checkout v1.6.0    # or a commit hash
+   git -C vendor/WhatShouldIDoDataCollector checkout v1.7.0    # or a commit hash
    git add vendor/WhatShouldIDoDataCollector
-   git commit -m "Bundle Data Collector v1.6.0"
+   git commit -m "Bundle Data Collector v1.7.0"
    ```
 3. Cut an app release as above. Users get the new addon when they update the app and relaunch it - the app doesn't pick up an addon change on its own.
 
