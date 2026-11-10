@@ -23,7 +23,7 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 ### Fixed
 - Campaign Tiers table: its header row was as tall as the Dungeon Check List's rotated headers and its cells had no padding, because the dungeon table's own styles overrode the page's
 - Corrected stale and misplaced code comments, including one that still named the retired AllianceRankTracker addon.
-- German translations checked by a German speaker and corrected were needed.
+- German translations checked by a German speaker and corrected where needed.
 
 ### Security
 - Cleared every known dependency vulnerability (`npm audit`: 8 down to 0). Electron 33 was end-of-life with around 35 open advisories; the rest were in brace-expansion, fast-uri, undici, extract-zip and esbuild
