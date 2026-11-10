@@ -212,9 +212,9 @@ The addon is developed in its own repo; this app just pins a commit of it. To sh
 2. Move the pin, and commit it here:
    ```
    git -C vendor/WhatShouldIDoDataCollector fetch --tags
-   git -C vendor/WhatShouldIDoDataCollector checkout v1.6.0    # or a commit hash
+   git -C vendor/WhatShouldIDoDataCollector checkout v1.7.0    # or a commit hash
    git add vendor/WhatShouldIDoDataCollector
-   git commit -m "Bundle Data Collector v1.6.0"
+   git commit -m "Bundle Data Collector v1.7.0"
    ```
 3. Cut an app release as above. Users get the new addon when they update the app and relaunch it - the app doesn't pick up an addon change on its own.
 
