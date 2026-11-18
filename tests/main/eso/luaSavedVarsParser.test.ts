@@ -51,6 +51,14 @@ describe('parseSavedVariables', () => {
     expect(await parseSavedVariables(filePath, 'T')).toEqual(['a', 'b', 'c'])
   })
 
+  it('stores a "__proto__" table key as plain data instead of changing the prototype', async () => {
+    const filePath = await fixture.write('Fixture.lua', `MyAddon_Settings={["__proto__"]={["polluted"]=true},["ok"]=1}`)
+    const result = (await parseSavedVariables(filePath, 'MyAddon_Settings')) as Record<string, unknown>
+    expect(Object.keys(result)).toEqual(['__proto__', 'ok'])
+    expect(result['polluted']).toBeUndefined()
+    expect(({} as Record<string, unknown>)['polluted']).toBeUndefined()
+  })
+
   describe('caching', () => {
     it('serves a cached result without re-parsing when mtime is unchanged, even if the file content changed underneath', async () => {
       const filePath = await fixture.write('Fixture.lua', `T={["n"]=1}`)

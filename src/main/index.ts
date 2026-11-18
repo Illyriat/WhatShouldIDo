@@ -15,8 +15,8 @@ function createWindow(): BrowserWindow {
     autoHideMenuBar: true,
     icon: join(__dirname, '../../resources/icon.png'),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.mjs'),
-      sandbox: false
+      preload: join(__dirname, '../preload/index.cjs'),
+      sandbox: true
     }
   })
 

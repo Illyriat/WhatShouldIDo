@@ -23,6 +23,16 @@ export default defineConfig({
       alias: {
         '@shared': resolve('src/shared')
       }
+    },
+    // The window runs with sandbox: true (src/main/index.ts), and a sandboxed preload
+    // can't be an ES module, so emit CommonJS even though package.json is "type": "module".
+    build: {
+      rollupOptions: {
+        output: {
+          format: 'cjs',
+          entryFileNames: '[name].cjs'
+        }
+      }
     }
   },
   renderer: {

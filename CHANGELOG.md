@@ -4,6 +4,13 @@ All notable changes to What Should I Do are documented here. Format follows [Kee
 
 ## [Unreleased]
 
+### Security
+- Updated Electron 44.10.2 to 44.11.4 for the latest Chromium and V8 security fixes
+- The app window now runs sandboxed. The preload script is built as CommonJS (`out/preload/index.cjs`) because a sandboxed preload can't be an ES module
+- Settings changes sent from the UI are validated before they're saved: the Documents folder must be an absolute path, the language must be one the app has, and unknown feature names are dropped
+- The SavedVariables reader stores a `__proto__` table key as plain data instead of letting it replace the object's prototype
+- CI and release workflows pin `actions/checkout` and `actions/setup-node` to commit hashes and no longer leave git credentials (including the addon repo token) in `.git/config` after checkout
+
 ## [0.4.0] - 2026-11-10
 
 ### Added

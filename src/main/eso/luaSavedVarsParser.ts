@@ -8,7 +8,9 @@ type LuaTable = Record<string, unknown> | unknown[]
 
 function tableConstructorToJs(node: luaparse.TableConstructorExpression): LuaTable {
   const arrayValues: unknown[] = []
-  const objectEntries: Record<string, unknown> = {}
+  // Null-prototype, so a table key like "__proto__" in a SavedVariables file is stored as
+  // an ordinary key instead of replacing the object's prototype.
+  const objectEntries: Record<string, unknown> = Object.create(null)
   let isArrayLike = true
   let nextIndex = 1
 

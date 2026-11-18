@@ -10,9 +10,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
@@ -31,7 +33,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # The Data Collector addon is bundled into the installer from a private repo
           # (a git submodule, see .gitmodules). The default GITHUB_TOKEN can only read this
@@ -39,8 +41,11 @@ jobs:
           # to the addon repo. It expires - renew it if this step starts failing on auth.
           submodules: true
           token: ${{ secrets.ADDON_REPO_TOKEN }}
+          # Don't leave the PAT in .git/config, where npm install scripts could read it.
+          # Nothing after checkout needs git credentials (publishing uses GH_TOKEN).
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
