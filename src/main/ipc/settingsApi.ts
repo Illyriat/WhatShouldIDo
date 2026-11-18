@@ -8,6 +8,7 @@ import { detectAddons } from '../eso/addonDetector'
 import { getAddonInstallStatus, installDataCollector } from '../eso/addonInstaller'
 import { bundledDataCollectorDir } from '../addonBundle'
 import { restartAutoRefreshWatcher } from '../autoRefresh'
+import { validateDisabledFeatures, validateDocumentsPathOverride, validateLanguage } from './validation'
 
 function defaultDocumentsPath(): string {
   return join(homedir(), 'Documents')
@@ -75,10 +76,12 @@ export function registerSettingsIpcHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.getAddonStatus, () => getAddonStatus())
   ipcMain.handle(IPC_CHANNELS.getAddonInstallStatus, () => getInstallStatus())
   ipcMain.handle(IPC_CHANNELS.installDataCollectorAddon, () => installBundledDataCollector())
-  ipcMain.handle(IPC_CHANNELS.setDocumentsPathOverride, (_event, path: string | null) =>
-    setDocumentsPathOverride(path)
+  ipcMain.handle(IPC_CHANNELS.setDocumentsPathOverride, (_event, path: unknown) =>
+    setDocumentsPathOverride(validateDocumentsPathOverride(path))
   )
-  ipcMain.handle(IPC_CHANNELS.setDisabledFeatures, (_event, flags: string[]) => setDisabledFeatures(flags))
-  ipcMain.handle(IPC_CHANNELS.setLanguage, (_event, language: string) => setLanguage(language))
+  ipcMain.handle(IPC_CHANNELS.setDisabledFeatures, (_event, flags: unknown) =>
+    setDisabledFeatures(validateDisabledFeatures(flags))
+  )
+  ipcMain.handle(IPC_CHANNELS.setLanguage, (_event, language: unknown) => setLanguage(validateLanguage(language)))
   ipcMain.handle(IPC_CHANNELS.pickDocumentsFolder, () => pickDocumentsFolder())
 }
